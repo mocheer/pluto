@@ -1,10 +1,10 @@
 package clock
 
-// DateFormat 时间格式化字符串
-var DateFormat = "2006-01-02"
+// FmtDate 格式化日期
+var FmtDate = "2006-01-02"
 
-// FullDateFomate 时间格式化字符串（全量）
-var FullDateFomate = "2006-01-02 15:04:05"
+// FmtFullDate 格式化时间全量
+var FmtFullDate = "2006-01-02 15:04:05"
 
-// SimpleDateFormat 时间格式化字符串(紧凑型)
-var SimpleDateFormat = "20060102"
+// FmtCompactDate 格式化紧凑型日期
+var FmtCompactDate = "20060102"

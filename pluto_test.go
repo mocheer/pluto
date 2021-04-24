@@ -1,4 +1,4 @@
-package fn_test
+package pluto_test
 
 import (
 	"testing"
@@ -6,6 +6,7 @@ import (
 	"github.com/mocheer/pluto/fn"
 )
 
+// TestFmtString fn.FmtString
 func TestFmtString(t *testing.T) {
 	result := fn.FmtString(`{a}bcd{e}fg{h}`, map[string]interface{}{"a": "1", "b": 2, "c": 3.0, "h": "4.0"})
 	if result != "1bcdfg4.0" {

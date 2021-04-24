@@ -8,24 +8,34 @@ type Clock struct {
 }
 
 // New 实例化
-func New() *Clock {
-	return &Clock{date: time.Now()}
+func New(date time.Time) *Clock {
+	return &Clock{date}
 }
 
-// Parse 解析时间字符串
-func Parse(s string) (time.Time, error) {
-	return time.Parse(FullDateFomate, s)
+// Now 实例化
+func Now() *Clock {
+	return New(time.Now())
 }
 
-// Format 格式化返回时间字符串
-func (c *Clock) Format(layout string) string {
+// SinceLastHours 获取时间戳
+func (c *Clock) SinceLastHours(num float64) bool {
+	return time.Since(c.date).Hours()/num > 1
+}
+
+// SinceLastDays 获取时间戳
+func (c *Clock) SinceLastDays(num float64) bool {
+	return c.SinceLastHours(24 * num)
+}
+
+// Fmt 格式化返回时间字符串
+func (c *Clock) Fmt(layout string) string {
 	if layout == "" {
-		layout = DateFormat
+		layout = FmtDate
 	}
 	return c.date.Format(layout)
 }
 
-// Value 获取时间戳
-func (c *Clock) Value() int64 {
+// Val 获取时间戳
+func (c *Clock) Val() int64 {
 	return c.date.Unix()
 }
