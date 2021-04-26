@@ -7,6 +7,15 @@ import (
 	"runtime"
 )
 
+// GetAbsolutePath 获取当前程序执行的路径 => 当前命令行执行的位置
+func GetAbsolutePath() string {
+	path, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	return path
+}
+
 // GetCurrentPath 获取当前程序所在位置
 // go install 安装后在任意位置执行时，GetCurrentPath()= `%go%/bin`
 func GetCurrentPath() (string, error) {
@@ -24,5 +33,4 @@ func GetCurrentFuncPath(skip int) string {
 	} else {
 		panic(`error:GetCurrentFuncPath`)
 	}
-
 }

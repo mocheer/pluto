@@ -20,7 +20,7 @@ func ParseTime(str string, fmtStr string) (time.Time, error) {
 func MustParse(str string, fmtStr string) *Clock {
 	c, err := Parse(str, fmtStr)
 	if err != nil {
-		c = Now()
+		panic(`解析时间字符串失败!`)
 	}
 	return c
 }

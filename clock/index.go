@@ -1,6 +1,8 @@
 package clock
 
-import "time"
+import (
+	"time"
+)
 
 // Clock 结构体
 type Clock struct {
@@ -17,14 +19,19 @@ func Now() *Clock {
 	return New(time.Now())
 }
 
-// SinceLastHours 获取时间戳
-func (c *Clock) SinceLastHours(num float64) bool {
-	return time.Since(c.date).Hours()/num > 1
+// SinceHours 获取距离当前时间的小时数
+func (c *Clock) SinceHours() float64 {
+	return time.Since(c.date).Hours()
 }
 
-// SinceLastDays 获取时间戳
-func (c *Clock) SinceLastDays(num float64) bool {
-	return c.SinceLastHours(24 * num)
+// SinceDays 获取距离当前时间的天数
+func (c *Clock) SinceDays() float64 {
+	return c.SinceHours() / 24
+}
+
+// SinceMonths 获取距离当前时间的月数
+func (c *Clock) SinceMonths() float64 {
+	return c.SinceDays() / 30
 }
 
 // Fmt 格式化返回时间字符串
