@@ -5,6 +5,7 @@ import (
 )
 
 // Clock 结构体
+// 不同于time的很多属性都是毫秒甚至是纳秒，clock(钟表)的最小单位一般是秒
 type Clock struct {
 	date time.Time
 }
