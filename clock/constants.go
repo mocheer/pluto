@@ -12,6 +12,9 @@ var Hour = 60 * Minute
 // 1day=24h=86400s
 var Day = 24 * Hour
 
+// Week
+var Week = 7 * Day
+
 // Month
 // 1Mon=30Day
 var Month = 30 * Day
