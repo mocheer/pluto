@@ -14,16 +14,21 @@ func IsExist(fileName string) bool {
 	return err == nil || os.IsExist(err)
 }
 
+// Create
+func Create(name string) (*os.File, error) {
+	err := os.MkdirAll(filepath.Dir(name), os.ModePerm)
+	if err == nil {
+		file, err := os.Create(name)
+		return file, err
+	}
+	return nil, err
+}
+
 // OpenOrCreate 创建不存在的文件
 func OpenOrCreate(name string, flag int, perm os.FileMode) (*os.File, error) {
 	isExit := IsExist(name)
 	if !isExit {
-		err := os.MkdirAll(filepath.Dir(name), os.ModePerm)
-		if err == nil {
-			file, err := os.Create(name)
-			return file, err
-		}
-		return nil, err
+		return Create(name)
 	}
 	return os.OpenFile(name, flag, perm)
 }

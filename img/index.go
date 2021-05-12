@@ -2,8 +2,15 @@ package img
 
 import (
 	"image"
+	"os"
 )
 
-func Clip(target image.Image, x0, y0, width, height int) image.Image {
-	return target.(*image.RGBA).SubImage(image.Rect(x0, y0, x0+width, y0+height))
+// FromFile
+func FromFile(path string) (image.Image, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	image, _, err := image.Decode(f)
+	return image, err
 }
