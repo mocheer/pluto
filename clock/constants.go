@@ -19,6 +19,9 @@ var Week = 7 * Day
 // 1Mon=30Day
 var Month = 30 * Day
 
+// Year 一年的所有秒数
+var Year = 365 * Day
+
 // FmtDate 格式化日期
 var FmtDate = "2006-01-02"
 

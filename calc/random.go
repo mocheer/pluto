@@ -1,4 +1,4 @@
-package rd
+package calc
 
 import (
 	"fmt"

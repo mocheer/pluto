@@ -3,26 +3,27 @@ package img
 import (
 	"bytes"
 	"image"
+	"image/gif"
 	"image/jpeg"
 	"image/png"
+
+	"github.com/mocheer/pluto/js/window"
 )
 
-// ToJPEGBase64 将image转成基于jpg编码的base64图片
-func ToJPEGBase64(target image.Image) (string, error) {
+// ToJPEGBase64 将image转成各种图片编码的base64字符串
+func ToBase64(target image.Image, imageType string) (data string, err error) {
 	buf := new(bytes.Buffer)
-	err := jpeg.Encode(buf, target, nil)
-	if err != nil {
-		return "", err
+	switch imageType {
+	case "jpeg":
+		err = jpeg.Encode(buf, target, nil)
+	case "png":
+		err = png.Encode(buf, target)
+	case "gif":
+		err = gif.Encode(buf, target, &gif.Options{})
 	}
-	return BytesToBase64(buf.Bytes()), nil
-}
-
-// ToJPEGBase64 将image转成基于jpg编码的base64图片
-func ToPNGBase64(target image.Image) (string, error) {
-	buf := new(bytes.Buffer)
-	err := png.Encode(buf, target)
 	if err != nil {
-		return "", err
+		return
 	}
-	return BytesToBase64(buf.Bytes()), nil
+	data = window.Btoa(buf.String())
+	return
 }

@@ -2,16 +2,11 @@ package fs
 
 import (
 	"encoding/json"
-	"os"
 )
 
 // ReadJSON
 func ReadJSON(path string, e interface{}) error {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return err
-	}
-	return json.Unmarshal(data, &e)
+	return json.Unmarshal(MustReadFile(path), &e)
 }
 
 // ReadJSONToMap
@@ -20,7 +15,8 @@ func ReadJSONToMap(path string) (data map[string]interface{}, err error) {
 	return
 }
 
-func WriteJSON(path string, e interface{}) error {
+// SaveJSON 保存为json文件
+func SaveJSON(path string, e interface{}) error {
 	data, err := json.MarshalIndent(e, "", " ")
 	if err != nil {
 		return err

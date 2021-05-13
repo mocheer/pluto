@@ -1,28 +1,12 @@
-package pluto_test
+package geom_test
 
 import (
 	"fmt"
 	"math/rand"
 	"testing"
 
-	"github.com/mocheer/pluto/fn"
 	"github.com/mocheer/pluto/geom"
-	"github.com/mocheer/pluto/rd"
 )
-
-// TestFmtString fn.FmtString
-func TestFmtString(t *testing.T) {
-	result := fn.FmtString(`{a}bcd{e}fg{h}`, map[string]interface{}{"a": "1", "b": 2, "c": 3.0, "h": "4.0"})
-	if result != "1bcdfg4.0" {
-		t.Error(result)
-	}
-}
-
-// TestRdString 测试随机字符串
-func TestRdString(t *testing.T) {
-	result := rd.String(6)
-	t.Log(result)
-}
 
 // TestBezierCurve 测试贝塞尔曲线
 func TestBezierCurve(t *testing.T) {

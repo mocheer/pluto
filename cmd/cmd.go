@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os/exec"
 )
 
@@ -13,11 +14,31 @@ import (
 // Wait 等待命令c退出，命令c必须是由Start方法运行的。
 
 // Exec 执行命令并返回结果。命令行参数在窗口输入的时候需要带引号，但这里的参数不需要，反而要去掉
-func Exec(name string, params ...string) string {
+func Exec(name string, params ...string) error {
 	command := exec.Command(name, params...)
-	result, err := command.Output()
+
+	stdout, err := command.StdoutPipe()
+	command.Stderr = command.Stdout
+
 	if err != nil {
-		return err.Error()
+		return err
 	}
-	return string(result)
+
+	if err = command.Start(); err != nil {
+		return err
+	}
+	// 从管道中实时获取输出并打印到终端
+	for {
+		tmp := make([]byte, 1024)
+		_, err := stdout.Read(tmp)
+		fmt.Print(string(tmp))
+		if err != nil {
+			break
+		}
+	}
+	//
+	if err = command.Wait(); err != nil {
+		return err
+	}
+	return nil
 }
