@@ -14,6 +14,17 @@ import (
 	"github.com/mocheer/pluto/fs"
 )
 
+// RSA_GenPemFiles
+func RSA_GenPemFiles(dir string, bits int) error {
+	privatePemPath := path.Join(dir, "private.pem")
+	publicPemPath := path.Join(dir, "public.pem")
+	pri := fs.MustCreate(privatePemPath)
+	pub := fs.MustCreate(publicPemPath)
+	defer pri.Close()
+	defer pub.Close()
+	return RSA_GenPems(pri, pub, bits)
+}
+
 // RSA_DecodeJSEncrypt 用于用户名、密码解密
 func RSA_DecodeJSEncrypt(data string, privatePemPath string) string {
 	// JSEncrypt 生成的编码本身会再加上base64编码
@@ -24,17 +35,6 @@ func RSA_DecodeJSEncrypt(data string, privatePemPath string) string {
 		panic(nil)
 	}
 	return string(plain)
-}
-
-// RSA_GenPemFiles
-func RSA_GenPemFiles(dir string, bits int) error {
-	privatePemPath := path.Join(dir, "private.pem")
-	publicPemPath := path.Join(dir, "public.pem")
-	pri := fs.MustCreate(privatePemPath)
-	pub := fs.MustCreate(publicPemPath)
-	defer pri.Close()
-	defer pub.Close()
-	return RSA_GenPems(pri, pub, bits)
 }
 
 func RSA_GenKeys(bits int) (privateKey *rsa.PrivateKey, publicKey *rsa.PublicKey, err error) {
