@@ -2,14 +2,14 @@ package fn
 
 import "unsafe"
 
-//  StringBytes 高性能转换
-func StringBytes(s string) []byte {
+//  String2Bytes 高性能转换
+func String2Bytes(s string) []byte {
 	x := (*[2]uintptr)(unsafe.Pointer(&s))
 	h := [3]uintptr{x[0], x[1], x[1]}
 	return *(*[]byte)(unsafe.Pointer(&h))
 }
 
-// BytesString 高性能转换
-func BytesString(b []byte) string {
+// Bytes2String 高性能转换
+func Bytes2String(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
