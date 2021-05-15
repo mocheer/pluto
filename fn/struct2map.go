@@ -25,6 +25,7 @@ const (
 )
 
 // StructToMap 结构体转map
+// fn.StructToMap(struct, "map", "")
 func StructToMap(s interface{}, tag string, methodName string) (res map[string]interface{}, err error) {
 	v := getValue(s)
 	t := getType(v)

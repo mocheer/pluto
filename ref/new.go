@@ -1,12 +1,28 @@
 package ref
 
-import "reflect"
+import (
+	"reflect"
+)
 
 // New 通过反射创建结构体对象
-// @param v 目前支持 结构体指针对象
 func New(v interface{}) interface{} {
+	typ := GetType(v)
+	entity := reflect.New(typ)
+	return entity.Interface()
+}
+
+// NewSlice 通过反射创建结构体对象
+func NewSlice(v interface{}) interface{} {
+	typ := GetType(v)
+	entity := reflect.New(reflect.SliceOf(typ))
+	return entity.Interface()
+}
+
+// GetType 获取类型
+func GetType(v interface{}) reflect.Type {
 	val := reflect.ValueOf(v)
-	typ := reflect.Indirect(val).Type()
-	n := reflect.New(typ)
-	return n.Interface()
+	if val.Kind() == reflect.Ptr {
+		val = val.Elem() // reflect.Indirect(v)
+	}
+	return val.Type()
 }
