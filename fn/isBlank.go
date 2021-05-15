@@ -1,4 +1,4 @@
-package valid
+package fn
 
 // IsBlank check the string is blank string
 func IsBlank(str string) bool {

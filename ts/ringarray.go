@@ -1,4 +1,4 @@
-package model
+package ts
 
 // RingArray implements the RingArray interface.
 type RingArray struct {
