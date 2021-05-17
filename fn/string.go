@@ -85,3 +85,51 @@ func ParseHex(str string) (uint64, error) {
 func ParseBool(str string) (bool, error) {
 	return strconv.ParseBool(str)
 }
+
+// // StringFormat
+// // @param str
+// // @param data
+// // @example ([]byte(`{a} b cd{e} fg {h}`),map[string]interface{}{ "a":"1","b":2,"e":5})
+// func StringFormat(str []byte, data map[string]interface{}) []byte {
+// 	l := len(str)
+// 	at := -1
+// 	var c byte
+// 	var buffer bytes.Buffer
+// read_next:
+// 	at++
+// 	if at >= l {
+// 		return buffer.Bytes()
+// 	}
+// 	c = str[at]
+// 	if c == '{' {
+// 		goto read_value
+// 	}
+// 	if c == '\\' {
+// 		goto read_next
+// 	}
+// 	buffer.WriteByte(c)
+// 	goto read_next
+// read_value:
+// 	var key []byte
+// 	for {
+// 		at++
+// 		if at >= l {
+// 			buffer.Write(key)
+// 			return buffer.Bytes()
+// 		}
+// 		c = str[at]
+// 		if c == '}' {
+// 			break
+// 		}
+// 		if c == '\\' {
+// 			continue
+// 		}
+// 		key = append(key, c)
+// 	}
+// 	value := data[string(key)]
+// 	if value != nil {
+// 		val := fmt.Sprint(value)
+// 		buffer.WriteString(val)
+// 	}
+// 	goto read_next
+// }

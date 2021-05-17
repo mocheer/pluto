@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"testing"
 
-	"github.com/mocheer/pluto/geom"
+	"github.com/mocheer/pluto/ts/geom"
 )
 
 // TestBezierCurve 测试贝塞尔曲线

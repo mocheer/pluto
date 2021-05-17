@@ -1,4 +1,4 @@
-package fn
+package sys
 
 import (
 	"bytes"
@@ -9,9 +9,9 @@ import (
 	"strings"
 )
 
-// IsPortUsed 传入查询的端口号
+// GetPortPID 传入查询的端口号
 // 返回端口号对应的进程PID，若没有找到相关进程，返回-1
-func IsPortUsed(portNumber int) int {
+func GetPortPID(portNumber int) int {
 	res := -1
 	var outBytes bytes.Buffer
 	cmdStr := fmt.Sprintf("netstat -ano -p tcp | findstr %d", portNumber)

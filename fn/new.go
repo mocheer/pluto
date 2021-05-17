@@ -4,7 +4,7 @@ import (
 	"reflect"
 )
 
-// New 通过反射创建结构体对象
+// New 通过反射创建结构体对象，这里最好只传递引用类型
 func New(v interface{}) interface{} {
 	typ := GetReflectType(v)
 	entity := reflect.New(typ)

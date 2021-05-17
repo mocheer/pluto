@@ -19,15 +19,15 @@ func MkdirNotExist(path string) error {
 }
 
 // EachDir 获取指定目录及所有子目录下的所有文件
-func EachDir(dir string, fn func(filename string)) error {
+func EachDir(dir string, fn func(filename string, fi os.FileInfo)) error {
 	err := filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error {
-		if err != nil { //忽略错误
+		if err != nil {
 			return err
 		}
 		if fi.IsDir() { // 忽略目录
 			return nil
 		}
-		fn(filename)
+		fn(filename, fi)
 		return nil
 	})
 	return err
@@ -36,10 +36,19 @@ func EachDir(dir string, fn func(filename string)) error {
 // EachDirToRemove 遍历文件夹，当回调函数返回true的时候删除文件
 // 注意，当一个目录下所有文件都被删除，这个目录本身也不会被删除
 func EachDirToRemove(dir string, fn func(filename string) bool) error {
-	return EachDir(dir, func(filename string) {
+	return EachDir(dir, func(filename string, fi os.FileInfo) {
 		if fn(filename) {
 			os.Remove(filename)
 		}
+	})
+}
+
+// 批量重命名指定目录及所有子目录下的所有文件。(不会重命名目录文件)
+func EachDirToRename(dir string, fn func(oldName string) string) (err error) {
+	return EachDir(dir, func(filename string, fi os.FileInfo) {
+		oldName := fi.Name()
+		newName := fn(oldName)
+		os.Rename(filename, filepath.Join(filepath.Dir(oldName), newName))
 	})
 }
 

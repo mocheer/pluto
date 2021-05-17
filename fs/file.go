@@ -59,7 +59,7 @@ func Append(path string, content string) {
 
 // EachDirAppendHead 遍历目录下的所有文件，添加文件头
 func EachDirAppendHead(dir string, content string, options map[string]interface{}) error {
-	return EachDir(dir, func(filename string) {
+	return EachDir(dir, func(filename string, fi os.FileInfo) {
 		if options != nil {
 			if options["suffix"] != nil {
 				if !strings.HasSuffix(filename, options["suffix"].(string)) {

@@ -4,6 +4,7 @@ import (
 	"os"
 	"testing"
 
+	"github.com/mocheer/pluto/assert"
 	"github.com/mocheer/pluto/ecc"
 )
 
@@ -15,11 +16,11 @@ func TestRsa(t *testing.T) {
 	data := "hello world"
 	pubKey, _ := ecc.RSA_PublicKeyFromFile("test/public.pem") // 解密公匙
 	encryData, _ := ecc.RSA_Encrypt([]byte(data), pubKey)     // 加密数据
-
+	//
 	priKey, _ := ecc.RSA_PrivateKeyFromFile("test/private.pem") // 解密私匙
 	decryData, _ := ecc.RSA_Decrypt(encryData, priKey)          // 解密数据
-	if data != string(decryData) {
-		t.Error("错误", data, "!=", decryData)
-	}
+	//
 	os.RemoveAll("test")
+	assert.Equal(t, data, string(decryData))
+
 }
