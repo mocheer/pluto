@@ -4,17 +4,27 @@ import (
 	"reflect"
 )
 
-// GetType 通过反射获取数据类型
-// GetType(string) == "string"
-// GetType(nil)
-func GetType(val interface{}) reflect.Kind {
-	if val == nil {
+// GetKind 通过反射获取数据类型
+// GetKind(string) == "string"
+// GetKind(nil)
+func GetKind(v interface{}) reflect.Kind {
+	if v == nil {
 		return reflect.Invalid
 	}
-	return reflect.TypeOf(val).Kind()
+	return reflect.TypeOf(v).Kind()
 }
 
 // IsString
-func IsString(val interface{}) bool {
-	return GetType(val) == reflect.String
+func IsString(v interface{}) bool {
+	return GetKind(v) == reflect.String
+}
+
+// IsPtr 是否为指针
+func IsPtr(v interface{}) bool {
+	return GetKind(v) == reflect.Ptr
+}
+
+// 获取一个struct的类型名称
+func GetStructTypeName(v interface{}) string {
+	return reflect.TypeOf(v).Name()
 }

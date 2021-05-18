@@ -8,7 +8,8 @@ import (
 )
 
 // ToCamelCase
-// fn.ToCamelCase("camel-case") == "camelCase"
 func ToCamelCase(val string) string {
-	return regexp.MustCompile(reg.CamelCase).ReplaceAllStringFunc(val, strings.ToUpper)
+	return regexp.MustCompile(reg.CamelCase).ReplaceAllStringFunc(val, func(s string) string {
+		return strings.ToUpper(s[1:])
+	})
 }

@@ -1,4 +1,4 @@
-package fn
+package ts
 
 import (
 	"errors"
@@ -12,6 +12,10 @@ import (
 type Color struct {
 	R, G, B uint8
 	A       float64
+}
+
+func NewColor(red, green, blue uint8, A float64) *Color {
+	return &Color{R: red, G: green, B: blue, A: A}
 }
 
 func (c Color) String() string {

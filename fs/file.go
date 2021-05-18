@@ -57,20 +57,6 @@ func Append(path string, content string) {
 	f.Close()
 }
 
-// EachDirAppendHead 遍历目录下的所有文件，添加文件头
-func EachDirAppendHead(dir string, content string, options map[string]interface{}) error {
-	return EachDir(dir, func(filename string, fi os.FileInfo) {
-		if options != nil {
-			if options["suffix"] != nil {
-				if !strings.HasSuffix(filename, options["suffix"].(string)) {
-					return
-				}
-			}
-		}
-		AppendHead(filename, content)
-	})
-}
-
 // Append 往文件尾部添加字符串
 func AppendHead(path string, content string) {
 	f, _ := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
