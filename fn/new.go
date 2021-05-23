@@ -18,10 +18,10 @@ func NewSlice(v interface{}) interface{} {
 	return entity.Interface()
 }
 
-// GetType 获取类型
+// GetType 获取类型 不包括指针
 func GetReflectType(v interface{}) reflect.Type {
 	val := reflect.ValueOf(v)
-	if val.Kind() == reflect.Ptr {
+	for val.Kind() == reflect.Ptr {
 		val = val.Elem() // reflect.Indirect(v)
 	}
 	return val.Type()

@@ -3,8 +3,6 @@ package fn
 import (
 	"encoding/json"
 	"fmt"
-
-	"github.com/mocheer/pluto/ts"
 )
 
 // Assign
@@ -19,12 +17,4 @@ func Assign(a, b interface{}) interface{} {
 	}
 
 	return a
-}
-
-// 合并两个map
-func AssignMap(m1 ts.Map, m2 ts.Map) ts.Map {
-	for k, v := range m2 {
-		m1[k] = v
-	}
-	return m1
 }
