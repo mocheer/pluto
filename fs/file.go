@@ -14,8 +14,8 @@ func IsExist(fileName string) bool {
 }
 
 //
-func MustReadFile(path string) []byte {
-	data, err := os.ReadFile(path)
+func MustReadFile(fileName string) []byte {
+	data, err := os.ReadFile(fileName)
 	if err != nil {
 		panic(err)
 	}
@@ -23,18 +23,18 @@ func MustReadFile(path string) []byte {
 }
 
 // Create
-func Create(name string) (*os.File, error) {
-	err := os.MkdirAll(filepath.Dir(name), os.ModePerm)
+func Create(fileName string) (*os.File, error) {
+	err := os.MkdirAll(filepath.Dir(fileName), os.ModePerm)
 	if err == nil {
-		file, err := os.Create(name)
+		file, err := os.Create(fileName)
 		return file, err
 	}
 	return nil, err
 }
 
 // MustCreate
-func MustCreate(name string) *os.File {
-	f, err := Create(name)
+func MustCreate(fileName string) *os.File {
+	f, err := Create(fileName)
 	if err != nil {
 		panic(err)
 	}
@@ -42,24 +42,24 @@ func MustCreate(name string) *os.File {
 }
 
 // OpenOrCreate 创建不存在的文件
-func OpenOrCreate(name string, flag int, perm os.FileMode) (*os.File, error) {
-	isExit := IsExist(name)
+func OpenOrCreate(fileName string, flag int, perm os.FileMode) (*os.File, error) {
+	isExit := IsExist(fileName)
 	if !isExit {
-		return Create(name)
+		return Create(fileName)
 	}
-	return os.OpenFile(name, flag, perm)
+	return os.OpenFile(fileName, flag, perm)
 }
 
 // Append 往文件尾部添加字符串
-func Append(path string, content string) {
-	f, _ := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+func Append(fileName string, content string) {
+	f, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	f.Write([]byte(content))
 	f.Close()
 }
 
 // Append 往文件尾部添加字符串
-func AppendHead(path string, content string) {
-	f, _ := os.OpenFile(path, os.O_RDWR|os.O_CREATE, 0644)
+func AppendHead(fileName string, content string) {
+	f, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, 0644)
 	defer f.Close()
 	data, err := io.ReadAll(f)
 	old := string(data)
@@ -69,8 +69,8 @@ func AppendHead(path string, content string) {
 }
 
 // SaveFile 保存图片
-func SaveFile(path string, data []byte) error {
-	f, err := OpenOrCreate(path, os.O_RDWR|os.O_CREATE, os.ModePerm)
+func SaveFile(fileName string, data []byte) error {
+	f, err := OpenOrCreate(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err == nil {
 		f.Write(data)
 	}

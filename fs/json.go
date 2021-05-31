@@ -5,23 +5,23 @@ import (
 )
 
 // ReadJSON
-func ReadJSON(path string, e interface{}) error {
-	return json.Unmarshal(MustReadFile(path), &e)
+func ReadJSON(fileName string, e interface{}) error {
+	return json.Unmarshal(MustReadFile(fileName), &e)
 }
 
 // ReadJSONToMap
-func ReadJSONToMap(path string) (data map[string]interface{}, err error) {
-	err = ReadJSON(path, data)
+func ReadJSONToMap(fileName string) (data map[string]interface{}, err error) {
+	err = ReadJSON(fileName, data)
 	return
 }
 
 // SaveJSON 保存为json文件
-func SaveJSON(path string, e interface{}) error {
+func SaveJSON(fileName string, e interface{}) error {
 	data, err := json.MarshalIndent(e, "", " ")
 	if err != nil {
 		return err
 	}
-	file, err := Create(path)
+	file, err := Create(fileName)
 	if err != nil {
 		return err
 	}

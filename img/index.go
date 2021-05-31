@@ -12,17 +12,6 @@ type Picture struct {
 	Type  string
 }
 
-// FromReader
-func FromReader(r io.Reader) (*Picture, error) {
-	i, imageType, err := image.Decode(r)
-	return &Picture{Image: i, Type: imageType}, err
-}
-
-// FromBytes
-func FromBytes(bs []byte) (*Picture, error) {
-	return FromReader(bytes.NewBuffer(bs))
-}
-
 // FromFile
 func FromFile(path string) (*Picture, error) {
 	f, err := os.Open(path)
@@ -30,4 +19,15 @@ func FromFile(path string) (*Picture, error) {
 		return nil, err
 	}
 	return FromReader(f)
+}
+
+// FromBytes
+func FromBytes(bs []byte) (*Picture, error) {
+	return FromReader(bytes.NewBuffer(bs))
+}
+
+// FromReader
+func FromReader(r io.Reader) (*Picture, error) {
+	i, imageType, err := image.Decode(r)
+	return &Picture{Image: i, Type: imageType}, err
 }
