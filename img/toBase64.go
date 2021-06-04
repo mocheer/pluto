@@ -2,6 +2,7 @@ package img
 
 import (
 	"bytes"
+	"fmt"
 	"image"
 	"image/gif"
 	"image/jpeg"
@@ -12,6 +13,10 @@ import (
 
 func (p *Picture) ToBase64() (data string, err error) {
 	return ToBase64(p.Image, p.Type)
+}
+
+func (p *Picture) ToDataURI() (data string, err error) {
+	return ToDataURI(p.Image, p.Type)
 }
 
 // ToJPEGBase64 将image转成各种图片编码的base64字符串
@@ -29,5 +34,15 @@ func ToBase64(target image.Image, imageType string) (data string, err error) {
 		return
 	}
 	data = window.Btoa(buf.String())
+	return
+}
+
+// ToDataURI  支持 data uri
+func ToDataURI(target image.Image, imageType string) (data string, err error) {
+	data, err = ToBase64(target, imageType)
+	if err != nil {
+		return "", err
+	}
+	data = fmt.Sprintf("data:image/%s;base64,%s", imageType, data)
 	return
 }
