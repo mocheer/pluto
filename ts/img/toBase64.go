@@ -8,7 +8,7 @@ import (
 	"image/jpeg"
 	"image/png"
 
-	"github.com/mocheer/pluto/js/window"
+	"github.com/mocheer/pluto/js"
 )
 
 func (p *Picture) ToBase64() (data string, err error) {
@@ -33,7 +33,7 @@ func ToBase64(target image.Image, imageType string) (data string, err error) {
 	if err != nil {
 		return
 	}
-	data = window.Btoa(buf.String())
+	data = js.Btoa(buf.String())
 	return
 }
 

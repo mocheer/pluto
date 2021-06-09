@@ -21,10 +21,11 @@ func SaveJSON(fileName string, e interface{}) error {
 	if err != nil {
 		return err
 	}
-	file, err := Create(fileName)
+	f, err := Create(fileName)
 	if err != nil {
 		return err
 	}
-	_, err = file.Write(data)
+	defer f.Close()
+	_, err = f.Write(data)
 	return err
 }

@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-
-	"github.com/mocheer/pluto/reg"
 )
 
 // FmtString
@@ -13,7 +11,8 @@ import (
 // @param data
 // @example FmtString("{a}",map[string]interfacle{}{"a":1})
 func FmtString(src string, data map[string]interface{}) string {
-	return regexp.MustCompile(reg.Brace).ReplaceAllStringFunc(src, func(key string) string {
+	// 匹配花括号内的字符串`{xxx}`，常用于字符串格式化替换
+	return regexp.MustCompile(`{([^}]+)}`).ReplaceAllStringFunc(src, func(key string) string {
 		// 这里的key包含括号
 		val := data[key[1:len(key)-1]]
 		if val == nil {

@@ -1,4 +1,4 @@
-package ecc
+package ec
 
 import (
 	"crypto/rand"

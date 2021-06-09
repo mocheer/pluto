@@ -10,7 +10,7 @@ import (
 	"os"
 )
 
-// Save
+// Save 保存为文件
 func (p *Picture) Save(path string) error {
 	switch p.Type {
 	case JPEG:

@@ -12,7 +12,7 @@ type Picture struct {
 	Type  string
 }
 
-// FromFile
+// FromFile 从文件中读取数据实例化Picture对象
 func FromFile(path string) (*Picture, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -21,7 +21,7 @@ func FromFile(path string) (*Picture, error) {
 	return FromReader(f)
 }
 
-// FromBytes
+// FromBytes 从bytes数据中实例化Picture对象
 func FromBytes(bs []byte) (*Picture, error) {
 	return FromReader(bytes.NewBuffer(bs))
 }

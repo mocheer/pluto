@@ -6,6 +6,7 @@ import (
 	"go/types"
 )
 
+// GetObjects
 func GetObjects(packageName string) []*types.Named {
 	pkg, err := importer.Default().Import(packageName)
 	if err != nil {

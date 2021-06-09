@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-//bezierCurve implements the BezierCurve interface.
+// bezierCurve implements the BezierCurve interface.
 type bezierCurve struct {
 	data []Point
 }

@@ -1,4 +1,4 @@
-package window
+package js
 
 import "encoding/base64"
 

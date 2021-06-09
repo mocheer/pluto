@@ -9,7 +9,7 @@ import (
 )
 
 //ToStruct 用map填充结构
-func MapToStruct(m map[string]interface{}, s interface{}) error {
+func Map2Struct(m map[string]interface{}, s interface{}) error {
 	for k, v := range m {
 		err := setField(s, k, v)
 		if err != nil {

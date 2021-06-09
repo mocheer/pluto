@@ -11,8 +11,8 @@ import (
 // @see https://github.com/andress134/agouti/blob/master/matchers/internal/colorparser/color_parser.go
 type Color color.RGBA
 
-// FromCSS
-func ColorFromCSS(color string) Color {
+// NewColorFromCSS
+func NewColorFromCSS(color string) Color {
 	c, _ := parseCSSColor(color)
 	return c
 }
