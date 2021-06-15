@@ -32,7 +32,7 @@ func Create(fileName string) (*os.File, error) {
 	return nil, err
 }
 
-// MustCreate
+// MustCreate 创建文件
 func MustCreate(fileName string) *os.File {
 	f, err := Create(fileName)
 	if err != nil {
