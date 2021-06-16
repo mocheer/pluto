@@ -1,8 +1,14 @@
-package geom
+package grap
 
 import (
 	"math"
 )
+
+//BezierCurve interface
+type BezierCurve interface {
+	GetPoints(step float64) []Point
+	GetPoint(t float64) Point
+}
 
 // bezierCurve implements the BezierCurve interface.
 type bezierCurve struct {
@@ -34,7 +40,7 @@ func (m *bezierCurve) GetPoint(t float64) Point {
 		x += p.X * b
 		y += p.Y * b
 	}
-	return (Point{x, y})
+	return (Point{X: x, Y: y})
 }
 
 //基函数

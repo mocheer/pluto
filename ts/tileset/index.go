@@ -16,11 +16,12 @@ func FromFile(fileName string) (*Tileset, error) {
 	return FromReader(f), err
 }
 
-// FromBytes 从bytes数据中实例化Picture对象
+// FromBytes 从bytes数据中实例化 Tileset 对象
 func FromBytes(bs []byte) *Tileset {
 	return FromReader(bytes.NewBuffer(bs))
 }
 
+// FromReader
 func FromReader(data io.Reader) *Tileset {
 	var ts *Tileset
 	json.NewDecoder(data).Decode(&ts)

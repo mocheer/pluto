@@ -1,5 +1,7 @@
 package ts
 
+import "github.com/mocheer/pluto/ts/grap"
+
 // Tile 地图瓦片
 type Tile struct {
 	X, Y, Z int
@@ -7,5 +9,5 @@ type Tile struct {
 
 type TilePoint struct {
 	Tile
-	Offset *Point
+	Offset *grap.Point
 }
