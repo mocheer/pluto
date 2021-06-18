@@ -6,5 +6,5 @@ import (
 
 // MustReadText 读取文本文件，当发生错误的时候直接panic
 func MustReadText(fileName string) string {
-	return fn.Bytes2String(MustReadFile(fileName))
+	return fn.Bytes2String(MustRead(fileName))
 }

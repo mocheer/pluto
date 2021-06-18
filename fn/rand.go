@@ -1,27 +1,27 @@
-package calc
+package fn
 
 import (
 	"fmt"
 	"math/rand"
 )
 
-// Bool 随机bool值
-func Bool() bool {
+// RandBool 生成随机bool值
+func RandBool() bool {
 	return rand.Intn(2) == 0
 }
 
-// Caps 随机大写字母
-func Caps() string {
+// RandCaps 生成随机大写字母
+func RandCaps() string {
 	return fmt.Sprint(rand.Intn(26) + 65)
 }
 
-// LowerCase 随机小写字母
-func LowerCase() string {
+// RandLowerCase 生成随机小写字母
+func RandLowerCase() string {
 	return fmt.Sprint(rand.Intn(26) + 97)
 }
 
-// String 生成随机字符串
-func String(num int) string {
+// RandString 生成随机字符串
+func RandString(num int) string {
 	bytes := []byte("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	result := make([]byte, num)
 	for i := 0; i < num; i++ {

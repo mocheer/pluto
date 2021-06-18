@@ -5,16 +5,16 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/mocheer/pluto/fn"
 	"github.com/mocheer/pluto/fs"
+	"github.com/mocheer/pluto/rh"
 )
 
 // Load 下载远程地址中的tileset以及其所有的tile
 func Load(remoteURL, dirName string) error {
-	data, err := fn.Load(remoteURL)
+	data, err := rh.Get(remoteURL)
 	if err == nil {
 		name := filepath.Base(remoteURL) // tileset.json
-		fs.SaveFile(filepath.Join(dirName, name), data)
+		fs.Save(filepath.Join(dirName, name), data)
 		//
 		tiles := FromBytes(data)
 		loadTile(tiles.Root, remoteURL[:strings.LastIndex(remoteURL, "/")], dirName)

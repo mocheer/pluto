@@ -3,12 +3,12 @@ package calc
 import (
 	"math"
 
-	"github.com/mocheer/pluto/ts"
+	"github.com/mocheer/pluto/ts/geois"
 	"github.com/mocheer/pluto/ts/grap"
 )
 
 // LonLat2Tile 经纬度转成瓦片
-func LonLat2Tile(lon float64, lat float64, z float64) (tile *ts.Tile) {
+func LonLat2Tile(lon float64, lat float64, z float64) (tile *geois.Tile) {
 	scaleZ := math.Exp2(z)
 	tileTempX := (lon + 180.0) / 360.0 * scaleZ
 	tileTempY := math.Log(math.Tan(lat*math.Pi/180*0.5+0.25*math.Pi)) / (2.0 * math.Pi)
@@ -16,7 +16,7 @@ func LonLat2Tile(lon float64, lat float64, z float64) (tile *ts.Tile) {
 	tileX := math.Floor(tileTempX)
 	tileY := math.Floor((0.5 - tileTempY) * scaleZ)
 
-	return &ts.Tile{
+	return &geois.Tile{
 		X: int(tileX),
 		Y: int(tileY),
 		Z: int(z),
@@ -24,7 +24,7 @@ func LonLat2Tile(lon float64, lat float64, z float64) (tile *ts.Tile) {
 }
 
 // LonLat2TilePoint 经纬度转成瓦片中的一个点
-func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *ts.TilePoint) {
+func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *geois.TilePoint) {
 	scaleZ := math.Exp2(z)
 	tileTempX := (lon + 180.0) / 360.0 * scaleZ
 	tileTempY := math.Log(math.Tan(lat*math.Pi/180*0.5+0.25*math.Pi)) / (2.0 * math.Pi)
@@ -40,8 +40,8 @@ func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *ts.TilePo
 		Y: float64(pixelY),
 	}
 
-	tilePoint = &ts.TilePoint{
-		Tile: ts.Tile{
+	tilePoint = &geois.TilePoint{
+		Tile: geois.Tile{
 			X: int(tileX),
 			Y: int(tileY),
 			Z: int(z),
@@ -53,7 +53,7 @@ func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *ts.TilePo
 }
 
 // Tile2LonLat 瓦片转经纬度(左上角)
-func Tile2LonLat(tile *ts.Tile) *grap.Point {
+func Tile2LonLat(tile *geois.Tile) *grap.Point {
 	x, y, z := tile.X, tile.Y, tile.Z
 	n := math.Pi - 2*math.Pi*float64(y)/math.Pow(float64(2), float64(z))
 

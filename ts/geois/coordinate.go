@@ -1,4 +1,4 @@
-package gis
+package geois
 
 import (
 	"fmt"
@@ -37,18 +37,18 @@ func (m *Coordinate) ZoomBy(distance float64) *Coordinate {
 }
 
 /**
- * 当前坐标是否恰为某行（即不含小数）
+ * IsRowEdge 当前坐标是否恰为某行（即不含小数）
  * @return	如果恰为某行，则返回true，否则返回false
  */
-func (m *Coordinate) isRowEdge() bool {
+func (m *Coordinate) IsRowEdge() bool {
 	return math.Floor(m.Row) == m.Row
 }
 
 /**
- * 当前坐标是否恰为某列（即不含小数）
+ * IsColumnEdge 当前坐标是否恰为某列（即不含小数）
  * @return	如果恰为某列，则返回true，否则返回false
  */
-func (m *Coordinate) isColumnEdge() bool {
+func (m *Coordinate) IsColumnEdge() bool {
 	return math.Floor(m.Col) == m.Col
 }
 
@@ -56,8 +56,8 @@ func (m *Coordinate) isColumnEdge() bool {
  * 当前坐标是否恰为某行列（即不含小数）
  * @return	如果恰为某行某列，则返回true，否则返回false
  */
-func (m *Coordinate) isEdge() bool {
-	return m.isRowEdge() && m.isColumnEdge()
+func (m *Coordinate) IsEdge() bool {
+	return m.IsRowEdge() && m.IsColumnEdge()
 }
 
 /**
@@ -65,7 +65,7 @@ func (m *Coordinate) isEdge() bool {
  * @param	distance	往上的行数
  * @return			对应坐标
  */
-func (m *Coordinate) up(distance float64) *Coordinate {
+func (m *Coordinate) Up(distance float64) *Coordinate {
 
 	return &Coordinate{m.Row - distance, m.Col, m.Zoom}
 }
@@ -75,7 +75,7 @@ func (m *Coordinate) up(distance float64) *Coordinate {
  * @param	distance	往右的列数
  * @return			对应坐标
  */
-func (m *Coordinate) right(distance float64) *Coordinate { // = 1
+func (m *Coordinate) Right(distance float64) *Coordinate { // = 1
 	return &Coordinate{m.Row, m.Col + distance, m.Zoom}
 }
 
@@ -84,7 +84,7 @@ func (m *Coordinate) right(distance float64) *Coordinate { // = 1
  * @param	distance	下移的行数
  * @return			对应坐标
  */
-func (m *Coordinate) down(distance float64) *Coordinate { //
+func (m *Coordinate) Down(distance float64) *Coordinate { //
 	return &Coordinate{m.Row + distance, m.Col, m.Zoom}
 }
 
@@ -93,14 +93,14 @@ func (m *Coordinate) down(distance float64) *Coordinate { //
  * @param	distance	往左的列数
  * @return			对应坐标
  */
-func (m *Coordinate) left(distance float64) *Coordinate {
+func (m *Coordinate) Left(distance float64) *Coordinate {
 	return &Coordinate{m.Row, m.Col - distance, m.Zoom}
 }
 
 /**
  * 如果两个坐标对象表示同一个位置，则返回true，否则返回false.
  */
-func (m *Coordinate) equalTo(coord *Coordinate) bool {
+func (m *Coordinate) EqualTo(coord *Coordinate) bool {
 	return coord != nil && coord.Row == m.Row && coord.Col == m.Col && coord.Zoom == m.Zoom
 }
 
@@ -108,7 +108,7 @@ func (m *Coordinate) equalTo(coord *Coordinate) bool {
  * 返回当前坐标对应的副本
  * @return	当前坐标对应的副本
  */
-func (m *Coordinate) clone() *Coordinate {
+func (m *Coordinate) Clone() *Coordinate {
 	return &Coordinate{m.Row, m.Col, m.Zoom}
 }
 
@@ -117,5 +117,5 @@ func (m *Coordinate) clone() *Coordinate {
  * @return	坐标的字符串表示形式，格式为：Column,Row,Zoom
  */
 func (m *Coordinate) String() string {
-	return fmt.Sprintf("%d,%d,%d", m.Row, m.Col, m.Zoom)
+	return fmt.Sprintf("%f,%f,%f", m.Row, m.Col, m.Zoom)
 }

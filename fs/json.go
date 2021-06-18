@@ -6,7 +6,7 @@ import (
 
 // ReadJSON
 func ReadJSON(fileName string, e interface{}) error {
-	return json.Unmarshal(MustReadFile(fileName), &e)
+	return json.Unmarshal(MustRead(fileName), &e)
 }
 
 // ReadJSONToMap

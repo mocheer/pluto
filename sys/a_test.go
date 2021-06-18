@@ -7,6 +7,6 @@ import (
 )
 
 func TestGetObjects(t *testing.T) {
-	objs := sys.GetObjects("time")
-	t.Error(objs)
+	objs := sys.GetObjects("testing")
+	t.Log(objs)
 }

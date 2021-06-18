@@ -1,4 +1,4 @@
-package ts
+package geois
 
 import "github.com/mocheer/pluto/ts/grap"
 

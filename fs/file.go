@@ -4,17 +4,15 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 )
 
-// IsExist 检查文件或目录是否存在
-func IsExist(fileName string) bool {
-	_, err := os.Stat(fileName)
-	return err == nil || os.IsExist(err)
+//
+func Read(fileName string) ([]byte, error) {
+	return os.ReadFile(fileName)
 }
 
 //
-func MustReadFile(fileName string) []byte {
+func MustRead(fileName string) []byte {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		panic(err)
@@ -24,12 +22,15 @@ func MustReadFile(fileName string) []byte {
 
 // Create
 func Create(fileName string) (*os.File, error) {
-	err := os.MkdirAll(filepath.Dir(fileName), os.ModePerm)
-	if err == nil {
-		file, err := os.Create(fileName)
-		return file, err
+	dir := filepath.Dir(fileName)
+	if !IsExist(dir) {
+		err := os.MkdirAll(dir, os.ModePerm)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return nil, err
+	file, err := os.Create(fileName)
+	return file, err
 }
 
 // MustCreate 创建文件
@@ -50,30 +51,29 @@ func OpenOrCreate(fileName string, flag int, perm os.FileMode) (*os.File, error)
 	return os.OpenFile(fileName, flag, perm)
 }
 
-// Append 往文件尾部添加字符串
-func Append(fileName string, content string) {
-	f, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
-	f.Write([]byte(content))
-	f.Close()
-}
-
-// Append 往文件尾部添加字符串
-func AppendHead(fileName string, content string) {
-	f, _ := os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, 0644)
-	defer f.Close()
-	data, err := io.ReadAll(f)
-	old := string(data)
-	if err == nil && !strings.Contains(old, content) {
-		f.WriteAt([]byte(content+"\n"+old), 0)
-	}
-}
-
-// SaveFile 保存图片
-func SaveFile(fileName string, data []byte) error {
+// Save 保存图片
+func Save(fileName string, data []byte) error {
 	f, err := OpenOrCreate(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
 	if err == nil {
 		f.Write(data)
 	}
 	defer f.Close()
 	return err
+}
+
+// CopyFile 拷贝文件
+func CopyFile(src, dst string) (err error) {
+	sf, err := os.Open(src)
+	if err != nil {
+		return
+	}
+	defer sf.Close()
+	//
+	df, err := OpenOrCreate(dst, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		return
+	}
+	defer df.Close()
+	_, err = io.Copy(df, sf)
+	return
 }

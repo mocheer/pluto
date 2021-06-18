@@ -12,7 +12,6 @@ func New(t *testing.T) *Test {
 
 func (t Test) Equal(a, b interface{}) {
 	Equal(t.T, a, b)
-
 }
 
 func Equal(t *testing.T, a, b interface{}) {

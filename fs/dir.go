@@ -1,16 +1,16 @@
 package fs
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// MkdirNotExist 创建不存在的文件夹
-func MkdirNotExist(path string) error {
-	isExit := IsExist(path)
-	if !isExit {
-		err := os.MkdirAll(filepath.Dir(path), os.ModePerm)
+// CreateDir 创建不存在的文件夹
+func CreateDir(dirName string) error {
+	if !IsExist(dirName) {
+		err := os.MkdirAll(filepath.Dir(dirName), os.ModePerm)
 		if err != nil {
 			return err
 		}
@@ -83,4 +83,53 @@ func GetFiles(dir, suffix string) (files []string, err error) {
 		return nil
 	})
 	return files, err
+}
+
+// CopyDir 拷贝文件夹和所有子文件夹
+func CopyDir(source string, dst string) error {
+	srcinfo, err := os.Stat(source)
+	if err != nil {
+		return err
+	}
+
+	// 创建目标目录
+	err = os.MkdirAll(dst, srcinfo.Mode())
+	if err != nil {
+		return err
+	}
+
+	dir, _ := os.Open(source)
+	obs, err := dir.Readdir(-1)
+	if err != nil {
+		return err
+	}
+
+	var errs []error
+	for _, obj := range obs {
+		fsource := source + "/" + obj.Name()
+		fdest := dst + "/" + obj.Name()
+		if obj.IsDir() {
+			// 循环拷贝子文件夹
+			err = CopyDir(fsource, fdest)
+			if err != nil {
+				errs = append(errs, err)
+			}
+		} else {
+			// 拷贝文件
+			err = CopyFile(fsource, fdest)
+			if err != nil {
+				errs = append(errs, err)
+			}
+		}
+	}
+
+	if len(errs) > 0 {
+		var errString string
+		for _, err := range errs {
+			errString += err.Error() + "\n"
+		}
+		return errors.New(errString)
+	}
+
+	return nil
 }
