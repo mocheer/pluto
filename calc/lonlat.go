@@ -4,6 +4,7 @@ import (
 	"math"
 
 	"github.com/mocheer/pluto/ts"
+	"github.com/mocheer/pluto/ts/grap"
 )
 
 // LonLat2Tile 经纬度转成瓦片
@@ -34,7 +35,7 @@ func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *ts.TilePo
 	pixelX := int(tileTempX*256.0) % 256
 	pixelY := int((1.0-tileTempY)*scaleZ*256.0) % 256
 	//
-	offsetPoint := &ts.Point{
+	offsetPoint := &grap.Point{
 		X: float64(pixelX),
 		Y: float64(pixelY),
 	}
@@ -52,11 +53,11 @@ func LonLat2TilePoint(lon float64, lat float64, z float64) (tilePoint *ts.TilePo
 }
 
 // Tile2LonLat 瓦片转经纬度(左上角)
-func Tile2LonLat(tile *ts.Tile) *ts.Point {
+func Tile2LonLat(tile *ts.Tile) *grap.Point {
 	x, y, z := tile.X, tile.Y, tile.Z
 	n := math.Pi - 2*math.Pi*float64(y)/math.Pow(float64(2), float64(z))
 
-	return &ts.Point{
+	return &grap.Point{
 		X: float64(x)/math.Exp2(float64(z))*360 - 180,
 		Y: (R2D * math.Atan(0.5*(math.Exp(n)-math.Exp(-1.0*n)))),
 	}
