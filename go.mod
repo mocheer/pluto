@@ -3,6 +3,7 @@ module github.com/mocheer/pluto
 go 1.16
 
 require (
+	github.com/gomarkdown/markdown v0.0.0-20210514010506-3b9f47219fe7 // indirect
 	github.com/imroc/req v0.3.0 // indirect
 	github.com/liuvigongzuoshi/go-kriging v0.0.1-alpha.14
 	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646

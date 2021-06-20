@@ -31,7 +31,7 @@ func (m Map) Bytes() []byte {
 
 //
 func (m Map) String() string {
-	return fn.Bytes2String(m.Bytes())
+	return fn.B2S(m.Bytes())
 }
 
 // 合并两个map

@@ -25,11 +25,11 @@ func setField(obj interface{}, name string, value interface{}) error {
 	structFieldValue := structValue.FieldByName(name) //结构体单个属性值
 
 	if !structFieldValue.IsValid() {
-		return fmt.Errorf("No such field: %s in obj", name)
+		return fmt.Errorf("没有这个字段: %s", name)
 	}
 
 	if !structFieldValue.CanSet() {
-		return fmt.Errorf("Cannot set %s field value", name)
+		return fmt.Errorf("无法设置值：%s", name)
 	}
 
 	structFieldType := structFieldValue.Type() //结构体的类型

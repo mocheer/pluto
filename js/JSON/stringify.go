@@ -12,5 +12,5 @@ func Stringify(v interface{}) string {
 	if err != nil {
 		panic(err)
 	}
-	return fn.Bytes2String(bytes)
+	return fn.B2S(bytes)
 }

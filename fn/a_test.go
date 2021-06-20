@@ -32,3 +32,11 @@ func TestRandString(t *testing.T) {
 	result := fn.RandString(6)
 	t.Log(result)
 }
+
+func TestToSnakeCase(t *testing.T) {
+	result := fn.ToSnakeCase("snakeCase")
+	t.Log(result)
+
+	result = fn.ToSnakeCase("CamelcaseToSnakecase")
+	t.Log(result)
+}
