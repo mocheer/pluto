@@ -24,7 +24,7 @@ func TestToCamelCase(t *testing.T) {
 }
 
 func TestUnicode2String(t *testing.T) {
-	assert.Equal(t, fn.Unicode2String("\u767e\u5ea6\u4e00\u4e0b\uff0c\u4f60\u5c31\u77e5\u9053"), "百度一下，你就知道")
+	assert.Equal(t, fn.Unicode2ZH("\u767e\u5ea6\u4e00\u4e0b\uff0c\u4f60\u5c31\u77e5\u9053"), "百度一下，你就知道")
 }
 
 // TestRandString 测试生成随机字符串

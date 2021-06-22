@@ -6,7 +6,8 @@ import (
 	"strings"
 )
 
-func Unicode2String(from string) string {
+// Unicode2ZH 将unicode编码转成中文
+func Unicode2ZH(from string) string {
 	textQuoted := strconv.QuoteToASCII(from)
 	textUnquoted := textQuoted[1 : len(textQuoted)-1]
 

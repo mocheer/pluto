@@ -1,6 +1,6 @@
 package fn
 
-// IsBlank check the string is blank string
+// IsBlank 是否空字符串
 func IsBlank(str string) bool {
 	for _, r := range str {
 		switch r {
