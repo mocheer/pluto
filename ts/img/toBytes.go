@@ -8,10 +8,12 @@ import (
 	"image/png"
 )
 
+// ToBytes 将图片对象转成bytes字节流
 func (p *Picture) ToBytes() (bs []byte, err error) {
 	return ToBytes(p.Image, p.Type)
 }
 
+// ToBytes 将图片对象转成bytes字节流
 func ToBytes(target image.Image, imageType string) (bs []byte, err error) {
 	buf := new(bytes.Buffer)
 	switch imageType {

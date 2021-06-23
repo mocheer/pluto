@@ -2,17 +2,27 @@ package fs
 
 import (
 	"encoding/json"
+
+	"github.com/mocheer/pluto/fn"
+	"github.com/mocheer/pluto/js/JSON"
+	"github.com/mocheer/pluto/ts"
+	"github.com/tidwall/gjson"
 )
 
 // ReadJSON
 func ReadJSON(fileName string, e interface{}) error {
-	return json.Unmarshal(MustRead(fileName), &e)
+	return json.Unmarshal(MustRead(fileName), e)
 }
 
 // ReadJSONToMap
-func ReadJSONToMap(fileName string) (data map[string]interface{}, err error) {
-	err = ReadJSON(fileName, data)
+func ReadJSONToMap(fileName string) (data ts.Map, err error) {
+	err = ReadJSON(fileName, &data)
 	return
+}
+
+// ReadJSONToGJSON
+func ReadJSONToGJSON(fileName string) gjson.Result {
+	return JSON.Parse(fn.B2S(MustRead(fileName)))
 }
 
 // SaveJSON 保存为json文件
