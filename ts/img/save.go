@@ -11,7 +11,7 @@ import (
 )
 
 // Save 保存为文件
-func (p *Picture) Save(path string) error {
+func (p *Img) Save(path string) error {
 	switch p.Type {
 	case JPEG:
 		return SaveAsJPEG(p.Image, path)
@@ -36,22 +36,22 @@ func SaveAsJPEG(target image.Image, path string) error {
 
 // SaveAsPNG
 func SaveAsPNG(target image.Image, path string) error {
-	file, err := os.Create(path)
+	f, err := os.Create(path)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	return png.Encode(file, target)
+	defer f.Close()
+	return png.Encode(f, target)
 }
 
 // SaveAsGIF
 func SaveAsGIF(target image.Image, path string) error {
-	file, err := os.Create(path)
+	f, err := os.Create(path)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	return gif.Encode(file, target, nil)
+	defer f.Close()
+	return gif.Encode(f, target, nil)
 }
 
 // SaveBase64 将base64字串保存为图片

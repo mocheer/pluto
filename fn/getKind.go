@@ -5,11 +5,8 @@ import (
 )
 
 // GetKind 通过反射获取数据类型
-// GetKind(string) == "string"
-// GetKind(nil)
+// GetKind(string) == reflect.String
+// GetKind(nil) == reflect.Invalid
 func GetKind(v interface{}) reflect.Kind {
-	if v == nil {
-		return reflect.Invalid
-	}
-	return reflect.TypeOf(v).Kind()
+	return reflect.ValueOf(v).Kind()
 }

@@ -10,3 +10,4 @@ config
 # 
 data
 log
+test.*

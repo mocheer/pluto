@@ -2,7 +2,7 @@ package fn
 
 import "reflect"
 
-// IsString
-func IsString(v interface{}) bool {
-	return GetKind(v) == reflect.String
+// IsPtr 是否为指针
+func IsPtr(v interface{}) bool {
+	return GetKind(v) == reflect.Ptr
 }

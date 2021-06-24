@@ -3,8 +3,8 @@ package img
 import "image"
 
 // Clip 剪切
-func (p *Picture) Clip(x0, y0, width, height int) *Picture {
-	return &Picture{Image: Clip(p.Image, x0, y0, width, height), Type: p.Type}
+func (m *Img) Clip(x0, y0, width, height int) *Img {
+	return &Img{Image: Clip(m.Image, x0, y0, width, height), Type: m.Type}
 }
 
 // Clip 剪切

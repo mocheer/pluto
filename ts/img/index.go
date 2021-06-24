@@ -7,13 +7,13 @@ import (
 	"os"
 )
 
-type Picture struct {
+type Img struct {
 	Image image.Image
 	Type  string
 }
 
 // FromFile 从文件中读取数据实例化Picture对象
-func FromFile(path string) (*Picture, error) {
+func FromFile(path string) (*Img, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -22,12 +22,12 @@ func FromFile(path string) (*Picture, error) {
 }
 
 // FromBytes 从bytes数据中实例化Picture对象
-func FromBytes(bs []byte) (*Picture, error) {
+func FromBytes(bs []byte) (*Img, error) {
 	return FromReader(bytes.NewBuffer(bs))
 }
 
 // FromReader
-func FromReader(r io.Reader) (*Picture, error) {
+func FromReader(r io.Reader) (*Img, error) {
 	i, imageType, err := image.Decode(r)
-	return &Picture{Image: i, Type: imageType}, err
+	return &Img{Image: i, Type: imageType}, err
 }

@@ -11,11 +11,11 @@ import (
 	"github.com/mocheer/pluto/js"
 )
 
-func (p *Picture) ToBase64() (data string, err error) {
+func (p *Img) ToBase64() (data string, err error) {
 	return ToBase64(p.Image, p.Type)
 }
 
-func (p *Picture) ToDataURI() (data string, err error) {
+func (p *Img) ToDataURI() (data string, err error) {
 	return ToDataURI(p.Image, p.Type)
 }
 

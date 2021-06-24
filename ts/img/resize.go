@@ -7,8 +7,8 @@ import (
 )
 
 // Resize 重置大小
-func (p *Picture) Resize(width, height int) *Picture {
-	return &Picture{Image: Resize(p.Image, width, height), Type: p.Type}
+func (p *Img) Resize(width, height int) *Img {
+	return &Img{Image: Resize(p.Image, width, height), Type: p.Type}
 }
 
 // Resize 当宽度或者高度为0时，保持比例
