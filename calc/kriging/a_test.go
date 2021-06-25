@@ -26,7 +26,7 @@ var bbox2 = [][2]float64{
 	{119.2, 29.7},
 }
 var levelColors = []ordinarykriging.GridLevelColor{
-	{Color: ordinarykriging.NewRGBA(255, 0, 0, 0), Value: [2]float64{-9999, 0.1}},
+	{Color: ordinarykriging.NewRGBA(255, 0, 0, 0), Value: [2]float64{-99999, 0.1}},
 	{Color: ordinarykriging.NewRGBA(198, 242, 183, 255), Value: [2]float64{0.1, 3.33}},
 	{Color: ordinarykriging.NewRGBA(159, 226, 133, 255), Value: [2]float64{3.33, 6.66}},
 	{Color: ordinarykriging.NewRGBA(127, 211, 90, 255), Value: [2]float64{6.66, 10}},
@@ -78,12 +78,14 @@ func TestSaveGridPng(t *testing.T) {
 		t.Error(err)
 	}
 	res := k.Variogram.Grid(polygon, 0.01)
-	err = k.SaveGridPng(res, "test.png", len(res.Data), len(res.Data[0]), levelColors)
+	err = k.SaveGridPng(res, "test.png", len(res.Data)*4, len(res.Data[0])*4, levelColors)
 	if err != nil {
 		t.Error(err)
 	}
 
 }
+
+
 
 var polygon = ordinarykriging.PolygonCoordinates{
 	ordinarykriging.Ring{

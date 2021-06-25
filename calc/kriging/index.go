@@ -8,13 +8,14 @@ type k struct {
 	Variogram *ordinarykriging.Variogram
 }
 
+//
 func New(values, x, y []float64) *k {
 	return &k{
 		Variogram: ordinarykriging.NewOrdinary(values, x, y),
 	}
 }
 
-// Train
+// Train 训练
 func (m *k) Train(modelType string) error {
 	_, err := m.Variogram.Train(ordinarykriging.ModelType(modelType), 0, 100)
 	return err
