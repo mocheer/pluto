@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/mocheer/pluto/fn"
-	"github.com/mocheer/pluto/js/JSON"
+	"github.com/mocheer/pluto/jsg/JSON"
 	"github.com/mocheer/pluto/ts"
 	"github.com/tidwall/gjson"
 )

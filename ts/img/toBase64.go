@@ -8,7 +8,7 @@ import (
 	"image/jpeg"
 	"image/png"
 
-	"github.com/mocheer/pluto/js"
+	js "github.com/mocheer/pluto/jsg"
 )
 
 func (p *Img) ToBase64() (data string, err error) {

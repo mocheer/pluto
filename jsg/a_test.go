@@ -1,13 +1,13 @@
-package js_test
+package jsg_test
 
 import (
 	"testing"
 
-	"github.com/mocheer/pluto/js"
+	"github.com/mocheer/pluto/jsg"
 )
 
 func TestRun(t *testing.T) {
-	vm := js.New()
+	vm := jsg.New()
 	val, err := vm.Otto.Run("var module ={};module.exports = {a:1};")
 	if err != nil {
 		t.Error(err)
