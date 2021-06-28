@@ -92,6 +92,11 @@ func RSA_PublicKeyFromFile(file string) (*rsa.PublicKey, error) {
 	if err != nil {
 		return nil, err
 	}
+	return RSA_PublicKeyFromBytes(pubByte)
+}
+
+// 解析公匙
+func RSA_PublicKeyFromBytes(pubByte []byte) (*rsa.PublicKey, error) {
 	// pem解码
 	b, _ := pem.Decode(pubByte)
 	if b == nil {
