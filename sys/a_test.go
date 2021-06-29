@@ -11,7 +11,10 @@ func TestGetObjects(t *testing.T) {
 	t.Log(objs)
 }
 
-func TestPowerShell(t *testing.T) {
-	var s sys.PowerShell = "npm -v\n"
-	s.Run()
+func TestExec(t *testing.T) {
+	sys.Exec("npm", "-v")
+}
+
+func TestShell(t *testing.T) {
+	sys.Shell("node -v;npm -v")
 }

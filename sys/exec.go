@@ -1,6 +1,7 @@
 package sys
 
 import (
+	"bufio"
 	"fmt"
 	"os/exec"
 )
@@ -24,22 +25,25 @@ func Exec(name string, params ...string) error {
 	if err != nil {
 		return err
 	}
-
-	if err = command.Start(); err != nil {
+	err = command.Start()
+	if err != nil {
 		return err
 	}
 	// 从管道中实时获取输出并打印到终端
-	for {
-		tmp := make([]byte, 1024)
-		_, err := stdout.Read(tmp)
-		fmt.Print(string(tmp))
-		if err != nil {
-			break
-		}
+	scanner := bufio.NewScanner(stdout)
+	// scanner.Split(bufio.ScanLines)
+	for scanner.Scan() {
+		m := scanner.Text()
+		fmt.Println(m)
 	}
 	//
 	if err = command.Wait(); err != nil {
 		return err
 	}
 	return nil
+}
+
+// Shell 执行PowerShell脚本，多个命令可用;间隔
+func Shell(script string) error {
+	return Exec("powershell", "-Command", script)
 }

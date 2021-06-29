@@ -25,8 +25,8 @@ func RSA_GenPemFiles(dir string, bits int) error {
 	return RSA_GenPems(pri, pub, bits)
 }
 
-// RSA_DecodeJSEncrypt 用于用户名、密码解密
-func RSA_DecodeJSEncrypt(data string, privatePemPath string) string {
+// RSA_JSEncrypt 用于用户名、密码解密
+func RSA_JSEncrypt(data string, privatePemPath string) string {
 	// JSEncrypt 生成的编码本身会再加上base64编码
 	b, _ := base64.StdEncoding.DecodeString(data)
 	//
@@ -112,12 +112,7 @@ func RSA_PublicKeyFromBytes(pubByte []byte) (*rsa.PublicKey, error) {
 }
 
 // 解析私匙
-func RSA_PrivateKeyFromFile(file string) (*rsa.PrivateKey, error) {
-	// 读取私匙
-	priByte, err := os.ReadFile(file)
-	if err != nil {
-		return nil, err
-	}
+func RSA_PrivateKeyFromBytes(priByte []byte) (*rsa.PrivateKey, error) {
 	// pem解码
 	block, _ := pem.Decode(priByte)
 	if block == nil {
@@ -131,6 +126,17 @@ func RSA_PrivateKeyFromFile(file string) (*rsa.PrivateKey, error) {
 	return prikey, nil
 }
 
+// 解析私匙
+func RSA_PrivateKeyFromFile(file string) (*rsa.PrivateKey, error) {
+	// 读取私匙
+	priByte, err := os.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	return RSA_PrivateKeyFromBytes(priByte)
+}
+
+// RSA_DecryptByPem 通过Pem文件解码
 func RSA_DecryptByPem(src []byte, file string) ([]byte, error) {
 	//
 	privateKey, err := RSA_PrivateKeyFromFile(file) // 解密私匙
@@ -138,12 +144,7 @@ func RSA_DecryptByPem(src []byte, file string) ([]byte, error) {
 		return nil, err
 	}
 	// 解密
-	res, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, src)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return RSA_Decrypt(src, privateKey)
 }
 
 //  rsa公匙加密
