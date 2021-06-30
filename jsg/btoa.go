@@ -11,6 +11,7 @@ func Btoa(s string) string {
 	return BtoaBytes(fn.S2B(s))
 }
 
+//
 func BtoaBytes(bytes []byte) string {
 	return base64.StdEncoding.EncodeToString(bytes)
 }

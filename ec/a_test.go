@@ -16,6 +16,7 @@ func TestRsa(t *testing.T) {
 	data := "hello world"
 	pubKey, _ := ec.RSA_PublicKeyFromFile("test/public.pem") // 解密公匙
 	encryData, _ := ec.RSA_Encrypt([]byte(data), pubKey)     // 加密数据
+
 	//
 	priKey, _ := ec.RSA_PrivateKeyFromFile("test/private.pem") // 解密私匙
 	decryData, _ := ec.RSA_Decrypt(encryData, priKey)          // 解密数据

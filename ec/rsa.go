@@ -28,11 +28,14 @@ func RSA_GenPemFiles(dir string, bits int) error {
 // RSA_JSEncrypt 用于用户名、密码解密
 func RSA_JSEncrypt(data string, privatePemPath string) string {
 	// JSEncrypt 生成的编码本身会再加上base64编码
-	b, _ := base64.StdEncoding.DecodeString(data)
+	b, err := base64.StdEncoding.DecodeString(data)
+	if err != nil {
+		panic(err)
+	}
 	//
 	plain, err := RSA_DecryptByPem(b, privatePemPath) // 解密私匙
 	if err != nil {
-		panic(nil)
+		panic(err)
 	}
 	return string(plain)
 }
