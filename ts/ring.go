@@ -12,8 +12,8 @@ func NewRing(data []interface{}) *Ring {
 	return ra
 }
 
-// GetNext
-func (m *Ring) GetNext() interface{} {
+// Next
+func (m *Ring) Next() interface{} {
 	data := m.data
 	len := len(data)
 	m.index++
@@ -23,18 +23,17 @@ func (m *Ring) GetNext() interface{} {
 	return data[m.index]
 }
 
-//GetCurrent
-func (m *Ring) GetCurrent() interface{} {
-	data := m.data
-	return data[m.index]
+//Current
+func (m *Ring) Current() interface{} {
+	return m.data[m.index]
+}
+
+//Index
+func (m *Ring) Index() interface{} {
+	return m.index
 }
 
 //SetIndex
 func (m *Ring) SetIndex(index int) {
 	m.index = index
-}
-
-//GetIndex
-func (m *Ring) GetIndex() interface{} {
-	return m.index
 }

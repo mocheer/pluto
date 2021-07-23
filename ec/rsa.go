@@ -11,15 +11,15 @@ import (
 	"os"
 	"path"
 
-	"github.com/mocheer/pluto/fs"
+	"github.com/mocheer/pluto/ds"
 )
 
 // RSA_GenPemFiles
 func RSA_GenPemFiles(dir string, bits int) error {
 	privatePemPath := path.Join(dir, "private.pem")
 	publicPemPath := path.Join(dir, "public.pem")
-	pri := fs.MustCreate(privatePemPath)
-	pub := fs.MustCreate(publicPemPath)
+	pri := ds.MustCreate(privatePemPath)
+	pub := ds.MustCreate(publicPemPath)
 	defer pri.Close()
 	defer pub.Close()
 	return RSA_GenPems(pri, pub, bits)

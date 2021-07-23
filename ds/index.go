@@ -1,6 +1,8 @@
-package fs
+package ds
 
-import "os"
+import (
+	"os"
+)
 
 // IsExist 检查文件或目录是否存在
 func IsExist(path string) bool {
@@ -17,5 +19,6 @@ func Copy(src, dst string) error {
 	if info.IsDir() {
 		return CopyDir(src, dst)
 	}
+
 	return CopyFile(src, dst)
 }

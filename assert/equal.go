@@ -19,7 +19,3 @@ func Equal(t *testing.T, a, b interface{}) {
 		t.Errorf("Not Equal. %d %d", a, b)
 	}
 }
-
-func DeepEqual(t *testing.T, a, b interface{}) {
-
-}

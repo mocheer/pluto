@@ -1,4 +1,4 @@
-package fs_test
+package ds_test
 
 import (
 	"strings"
@@ -6,7 +6,6 @@ import (
 
 	"github.com/mocheer/pluto/assert"
 	"github.com/mocheer/pluto/fn"
-	"github.com/mocheer/pluto/fs"
 )
 
 func TestRead(t *testing.T) {
@@ -15,5 +14,5 @@ func TestRead(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, strings.HasPrefix(fn.B2S(data), "package fs_test"), true)
+	assert.Equal(t, strings.HasPrefix(fn.B2S(data), "package ds_test"), true)
 }

@@ -1,4 +1,4 @@
-package fs
+package dszip
 
 import (
 	"archive/zip"
@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-// EachZip 遍历zip文件
-func EachZip(fileName string, callback func(*zip.File)) {
+// Each 遍历zip文件
+func Each(fileName string, callback func(*zip.File)) {
 	// 读取
 	zipFile, err := zip.OpenReader(fileName)
 	if err != nil {
@@ -23,10 +23,10 @@ func EachZip(fileName string, callback func(*zip.File)) {
 	}
 }
 
-// ExtractZip 解压缩zip文件
-func ExtractZip(fileName string) {
+// Extract 解压缩zip文件
+func Extract(fileName string) {
 	// 读取
-	EachZip(fileName, func(f *zip.File) {
+	Each(fileName, func(f *zip.File) {
 		info := f.FileInfo()
 		if info.IsDir() {
 			err := os.MkdirAll(f.Name, os.ModePerm)
@@ -52,8 +52,8 @@ func ExtractZip(fileName string) {
 
 }
 
-// WriteZip 读取某个文件并创建压缩包
-func WriteZip(data []byte, fileName string) {
+// Write 读取某个文件并创建压缩包
+func Write(data []byte, fileName string) {
 	// 缓存压缩文件内容
 	buf := new(bytes.Buffer)
 
