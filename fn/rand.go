@@ -21,11 +21,16 @@ func RandLowerCase() string {
 }
 
 // RandString 生成随机字符串
-func RandString(num int) string {
+func RandBytes(num int) []byte {
 	bytes := []byte("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 	result := make([]byte, num)
 	for i := 0; i < num; i++ {
 		result[i] = bytes[rand.Intn(len(bytes))]
 	}
-	return string(result)
+	return result
+}
+
+// RandString 生成随机字符串
+func RandString(num int) string {
+	return B2S(RandBytes(num))
 }
