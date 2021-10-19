@@ -31,3 +31,8 @@ func FromReader(r io.Reader) (*Img, error) {
 	i, imageType, err := image.Decode(r)
 	return &Img{Image: i, Type: imageType}, err
 }
+
+// FromImage
+func FromImage(ig image.Image) *Img {
+	return &Img{Image: ig}
+}
