@@ -3,6 +3,7 @@ package fn
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 // RandBool 生成随机bool值
@@ -22,10 +23,10 @@ func RandLowerCase() string {
 
 // RandString 生成随机字符串
 func RandBytes(num int) []byte {
-	bytes := []byte("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	result := make([]byte, num)
 	for i := 0; i < num; i++ {
-		result[i] = bytes[rand.Intn(len(bytes))]
+		result[i] = byte(r.Intn(26) + 65)
 	}
 	return result
 }
