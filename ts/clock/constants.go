@@ -1,5 +1,7 @@
 package clock
 
+// clock的最小单位为秒
+
 // Minute
 // 1min=60s
 var Minute = 60

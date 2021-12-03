@@ -1,4 +1,4 @@
-package dsxml
+package ds_xml
 
 import (
 	"encoding/xml"

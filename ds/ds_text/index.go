@@ -1,13 +1,15 @@
-package dstext
+package ds_text
 
 import (
+	"os"
+
 	"github.com/mocheer/pluto/ds"
 	"github.com/mocheer/pluto/fn"
 )
 
 //
 func Read(fileName string) (string, error) {
-	bs, err := ds.Read(fileName)
+	bs, err := os.ReadFile(fileName)
 	return fn.B2S(bs), err
 }
 

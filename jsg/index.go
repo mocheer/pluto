@@ -1,7 +1,7 @@
 package jsg
 
 import (
-	"github.com/mocheer/pluto/ds/dstext"
+	"github.com/mocheer/pluto/ds/ds_text"
 	"github.com/robertkrimen/otto"
 )
 
@@ -15,7 +15,7 @@ func New() *vm {
 
 // 导入脚本
 func (m vm) Import(fileName string) (otto.Value, error) {
-	script, err := dstext.Read(fileName)
+	script, err := ds_text.Read(fileName)
 	if err != nil {
 		return otto.Value{}, err
 	}

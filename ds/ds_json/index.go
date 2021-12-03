@@ -1,7 +1,8 @@
-package dsjson
+package ds_json
 
 import (
 	"encoding/json"
+	"os"
 
 	"github.com/mocheer/pluto/ds"
 	"github.com/mocheer/pluto/fn"
@@ -12,7 +13,7 @@ import (
 
 // Read
 func Read(fileName string, e interface{}) error {
-	data, err := ds.Read(fileName)
+	data, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
 	}
@@ -24,9 +25,9 @@ func ReadGJSON(fileName string) gjson.Result {
 	return JSON.Parse(fn.B2S(ds.MustRead(fileName)))
 }
 
-// Save 保存为json文件
-func Save(fileName string, e interface{}) error {
-	data, err := json.MarshalIndent(e, "", " ")
+// Save 保存数据为json文件（包含json格式化）
+func Save(fileName string, data interface{}) error {
+	_data, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err
 	}
@@ -35,6 +36,6 @@ func Save(fileName string, e interface{}) error {
 		return err
 	}
 	defer f.Close()
-	_, err = f.Write(data)
+	_, err = f.Write(_data)
 	return err
 }

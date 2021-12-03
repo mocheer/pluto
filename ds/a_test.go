@@ -1,16 +1,16 @@
 package ds_test
 
 import (
+	"os"
 	"strings"
 	"testing"
 
 	"github.com/mocheer/pluto/assert"
-	"github.com/mocheer/pluto/ds"
 	"github.com/mocheer/pluto/fn"
 )
 
 func TestRead(t *testing.T) {
-	data, err := ds.Read("./a_test.go")
+	data, err := os.ReadFile("./a_test.go")
 	if err != nil {
 		t.Error(err)
 	}

@@ -1,4 +1,4 @@
-package dszip
+package ds_zip
 
 import (
 	"archive/zip"

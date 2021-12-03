@@ -7,7 +7,7 @@ import (
 )
 
 //
-func Read(fileName string) ([]byte, error) {
+func ReadFile(fileName string) ([]byte, error) {
 	return os.ReadFile(fileName)
 }
 
@@ -20,7 +20,7 @@ func MustRead(fileName string) []byte {
 	return data
 }
 
-// Create
+// Create 创建一个不存在的文件(已存在则忽略)
 func Create(fileName string) (*os.File, error) {
 	dir := filepath.Dir(fileName)
 	if !IsExist(dir) {

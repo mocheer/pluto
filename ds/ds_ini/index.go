@@ -1,4 +1,4 @@
-package dsini
+package ds_ini
 
 import "gopkg.in/ini.v1"
 
