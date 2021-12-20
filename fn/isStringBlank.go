@@ -1,7 +1,7 @@
 package fn
 
-// IsBlank 是否空字符串
-func IsBlank(str string) bool {
+// IsStringBlank 是否空字符串
+func IsStringBlank(str string) bool {
 	for _, r := range str {
 		switch r {
 		case 9:

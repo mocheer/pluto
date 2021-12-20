@@ -4,65 +4,72 @@ import (
 	"strconv"
 )
 
+// 类似于javascript，全局的parseInt、parseFloat
 // ParseFloat64
-func ParseFloat64(str string) (float64, error) {
-	return strconv.ParseFloat(str, 64)
+func ParseFloat64(str string) float64 {
+	f64, _ := strconv.ParseFloat(str, 64)
+	return f64
 }
 
 // ParseFloat32
-func ParseFloat32(str string) (float32, error) {
-	f64, err := strconv.ParseFloat(str, 32)
-	return float32(f64), err
+func ParseFloat32(str string) float32 {
+	f64, _ := strconv.ParseFloat(str, 32)
+	return float32(f64)
 }
 
 // ParseInt64
-func ParseInt64(str string) (int64, error) {
-	return strconv.ParseInt(str, 10, 64)
+func ParseInt64(str string) int64 {
+	i64, _ := strconv.ParseInt(str, 10, 64)
+	return i64
 }
 
 // ParseInt32
-func ParseInt32(str string) (int32, error) {
-	i64, err := strconv.ParseInt(str, 10, 32)
-	return int32(i64), err
+func ParseInt32(str string) int32 {
+	i64, _ := strconv.ParseInt(str, 10, 32)
+	return int32(i64)
 }
 
 // ParseInt16
-func ParseInt16(str string) (int16, error) {
-	i64, err := strconv.ParseInt(str, 10, 16)
-	return int16(i64), err
+func ParseInt16(str string) int16 {
+	i64, _ := strconv.ParseInt(str, 10, 16)
+	return int16(i64)
 }
 
 // ParseInt8
-func ParseInt8(str string) (int8, error) {
-	i64, err := strconv.ParseInt(str, 10, 8)
-	return int8(i64), err
+func ParseInt8(str string) int8 {
+	i64, _ := strconv.ParseInt(str, 10, 8)
+	return int8(i64)
 }
 
-// ParseInt
-func ParseInt(str string) (int, error) {
-	return strconv.Atoi(str)
+// ParseInt 解析失败时，返回int默认值
+func ParseInt(str string) int {
+	i, _ := strconv.Atoi(str)
+	return i
 }
 
 // ParseUint64
-func ParseUint64(str string) (uint64, error) {
-	return strconv.ParseUint(str, 10, 0)
+func ParseUint64(str string) uint64 {
+	ui, _ := strconv.ParseUint(str, 10, 0)
+	return ui
 }
 
 // ParseUint
-func ParseUint(str string) (uint, error) {
-	u64, err := strconv.ParseUint(str, 10, 0)
-	return uint(u64), err
+func ParseUint(str string) uint {
+	u64, _ := strconv.ParseUint(str, 10, 0)
+	return uint(u64)
 }
 
 // ParseHex
-func ParseHex(str string) (uint64, error) {
-	return strconv.ParseUint(str, 0, 0) //如果 base 为 0，则根据字符串的前缀判断进位制（0x:16，0:8，其它:10）
+func ParseHex(str string) uint64 {
+	u64, _ := strconv.ParseUint(str, 0, 0) //如果 base 为 0，则根据字符串的前缀判断进位制（0x:16，0:8，其它:10）
+	return u64
 }
 
-// Bool 将字符串转换为布尔值
+// ParseBool 将字符串转换为布尔值
 // 它接受真值：1, t, T, TRUE, true, True
 // 它接受假值：0, f, F, FALSE, false, False.
 // 其它任何值都返回一个错误
-func ParseBool(str string) (bool, error) {
-	return strconv.ParseBool(str)
+func ParseBool(str string) bool {
+	b, _ := strconv.ParseBool(str)
+	return b
 }

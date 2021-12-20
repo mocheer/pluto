@@ -9,7 +9,7 @@ import (
 )
 
 //ToStruct 用map填充结构
-func Map2Struct(m map[string]interface{}, s interface{}) error {
+func Map2Struct(m map[string]interface{}, s struct{}) error {
 	for k, v := range m {
 		err := setField(s, k, v)
 		if err != nil {
@@ -20,7 +20,7 @@ func Map2Struct(m map[string]interface{}, s interface{}) error {
 }
 
 //setField 用map的值替换结构的值
-func setField(obj interface{}, name string, value interface{}) error {
+func setField(obj struct{}, name string, value interface{}) error {
 	structValue := reflect.ValueOf(obj).Elem()        //结构体属性值
 	structFieldValue := structValue.FieldByName(name) //结构体单个属性值
 
