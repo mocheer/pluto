@@ -2,7 +2,6 @@
 *.exe
 # air tmp
 tmp
-docs
 # vendor
 vendor
 public
