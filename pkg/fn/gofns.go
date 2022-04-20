@@ -6,9 +6,10 @@ import (
 
 // GoFns
 // @example GoFns(16,tasks); // 将tasks拆分成16组，并发执行
-func GoFns(num int, fns []func()) (wg *sync.WaitGroup) {
+// 这个分组机制有问题
+func GoFns(step int, fns []func()) (wg *sync.WaitGroup) {
 	size := len(fns)
-	step := size/num + 1
+	num := size/step + 1
 	wg = &sync.WaitGroup{}
 	for i := 0; i < num; i++ {
 		start := step * i
