@@ -2,12 +2,14 @@ package fn
 
 import (
 	"strconv"
+	"strings"
 )
 
 // 类似于javascript，全局的parseInt、parseFloat
+// 需要去掉首尾空格，否则可能会解析为0
 // ParseFloat64
 func ParseFloat64(str string) float64 {
-	f64, _ := strconv.ParseFloat(str, 64)
+	f64, _ := strconv.ParseFloat(strings.TrimSpace(str), 64)
 	return f64
 }
 

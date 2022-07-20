@@ -1,6 +1,7 @@
 package ds_text
 
 import (
+	"bufio"
 	"os"
 
 	"github.com/mocheer/pluto/pkg/ds"
@@ -16,4 +17,18 @@ func Read(fileName string) (string, error) {
 // MustRead 读取文本文件，当发生错误的时候直接panic
 func MustRead(fileName string) string {
 	return fn.B2S(ds.MustRead(fileName))
+}
+
+// ReadLine 按行读取文本文件，常用于特殊数据文件的解析
+func ReadLine(fileName string, fn func(line string)) error {
+	file, err := os.Open(fileName)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		fn(scanner.Text())
+	}
+	return nil
 }

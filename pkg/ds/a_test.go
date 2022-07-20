@@ -5,8 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/assert"
 	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestRead(t *testing.T) {

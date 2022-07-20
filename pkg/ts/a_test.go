@@ -3,8 +3,8 @@ package ts_test
 import (
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/assert"
 	"github.com/mocheer/pluto/pkg/ts"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetObjects(t *testing.T) {

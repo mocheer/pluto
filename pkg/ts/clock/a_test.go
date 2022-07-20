@@ -3,8 +3,8 @@ package clock_test
 import (
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/assert"
 	"github.com/mocheer/pluto/pkg/ts/clock"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClock(t *testing.T) {

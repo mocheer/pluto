@@ -13,7 +13,7 @@ func Read(fileName string, e interface{}) error {
 }
 
 // ReadToMap
-func ReadToMap(fileName string) (data ts.Map, err error) {
+func ReadToMap(fileName string) (data ts.Map[any], err error) {
 	err = Read(fileName, data)
 	return
 }

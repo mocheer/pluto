@@ -7,8 +7,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/assert"
 	"github.com/mocheer/pluto/pkg/ec"
+	"github.com/stretchr/testify/assert"
 )
 
 // ecc 加密技术测试
@@ -25,6 +25,7 @@ func TestRsa(t *testing.T) {
 	decryData, _ := ec.RSA_Decrypt(encryData, priKey)          // 解密数据
 	//
 	os.RemoveAll("test")
+
 	assert.Equal(t, data, string(decryData))
 
 }

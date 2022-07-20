@@ -16,6 +16,12 @@ func GetCurrentPath() string {
 	return path
 }
 
+// GetCurrentDirname 获取程序当前执行的路径的目录名称
+func GetCurrentDirname() string {
+	_, file := filepath.Split(GetCurrentPath())
+	return file
+}
+
 // 获取当前函数所在文件路径（一旦文件编译生成）
 // skip=0 是当前sys的目录
 // skip=1 是当前调用 GetCurrentFuncPath(1) 的目录

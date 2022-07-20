@@ -1,11 +1,13 @@
 package fn_test
 
 import (
+	"math"
 	"reflect"
 	"testing"
+	"time"
 
-	"github.com/mocheer/pluto/pkg/assert"
 	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFmtString(t *testing.T) {
@@ -38,4 +40,14 @@ func TestToSnakeCase(t *testing.T) {
 
 	result = fn.ToSnakeCase("CamelcaseToSnakecase")
 	t.Log(result)
+}
+
+func TestIsTime(t *testing.T) {
+
+	t.Error(fn.GetType(time.Now())) //struct
+}
+
+func TestMinFloat64(t *testing.T) {
+
+	t.Error(math.SmallestNonzeroFloat64) //struct
 }
