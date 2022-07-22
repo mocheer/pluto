@@ -6,7 +6,7 @@ import (
 	"github.com/samber/lo"
 )
 
-// https://github1s.com/d3/d3-array/blob/HEAD/src/extent.js
+// @see https://github1s.com/d3/d3-array/blob/HEAD/src/extent.js
 
 func Extent(values []float64, valueof func(value float64, index int, values []float64) float64) []float64 {
 	min := math.SmallestNonzeroFloat64

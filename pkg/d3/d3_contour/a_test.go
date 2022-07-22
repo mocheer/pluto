@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/d3/d3_contour"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test1(t *testing.T) {
@@ -20,12 +21,15 @@ func Test1(t *testing.T) {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	})
-	// {
-	// 	"type": "MultiPolygon",
-	// 	"value": 0.5,
-	// 	"coordinates": []
-	// }
-	t.Log(data)
+	//
+	assert.Equal(t, []*d3_contour.ContourPolygon{
+		{
+			Type:        "MultiPolygon",
+			Value:       0.5,
+			Coordinates: [][][][2]float64{},
+		},
+	}, data)
+
 }
 
 func Test2(t *testing.T) {
@@ -41,18 +45,20 @@ func Test2(t *testing.T) {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	})
-	// {
-	// 	"type": "MultiPolygon",
-	// 	"value": 0.5,
-	// 	"coordinates": [
-	// 		[
-	// 			[[6, 7.5], [6, 6.5], [6, 5.5], [6, 4.5], [6, 3.5], [5.5, 3], [4.5, 3],
-	// 			 [3.5, 3], [3, 3.5], [3, 4.5], [3, 5.5], [3, 6.5], [3, 7.5], [3.5, 8],
-	// 			 [4.5, 8], [5.5, 8], [6, 7.5]]
-	// 		]
-	// 	]
-	// }
-	t.Log(data)
+
+	assert.Equal(t, []*d3_contour.ContourPolygon{
+		{
+			Type:  "MultiPolygon",
+			Value: 0.5,
+			Coordinates: [][][][2]float64{
+				{
+					{{6, 7.5}, {6, 6.5}, {6, 5.5}, {6, 4.5}, {6, 3.5}, {5.5, 3}, {4.5, 3},
+						{3.5, 3}, {3, 3.5}, {3, 4.5}, {3, 5.5}, {3, 6.5}, {3, 7.5}, {3.5, 8},
+						{4.5, 8}, {5.5, 8}, {6, 7.5}},
+				},
+			},
+		},
+	}, data)
 }
 
 func Test3(t *testing.T) {
