@@ -7,7 +7,7 @@ import (
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
 
-	"github.com/mocheer/pluto/pkg/jsg/JSON"
+	"github.com/mocheer/pluto/pkg/ts/JSON"
 	"github.com/tidwall/gjson"
 )
 

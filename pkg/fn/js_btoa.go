@@ -1,14 +1,12 @@
-package jsg
+package fn
 
 import (
 	"encoding/base64"
-
-	"github.com/mocheer/pluto/pkg/fn"
 )
 
 // Btoa 编码base64字符串
 func Btoa(s string) string {
-	return BtoaBytes(fn.S2B(s))
+	return BtoaBytes(S2B(s))
 }
 
 //

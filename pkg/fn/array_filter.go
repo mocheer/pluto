@@ -1,5 +1,0 @@
-package fn
-
-func ArrayFilter() {
-
-}

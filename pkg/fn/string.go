@@ -25,7 +25,7 @@ func ParseInt64(str string) int64 {
 	return i64
 }
 
-// ParseInt32
+// ParseInt32 有问题，不包括浮点数解析
 func ParseInt32(str string) int32 {
 	i64, _ := strconv.ParseInt(str, 10, 32)
 	return int32(i64)

@@ -7,20 +7,54 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"github.com/mocheer/pluto/pkg/fn"
 )
 
 // Each 遍历zip文件
-func Each(fileName string, callback func(*zip.File)) {
+func Each(fileName string, callback func(*zip.File)) error {
 	// 读取
 	zipFile, err := zip.OpenReader(fileName)
+	// zip: not a valid zip file [recovered]
+	// fn.Panic(err, fileName+"不是有效的zip文件")
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
 	defer zipFile.Close()
-	// 遍历所有文件
+	// 遍历所有文件，包括文件夹本身
 	for _, f := range zipFile.File {
 		callback(f)
 	}
+	return nil
+}
+
+// EachFiles 遍历zip文件
+func EachFiles(fileName string, callback func(*zip.File)) error {
+	return Each(fileName, func(f *zip.File) {
+		info := f.FileInfo()
+		if !info.IsDir() {
+			callback(f)
+		}
+	})
+}
+
+// EachFiles 遍历zip文件
+func EachFilesReader(fileName string, callback func(io.ReadCloser)) error {
+	return EachFiles(fileName, func(f *zip.File) {
+		reader, err := f.Open()
+		fn.Panic(err, "无法解压")
+		defer reader.Close()
+		callback(reader)
+	})
+}
+
+// EachFilesBytes 遍历zip文件
+func EachFilesBytes(fileName string, callback func([]byte)) error {
+	return EachFilesReader(fileName, func(r io.ReadCloser) {
+		bs, err := io.ReadAll(r)
+		fn.Panic(err, "无法读取")
+		callback(bs)
+	})
 }
 
 // Extract 解压缩zip文件
@@ -52,7 +86,7 @@ func Extract(fileName string) {
 
 }
 
-// Write 读取某个文件并创建压缩包
+// Write 创建压缩包并写入文件
 func Write(data []byte, fileName string) {
 	// 缓存压缩文件内容
 	buf := new(bytes.Buffer)

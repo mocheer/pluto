@@ -1,4 +1,4 @@
-package jsg
+package fn
 
 import "encoding/base64"
 
