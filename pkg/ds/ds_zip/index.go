@@ -14,15 +14,30 @@ import (
 // Each 遍历zip文件
 func Each(fileName string, callback func(*zip.File)) error {
 	// 读取
-	zipFile, err := zip.OpenReader(fileName)
+	r, err := zip.OpenReader(fileName)
 	// zip: not a valid zip file [recovered]
 	// fn.Panic(err, fileName+"不是有效的zip文件")
 	if err != nil {
 		return err
 	}
-	defer zipFile.Close()
+	defer r.Close()
 	// 遍历所有文件，包括文件夹本身
-	for _, f := range zipFile.File {
+	for _, f := range r.File {
+		callback(f)
+	}
+	return nil
+}
+
+// EachByReader
+// EachByReader(file,file.Size)
+// EachByReader(bytes.NewReader(bs),len(bs))
+func EachByReader(reader io.ReaderAt, size int64, callback func(*zip.File)) error {
+	r, err := zip.NewReader(reader, size)
+	if err != nil {
+		return err
+	}
+	// 遍历所有文件，包括文件夹本身
+	for _, f := range r.File {
 		callback(f)
 	}
 	return nil
