@@ -26,7 +26,7 @@ const (
 
 // StructToMap 结构体转map
 // fn.StructToMap(struct, "map", "")
-func StructToMap(s interface{}, tag string, methodName string) (res map[string]interface{}, err error) {
+func StructToMap(s any, tag string, methodName string) (res map[string]any, err error) {
 	v := getValue(s)
 	t := getType(v)
 	//
@@ -34,7 +34,7 @@ func StructToMap(s interface{}, tag string, methodName string) (res map[string]i
 		return nil, fmt.Errorf("结构体参数有问题")
 	}
 	//
-	res = make(map[string]interface{})
+	res = make(map[string]any)
 	for i := 0; i < t.NumField(); i++ {
 		fieldType := t.Field(i)
 
@@ -131,7 +131,7 @@ func StructToMap(s interface{}, tag string, methodName string) (res map[string]i
 	return
 }
 
-func getValue(s interface{}) reflect.Value {
+func getValue(s any) reflect.Value {
 	return reflect.ValueOf(s)
 }
 
@@ -183,10 +183,10 @@ func readTag(f reflect.StructField, tag string) (string, int) {
 }
 
 // 当结构体自身实现了toMap方法时，
-func callFunc(fv reflect.Value, methodName string) (string, interface{}, error) {
+func callFunc(fv reflect.Value, methodName string) (string, any, error) {
 	methodRes := fv.MethodByName(methodName).Call([]reflect.Value{})
 	if len(methodRes) != methodResNum {
-		return "", nil, fmt.Errorf("wrong method %s, should have 2 output: (string,interface{})", methodName)
+		return "", nil, fmt.Errorf("wrong method %s, should have 2 output: (string,any)", methodName)
 	}
 	if methodRes[0].Kind() != reflect.String {
 		return "", nil, fmt.Errorf("wrong method %s, first output should be string", methodName)

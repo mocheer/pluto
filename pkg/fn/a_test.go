@@ -11,7 +11,7 @@ import (
 )
 
 func TestFmtString(t *testing.T) {
-	result := fn.FmtString(`{a}bcd{e}fg{h}`, map[string]interface{}{"a": "1", "b": 2, "c": 3.0, "h": "4.0"})
+	result := fn.FmtString(`{a}bcd{e}fg{h}`, map[string]any{"a": "1", "b": 2, "c": 3.0, "h": "4.0"})
 	assert.Equal(t, result, "1bcdfg4.0")
 
 }
@@ -44,10 +44,13 @@ func TestToSnakeCase(t *testing.T) {
 
 func TestIsTime(t *testing.T) {
 
-	t.Error(fn.GetType(time.Now())) //struct
+	t.Log(fn.GetType(time.Now())) //struct
 }
 
 func TestMinFloat64(t *testing.T) {
-
-	t.Error(math.SmallestNonzeroFloat64) //struct
+	var a = 4.8
+	t.Log(math.SmallestNonzeroFloat64) //struct
+	t.Log(int(a))
+	t.Log(fn.RoundInt(4.49))
+	t.Log(fn.RoundInt(4.5))
 }

@@ -3,6 +3,6 @@ package fn
 import "reflect"
 
 // IsString
-func IsString(v interface{}) bool {
+func IsString(v any) bool {
 	return GetKind(v) == reflect.String
 }

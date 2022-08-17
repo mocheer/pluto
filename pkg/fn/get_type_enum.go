@@ -7,7 +7,7 @@ const (
 	Unknown
 )
 
-func GetTypeEnum(value interface{}) int {
+func GetTypeEnum(value any) int {
 	switch value.(type) {
 	case string:
 		return String

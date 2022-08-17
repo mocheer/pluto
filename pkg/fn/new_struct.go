@@ -134,10 +134,10 @@ func (in *Instance) SetFunc(name string, value func()) {
 	}
 }
 
-func (i *Instance) Interface() interface{} {
+func (i *Instance) Interface() any {
 	return i.instance.Interface()
 }
 
-func (i *Instance) Addr() interface{} {
+func (i *Instance) Addr() any {
 	return i.instance.Addr().Interface()
 }

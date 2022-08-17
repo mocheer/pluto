@@ -5,24 +5,33 @@ import (
 )
 
 // New 通过反射创建结构体对象，这里最好只传递引用类型
-func New(v interface{}) interface{} {
+func New(v any) any {
 	typ := GetReflectType(v)
 	entity := reflect.New(typ)
 	return entity.Interface()
 }
 
 // NewSlice 通过反射创建结构体对象
-func NewSlice(v interface{}) interface{} {
+func NewSlice(v any) any {
 	typ := GetReflectType(v)
 	entity := reflect.New(reflect.SliceOf(typ))
 	return entity.Interface()
 }
 
-// GetType 获取类型 不包括指针
-func GetReflectType(v interface{}) reflect.Type {
+// GetType 获取数据类型(不包括指针)
+func GetReflectType(v any) reflect.Type {
+	val := reflect.TypeOf(v)
+	for val.Kind() == reflect.Ptr {
+		val = val.Elem() // reflect.Indirect(v)
+	}
+	return val
+}
+
+// GetType 获取数据值(不包括指针)
+func GetReflectValue(v any) reflect.Value {
 	val := reflect.ValueOf(v)
 	for val.Kind() == reflect.Ptr {
 		val = val.Elem() // reflect.Indirect(v)
 	}
-	return val.Type()
+	return val
 }

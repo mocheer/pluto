@@ -12,7 +12,7 @@ import (
 )
 
 // Read
-func Read(fileName string, e interface{}) error {
+func Read(fileName string, e any) error {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func ReadGJSON(fileName string) gjson.Result {
 }
 
 // Save 保存数据为json文件（包含json格式化）
-func Save(fileName string, data interface{}) error {
+func Save(fileName string, data any) error {
 	_data, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err

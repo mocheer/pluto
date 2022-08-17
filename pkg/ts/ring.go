@@ -2,18 +2,18 @@ package ts
 
 // Ring
 type Ring struct {
-	data  []interface{}
+	data  []any
 	index int
 }
 
 // NewRing
-func NewRing(data []interface{}) *Ring {
+func NewRing(data []any) *Ring {
 	ra := &Ring{data, -1}
 	return ra
 }
 
 // Next
-func (m *Ring) Next() interface{} {
+func (m *Ring) Next() any {
 	data := m.data
 	len := len(data)
 	m.index++
@@ -24,12 +24,12 @@ func (m *Ring) Next() interface{} {
 }
 
 //Current
-func (m *Ring) Current() interface{} {
+func (m *Ring) Current() any {
 	return m.data[m.index]
 }
 
 //Index
-func (m *Ring) Index() interface{} {
+func (m *Ring) Index() any {
 	return m.index
 }
 

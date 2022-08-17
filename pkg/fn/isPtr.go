@@ -3,6 +3,6 @@ package fn
 import "reflect"
 
 // IsPtr 是否为指针
-func IsPtr(v interface{}) bool {
+func IsPtr(v any) bool {
 	return GetKind(v) == reflect.Ptr
 }

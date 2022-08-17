@@ -6,7 +6,7 @@ import (
 )
 
 // Assign
-func Assign(a, b interface{}) interface{} {
+func Assign(a, b any) any {
 	jb, err := json.Marshal(b)
 	if err != nil {
 		fmt.Println("Marshal error b:", err)
