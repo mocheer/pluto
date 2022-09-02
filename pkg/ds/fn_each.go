@@ -7,7 +7,7 @@ import (
 )
 
 // Each 遍历指定目录及所有子目录下的所有文件(包括目录本身)
-func Each(dir string, fn func(fileName string, fi os.FileInfo)) error {
+func Each(dir string, fn func(filename string, fi os.FileInfo)) error {
 	err := filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -19,7 +19,7 @@ func Each(dir string, fn func(fileName string, fi os.FileInfo)) error {
 }
 
 // EachFiles 遍历指定目录及所有子目录下的所有文件
-func EachFiles(dir string, fn func(fileName string, fi os.FileInfo)) error {
+func EachFiles(dir string, fn func(filename string, fi os.FileInfo)) error {
 	err := filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -35,10 +35,10 @@ func EachFiles(dir string, fn func(fileName string, fi os.FileInfo)) error {
 
 // EachFilesToRemove 遍历文件夹，当回调函数返回true的时候删除文件
 // 注意，当一个目录下所有文件都被删除，这个目录本身也不会被删除
-func EachFilesToRemove(dir string, fn func(fileName string, fi os.FileInfo) bool) error {
-	return EachFiles(dir, func(fileName string, fi os.FileInfo) {
-		if fn(fileName, fi) {
-			os.Remove(fileName)
+func EachFilesToRemove(dir string, fn func(filename string, fi os.FileInfo) bool) error {
+	return EachFiles(dir, func(filename string, fi os.FileInfo) {
+		if fn(filename, fi) {
+			os.Remove(filename)
 		}
 	})
 }

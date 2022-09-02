@@ -4,14 +4,15 @@ import (
 	"errors"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
 
 // CreateDir 创建不存在的文件夹
-func CreateDir(dirName string) error {
-	if !IsExist(dirName) {
-		err := os.MkdirAll(filepath.Dir(dirName), os.ModePerm)
+func CreateDir(fileName string) error {
+	if !IsExist(fileName) {
+		err := os.MkdirAll(filepath.Dir(fileName), os.ModePerm)
 		if err != nil {
 			return err
 		}
@@ -90,4 +91,29 @@ func CopyDir(source string, dst string) error {
 	}
 
 	return nil
+}
+
+// RemoveEmptyDir 移除空目录
+func RemoveEmptyDir(dir string) (bool, error) {
+	de, err := os.ReadDir(dir)
+	if err != nil {
+		return false, err
+	}
+	if len(de) > 0 {
+		for _, info := range de {
+			if info.IsDir() {
+				isDirEmpty, err := RemoveEmptyDir(path.Join(dir, info.Name()))
+				if err != nil {
+					return false, err
+				}
+				if !isDirEmpty {
+					return false, nil
+				}
+			} else {
+				return false, nil
+			}
+		}
+	}
+	os.RemoveAll(dir)
+	return true, nil
 }

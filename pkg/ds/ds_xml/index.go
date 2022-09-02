@@ -9,7 +9,7 @@ import (
 
 // Read 读取xml文件
 func Read(fileName string, e any) error {
-	return xml.Unmarshal(ds.MustRead(fileName), &e)
+	return xml.Unmarshal(ds.MustReadFile(fileName), &e)
 }
 
 // ReadToMap

@@ -6,13 +6,11 @@ import (
 	"path/filepath"
 )
 
-//
 func ReadFile(fileName string) ([]byte, error) {
 	return os.ReadFile(fileName)
 }
 
-//
-func MustRead(fileName string) []byte {
+func MustReadFile(fileName string) []byte {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		panic(err)

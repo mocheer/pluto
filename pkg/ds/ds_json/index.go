@@ -22,7 +22,7 @@ func Read(fileName string, e any) error {
 
 // ReadGJSON
 func ReadGJSON(fileName string) gjson.Result {
-	return JSON.Parse(fn.B2S(ds.MustRead(fileName)))
+	return JSON.Parse(fn.B2S(ds.MustReadFile(fileName)))
 }
 
 // Save 保存数据为json文件（包含json格式化）

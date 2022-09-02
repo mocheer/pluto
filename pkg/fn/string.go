@@ -49,13 +49,9 @@ func ParseInt(str string) int {
 	return i
 }
 
-// ParseUint64
-func ParseUint64(str string) uint64 {
-	ui, _ := strconv.ParseUint(str, 10, 0)
-	return ui
-}
-
 // ParseUint
+// base：   数字字符串的进制，比如：2进制、10进制，如果 base 为 0，则根据字符串的前缀判断进位制（0x:16，0:8，其它:10）
+// bitSize：预期数值的bit大小，用于数值上限限制，最终返回的还是int64/uint64类型
 func ParseUint(str string) uint {
 	u64, _ := strconv.ParseUint(str, 10, 0)
 	return uint(u64)
@@ -63,7 +59,7 @@ func ParseUint(str string) uint {
 
 // ParseHex
 func ParseHex(str string) uint64 {
-	u64, _ := strconv.ParseUint(str, 0, 0) //如果 base 为 0，则根据字符串的前缀判断进位制（0x:16，0:8，其它:10）
+	u64, _ := strconv.ParseUint(str, 16, 0)
 	return u64
 }
 

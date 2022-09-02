@@ -40,6 +40,8 @@ func (c *Clock) Fmt(layout string) string {
 	if layout == "" {
 		layout = FmtDate
 	}
+	// Format转成字符串的时候会使用当前时间，问题是服务器的时区不一定和客户端的时区一致
+	// 所以数据库存储不应该用时间字符串
 	return c.date.Format(layout)
 }
 
