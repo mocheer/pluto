@@ -9,8 +9,17 @@ import (
 )
 
 // ToBytes 将图片对象转成bytes字节流
-func (p *Img) ToBytes() (bs []byte, err error) {
-	return ToBytes(p.Image, p.Type)
+func (m *Img) ToBytes() (bs []byte, err error) {
+	return ToBytes(m.Image, m.Type)
+}
+
+// MustToBytes
+func (m *Img) MustToBytes() []byte {
+	bs, err := ToBytes(m.Image, m.Type)
+	if err != nil {
+		panic(err)
+	}
+	return bs
 }
 
 // ToBytes 将图片对象转成bytes字节流
