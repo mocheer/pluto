@@ -1,14 +1,25 @@
 package fn_test
 
 import (
+	"fmt"
 	"math"
 	"reflect"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestB2S(t *testing.T) {
+	var b = []byte(`b2s`)
+	var s = fn.B2S(b)
+	var s2 = strings.Clone(s)
+	b[1] = 1
+
+	fmt.Println(s, s2)
+}
 
 func TestFmtString(t *testing.T) {
 	result := fn.FmtString(`{a}bcd{e}fg{h}`, map[string]any{"a": "1", "b": 2, "c": 3.0, "h": "4.0"})
