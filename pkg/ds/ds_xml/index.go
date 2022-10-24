@@ -7,13 +7,13 @@ import (
 	"github.com/mocheer/pluto/pkg/ts"
 )
 
-// Read 读取xml文件
-func Read(fileName string, e any) error {
+// ReadFile 读取xml文件
+func ReadFile(fileName string, e any) error {
 	return xml.Unmarshal(ds.MustReadFile(fileName), &e)
 }
 
-// ReadToMap
-func ReadToMap(fileName string) (data ts.Map[any], err error) {
-	err = Read(fileName, data)
+// ReadFileToMap
+func ReadFileToMap(fileName string) (data ts.Map[any], err error) {
+	err = ReadFile(fileName, data)
 	return
 }

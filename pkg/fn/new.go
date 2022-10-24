@@ -11,7 +11,8 @@ func New(v any) any {
 	return entity.Interface()
 }
 
-// NewSlice 通过反射创建结构体对象
+// NewSlice 通过反射创建结构体切片
+// 这里返回的是指针,gorm的find查询需要的是指针
 func NewSlice(v any) any {
 	typ := GetReflectType(v)
 	entity := reflect.New(reflect.SliceOf(typ))

@@ -15,6 +15,10 @@ func New(date time.Time) *Clock {
 	return &Clock{date}
 }
 
+func FromUnixMilli(val int64) *Clock {
+	return New(time.UnixMilli(val))
+}
+
 // Now 实例化
 func Now() *Clock {
 	return New(time.Now())

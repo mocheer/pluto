@@ -10,8 +10,8 @@ type Geobuf struct {
 	*geobuf.Reader
 }
 
-// Read
-func Read(filename string) *Geobuf {
+// ReadFile
+func ReadFile(filename string) *Geobuf {
 	return &Geobuf{geobuf.ReaderFile(filename)}
 }
 
@@ -28,8 +28,8 @@ func Read(filename string) *Geobuf {
 // 	return &Geobuf{buf}
 // }
 
-// ReadBytes
-func ReadBytes(data []byte) *Geobuf {
+// Read
+func Read(data []byte) *Geobuf {
 	return &Geobuf{geobuf.ReaderBuf(data)}
 }
 

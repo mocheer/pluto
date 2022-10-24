@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-// Read 读取文件并生成对应的gzip字节数组
-func Read(filename string) ([]byte, error) {
+// ReadFile 读取文件并生成对应的gzip字节数组
+func ReadFile(filename string) ([]byte, error) {
 	// 打开本地gz格式压缩包
 	fr, err := os.Open(filename)
 	if err != nil {

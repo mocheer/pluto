@@ -16,11 +16,11 @@ func Test(t *testing.T) {
 }
 
 func Test2(t *testing.T) {
-	j, _ := ds_geobuf.Read("./testdata/featurecollection.geobuf").ToGeoJSON().MarshalJSON()
+	j, _ := ds_geobuf.ReadFile("./testdata/featurecollection.geobuf").ToGeoJSON().MarshalJSON()
 	t.Log(string(j))
 }
 
 func Test3(t *testing.T) {
-	j, _ := ds_geobuf.Read("./testdata/feature.geobuf").ToGeoJSON().MarshalJSON()
+	j, _ := ds_geobuf.ReadFile("./testdata/feature.geobuf").ToGeoJSON().MarshalJSON()
 	t.Log(string(j))
 }
