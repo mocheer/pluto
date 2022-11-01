@@ -28,3 +28,12 @@ func ReadFile(fileName string) (gltf.Document, error) {
 	gltf.NewDecoder(fr).Decode(&doc)
 	return doc, nil
 }
+
+// ToGlbBuffer
+func ToGlbBuffer(doc gltf.Document) bytes.Buffer {
+	var buf bytes.Buffer
+	enc := gltf.NewEncoder(&buf)
+	enc.AsBinary = false
+	enc.Encode(&doc)
+	return buf
+}
