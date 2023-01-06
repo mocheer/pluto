@@ -46,6 +46,7 @@ require (
 	github.com/murphy214/protoscan v0.0.0-20201005105904-485caf8f7562 // indirect
 	github.com/pierrec/lz4/v4 v4.1.16 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
+	github.com/qmuntal/draco-go v0.5.0 // indirect
 	github.com/qmuntal/gltf v0.23.1 // indirect
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect

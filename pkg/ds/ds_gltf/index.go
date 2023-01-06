@@ -29,11 +29,13 @@ func ReadFile(fileName string) (gltf.Document, error) {
 	return doc, nil
 }
 
-// ToGlbBuffer
-func ToGlbBuffer(doc gltf.Document) bytes.Buffer {
+// ToBuffer
+func ToBuffer(doc gltf.Document, asBubary bool) bytes.Buffer {
 	var buf bytes.Buffer
 	enc := gltf.NewEncoder(&buf)
-	enc.AsBinary = false
+	// 默认 false 生成 gltf
+	// 设置为true时生成 glb
+	enc.AsBinary = asBubary
 	enc.Encode(&doc)
 	return buf
 }

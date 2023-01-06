@@ -41,3 +41,7 @@ func ClearDir(dst string) error {
 func Remove(fileName string) error {
 	return os.Remove(fileName)
 }
+
+func RemoveDir(path string) error {
+	return os.RemoveAll(path)
+}

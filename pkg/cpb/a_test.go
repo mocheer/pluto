@@ -1,6 +1,7 @@
 package cpb_test
 
 import (
+	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -28,6 +29,7 @@ func Test1(t *testing.T) {
 		},
 		Data: []byte{1, 2, 3, 4, 5},
 	}
+
 	data := cpb.Marshal(u)
 	t.Log(data)
 	t.Log(len(data))
@@ -92,5 +94,11 @@ func Test200(t *testing.T) {
 
 	a, b, n := protowire.ConsumeTag(data2)
 	t.Log(a, b, n)
+
+}
+
+func Test300(t *testing.T) {
+	var a map[string]string
+	fmt.Println(reflect.ValueOf(a).Len(), reflect.ValueOf(a).IsNil())
 
 }

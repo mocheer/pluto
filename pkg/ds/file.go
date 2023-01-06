@@ -40,18 +40,17 @@ func MustCreate(fileName string) *os.File {
 	return f
 }
 
-// OpenOrCreate 创建不存在的文件
-func OpenOrCreate(fileName string, flag int, perm os.FileMode) (*os.File, error) {
-	isExit := IsExist(fileName)
-	if !isExit {
-		return Create(fileName)
-	}
-	return os.OpenFile(fileName, flag, perm)
+// OpenOrCreate
+func OpenOrCreate(fileName string) (*os.File, error) {
+	// O_RDWR：可读可写
+	// O_CREATE：如果不存在将创建一个新文件
+	return os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
 }
 
-// Save 保存图片
+// Save 保存
 func Save(fileName string, data []byte) error {
-	f, err := OpenOrCreate(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
+	//这里不用 OpenOrCreate，因为有问题的，当文件有内容且内容大于data长度时，会保留
+	f, err := Create(fileName)
 	if err == nil {
 		f.Write(data)
 	}
@@ -67,7 +66,7 @@ func CopyFile(src, dst string) (err error) {
 	}
 	defer sf.Close()
 	//
-	df, err := OpenOrCreate(dst, os.O_WRONLY|os.O_CREATE, 0644)
+	df, err := Create(dst)
 	if err != nil {
 		return
 	}

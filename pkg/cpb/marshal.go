@@ -24,22 +24,38 @@ var marshalerType = reflect.TypeOf((*Marshaler)(nil)).Elem()
 
 // marshal
 func marshal(data []byte, v reflect.Value) []byte {
-	// 指针、结构体和其属性可能是空对象、零值
-	// 比如说 delete_at 时间类型
-	// 关于 IsZero
-	// 1. IsZero 当 结构体中未赋值的属性值，为真
-	// 2. IsZero 即使赋值，但如果值为空字符串、nil、空指针、数字0等零值时，为真
-	// 3. 当 v 的原始对象是一个any类型且为空，IsZero 会抛出异常，这个时候 IsValid=false ，可以先验证 IsValid
-	// 4. v.IsNil 当 v 是一个结构体等不能为空的值时会发生错误
-	//
-	// 这里会出现和json序列化不一致的内容，比如数字0
-	if !v.IsValid() || v.IsZero() {
-		data = protowire.AppendVarint(data, TypeInvalid)
-		return data
+	// 指针、结构体和其属性可能是空对象、零值，当指针为nil时，后续取值，获取属性时会报错
+	// 关于 IsValid
+	// 1. 当 v 的原始对象是一个any的类型且为空，IsZero 会抛出异常，这个时候 IsValid=false ，可以先验证 IsValid
+	// 2. 当 v 是一个结构体或者其他不能为空的值，IsNil 会发生错误，所以在用 IsNil 进行判断前需要先验证 IsValid
+	// || v.IsNil()
+	if !v.IsValid() {
+		return protowire.AppendVarint(data, TypeInvalid)
 	}
+
 	//
 	typ := v.Type()
+	// 结构体中未赋值的属性值，为真
+	// 即使赋值，但如果值为空字符串、nil、空指针、数字0等零值时，为真
+	// 这里在零值的时候，需要和json保持一致，这里其实不需要再处理，因为已经排除了nil情况
+	// if v.IsZero() {
+	// 	switch typ.Kind() {
+	// 	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int, reflect.Int64, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint, reflect.Uint64:
+	// 		data = protowire.AppendVarint(data, TypeInt)
+	// 		data = protowire.AppendVarint(data, 0)
+	// 	case reflect.String:
+	// 		data = protowire.AppendVarint(data, TypeString)
+	// 		data = protowire.AppendString(data, "")
+	// 	default:
+	// 		data = protowire.AppendVarint(data, TypeInvalid)
+	// 	}
+	// 	return data
+	// }
+
+	//
+	//
 	// time.Time、datatypes.JSON
+	// 比如说 delete_at 时间类型
 	// json.Marshaler 这里不用，因为会多出引号
 	// encoding.TextMarshaler 也不用，因为 datatypes.JSON 没有实现该方法，但问题是即使是json前端还需要序列化
 	// 这里考虑实现自定义接口 MarshalCPB
@@ -59,12 +75,25 @@ func marshal(data []byte, v reflect.Value) []byte {
 		case TypeJSON:
 			val, _ := cv.(string)
 			data = protowire.AppendString(data, val)
+		case TypeString:
+			val, _ := cv.(string)
+			data = protowire.AppendString(data, val)
 		}
 		return data
 	}
 	//
 	switch typ.Kind() {
 	case reflect.Struct:
+		// gorm.DeletedAt
+		var isZero = true
+		for i := 0; i < v.NumField(); i++ {
+			if !v.Field(i).IsZero() {
+				isZero = false
+			}
+		}
+		if isZero {
+			return protowire.AppendVarint(data, TypeInvalid)
+		}
 		data = protowire.AppendVarint(data, TypeStruct)
 		data = marshalStruct(v, typ, data)
 		//
@@ -132,6 +161,9 @@ func marshal(data []byte, v reflect.Value) []byte {
 		data = protowire.AppendVarint(data, TypeInt)
 		data = protowire.AppendVarint(data, uint64(v.Uint()))
 	case reflect.Ptr:
+		if v.IsNil() {
+			return protowire.AppendVarint(data, TypeInvalid)
+		}
 		data = marshal(data, v.Elem())
 	case reflect.Interface: //
 		data = marshal(data, reflect.ValueOf(v.Interface()))
