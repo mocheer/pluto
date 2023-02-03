@@ -8,15 +8,14 @@ import (
 	"github.com/mocheer/pluto/pkg/fn"
 )
 
-//
 func Read(fileName string) (string, error) {
 	bs, err := os.ReadFile(fileName)
-	return fn.B2S(bs), err
+	return fn.BytesToString(bs), err
 }
 
 // MustRead 读取文本文件，当发生错误的时候直接panic
 func MustRead(fileName string) string {
-	return fn.B2S(ds.MustReadFile(fileName))
+	return fn.BytesToString(ds.MustReadFile(fileName))
 }
 
 // ReadLine 按行读取文本文件，常用于特殊数据文件的解析

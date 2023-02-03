@@ -35,7 +35,7 @@ func StringBytes(num int) []byte {
 
 // String 生成随机字符串
 func String(num int) string {
-	return fn.B2S(StringBytes(num))
+	return fn.BytesToString(StringBytes(num))
 }
 
 // RandString 生成随机字符串

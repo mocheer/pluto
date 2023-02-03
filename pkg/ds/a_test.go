@@ -15,5 +15,5 @@ func TestRead(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, strings.HasPrefix(fn.B2S(data), "package ds_test"), true)
+	assert.Equal(t, strings.HasPrefix(fn.BytesToString(data), "package ds_test"), true)
 }

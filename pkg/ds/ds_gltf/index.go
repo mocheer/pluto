@@ -29,8 +29,18 @@ func ReadFile(fileName string) (gltf.Document, error) {
 	return doc, nil
 }
 
-// ToBuffer
-func ToBuffer(doc gltf.Document, asBubary bool) bytes.Buffer {
+// ToGlb
+func ToGlb(doc gltf.Document) bytes.Buffer {
+	return toBuffer(doc, true)
+}
+
+// ToGltf
+func ToGltf(doc gltf.Document) bytes.Buffer {
+	return toBuffer(doc, false)
+}
+
+// toBuffer
+func toBuffer(doc gltf.Document, asBubary bool) bytes.Buffer {
 	var buf bytes.Buffer
 	enc := gltf.NewEncoder(&buf)
 	// 默认 false 生成 gltf

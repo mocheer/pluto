@@ -12,5 +12,5 @@ func Stringify(v any) string {
 	if err != nil {
 		panic(err)
 	}
-	return fn.B2S(bytes)
+	return fn.BytesToString(bytes)
 }

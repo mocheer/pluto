@@ -14,7 +14,7 @@ import (
 
 func TestB2S(t *testing.T) {
 	var b = []byte(`b2s`)
-	var s = fn.B2S(b)
+	var s = fn.BytesToString(b)
 	var s2 = strings.Clone(s)
 	b[1] = 1
 

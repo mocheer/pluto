@@ -23,15 +23,13 @@ func (m Map[T]) Len() int {
 	return len(m)
 }
 
-//
 func (m Map[T]) Bytes() []byte {
 	bytes, _ := json.Marshal(m)
 	return bytes
 }
 
-//
 func (m Map[T]) String() string {
-	return fn.B2S(m.Bytes())
+	return fn.BytesToString(m.Bytes())
 }
 
 // 合并两个map

@@ -6,10 +6,9 @@ import (
 
 // Btoa 编码base64字符串
 func Btoa(s string) string {
-	return BtoaBytes(S2B(s))
+	return BtoaBytes(StringToBytes(s))
 }
 
-//
 func BtoaBytes(bytes []byte) string {
 	return base64.StdEncoding.EncodeToString(bytes)
 }

@@ -1,6 +1,6 @@
 module github.com/mocheer/pluto
 
-go 1.19
+go 1.20
 
 require (
 	github.com/amenzhinsky/go-memexec v0.7.0
