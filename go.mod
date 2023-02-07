@@ -39,6 +39,7 @@ require (
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/jonas-p/go-shp v0.1.1 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/murphy214/mercantile v0.0.0-20201005105843-2d6d6ba702ec // indirect
