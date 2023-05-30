@@ -1,14 +1,13 @@
 package fn
 
-// 泛型
+import "github.com/mocheer/pluto/pkg/itypes"
 
-type Number interface{
-	int|int8|int16|int32|int64|uint|uint8|uint16|uint32|uint64|float32|float64
-}
-
-func Max[T Number](a,b T) T {
-	if a > b {
-		return a
+func Max[T itypes.Number](data []T) T {
+	max_num := data[0]
+	for i := 1; i < len(data); i++ {
+		if data[i] > max_num {
+			max_num = data[i]
+		}
 	}
-	return b
+	return max_num
 }

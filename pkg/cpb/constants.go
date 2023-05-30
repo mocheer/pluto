@@ -13,4 +13,5 @@ const (
 	TypeFixed64
 	TypeSliceStruct
 	TypeDate
+	TypeSliceInt
 )

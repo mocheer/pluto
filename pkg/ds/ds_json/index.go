@@ -7,7 +7,6 @@ import (
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
 
-	"github.com/mocheer/pluto/pkg/ts/JSON"
 	"github.com/tidwall/gjson"
 )
 
@@ -22,11 +21,11 @@ func Read(fileName string, e any) error {
 
 // ReadGJSON
 func ReadGJSON(fileName string) gjson.Result {
-	return JSON.Parse(fn.BytesToString(ds.MustReadFile(fileName)))
+	return gjson.Parse(fn.BytesToString(ds.MustReadFile(fileName)))
 }
 
 // Save 保存数据为json文件（包含json格式化）
-func Save(fileName string, data any) error {
+func Save(data any, fileName string) error {
 	_data, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err

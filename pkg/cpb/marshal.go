@@ -4,7 +4,7 @@ import (
 	"math"
 	"reflect"
 
-	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/mocheer/pluto/pkg/ts/object"
 	"google.golang.org/protobuf/encoding/protowire"
 )
 
@@ -134,6 +134,18 @@ func marshal(data []byte, v reflect.Value) []byte {
 			case reflect.Uint8:
 				data = protowire.AppendVarint(data, TypeBytes)
 				data = protowire.AppendBytes(data, v.Bytes())
+			case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int, reflect.Int64:
+				data = protowire.AppendVarint(data, TypeSliceInt)
+				data = protowire.AppendVarint(data, uint64(num))
+				for i := 0; i < num; i++ {
+					data = protowire.AppendVarint(data, uint64(v.Index(i).Int()))
+				}
+			case reflect.Uint16, reflect.Uint32, reflect.Uint, reflect.Uint64:
+				data = protowire.AppendVarint(data, TypeSliceInt)
+				data = protowire.AppendVarint(data, uint64(num))
+				for i := 0; i < num; i++ {
+					data = protowire.AppendVarint(data, uint64(v.Index(i).Uint()))
+				}
 			case reflect.Struct:
 				data = protowire.AppendVarint(data, TypeSliceStruct)
 				data = marshalSliceStruct(v, vi.Type(), data)
@@ -154,7 +166,6 @@ func marshal(data []byte, v reflect.Value) []byte {
 		data = protowire.AppendVarint(data, TypeFixed64)
 		data = protowire.AppendFixed64(data, math.Float64bits(v.Float()))
 	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int, reflect.Int64:
-
 		data = protowire.AppendVarint(data, TypeInt)
 		data = protowire.AppendVarint(data, uint64(v.Int()))
 	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint, reflect.Uint64:
@@ -180,7 +191,7 @@ func marshal(data []byte, v reflect.Value) []byte {
 
 // marshalStruct
 func marshalStruct(v reflect.Value, typ reflect.Type, data []byte) []byte {
-	fieldIndexs, fieldNames := fn.GetStructFields(typ)
+	fieldIndexs, fieldNames := object.GetStructFields(typ)
 	num := len(fieldIndexs)
 	data = protowire.AppendVarint(data, uint64(num))
 	for i := 0; i < num; i++ {
@@ -196,7 +207,7 @@ func marshalSliceStruct(v reflect.Value, typ reflect.Type, data []byte) []byte {
 	num := v.Len()
 	data = protowire.AppendVarint(data, uint64(num))
 	//
-	fieldIndexs, fieldNames := fn.GetStructFields(typ)
+	fieldIndexs, fieldNames := object.GetStructFields(typ)
 	numField := len(fieldIndexs)
 	data = protowire.AppendVarint(data, uint64(numField))
 	//

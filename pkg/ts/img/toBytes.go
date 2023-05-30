@@ -26,8 +26,11 @@ func (m *Img) MustToBytes() []byte {
 func ToBytes(target image.Image, imageType string) (bs []byte, err error) {
 	buf := new(bytes.Buffer)
 	switch imageType {
+	case JPG:
+		fallthrough
 	case JPEG:
-		err = jpeg.Encode(buf, target, &jpeg.Options{})
+		// 默认的压缩质量为75，损失的图片细节太多
+		err = jpeg.Encode(buf, target, &jpeg.Options{Quality: 92})
 	case PNG:
 		err = png.Encode(buf, target)
 	case GIF:

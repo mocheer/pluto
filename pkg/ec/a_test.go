@@ -3,7 +3,6 @@ package ec_test
 import (
 	"encoding/base64"
 	"encoding/hex"
-	"os"
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/ec"
@@ -13,18 +12,16 @@ import (
 // ecc 加密技术测试
 func TestRsa(t *testing.T) {
 	// 生成私匙和公匙
-	ec.RSA_GenPemFiles("test", 2048)
+	ec.RSA_GenPemFiles("testdata", 2048)
 
 	data := "hello world"
-	pubKey, _ := ec.RSA_PublicKeyFromFile("test/public.pem") // 解密公匙
-	encryData, _ := ec.RSA_Encrypt([]byte(data), pubKey)     // 加密数据
+	pubKey, _ := ec.RSA_PublicKeyFromFile("testdata/public.pem") // 解密公匙
+	encryData, _ := ec.RSA_Encrypt([]byte(data), pubKey)         // 加密数据
 
 	//
-	priKey, _ := ec.RSA_PrivateKeyFromFile("test/private.pem") // 解密私匙
-	decryData, _ := ec.RSA_Decrypt(encryData, priKey)          // 解密数据
+	priKey, _ := ec.RSA_PrivateKeyFromFile("testdata/private.pem") // 解密私匙
+	decryData, _ := ec.RSA_Decrypt(encryData, priKey)              // 解密数据
 	//
-	os.RemoveAll("test")
-
 	assert.Equal(t, data, string(decryData))
 
 }
@@ -56,4 +53,12 @@ func TestAes(t *testing.T) {
 	t.Log("密文(base64)：", base64.StdEncoding.EncodeToString(encrypted))
 	decrypted = ec.AesDecryptCFB(encrypted, key)
 	t.Log("解密结果：", string(decrypted))
+}
+
+// DecodeCipherRSA 解析RSA密文
+func TestDecodeCipherRSA(t *testing.T) {
+	data := ""      //待解密
+	key := []byte{} //密钥
+	plainText := ec.RSA_JSEncrypt(data, key)
+	t.Log(plainText)
 }

@@ -1,5 +1,6 @@
 package d3_contour
 
+// Area 计算面积
 func Area(ring [][2]float64) float64 {
 	n := len(ring)
 	result := ring[n-1][1]*ring[0][0] - ring[n-1][0]*ring[0][1]

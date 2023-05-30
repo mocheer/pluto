@@ -5,8 +5,8 @@ import (
 	"reflect"
 
 	"github.com/mocheer/pluto/pkg/cpb"
-	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/mocheer/pluto/pkg/ts/clock"
+	"github.com/mocheer/pluto/pkg/ts/object"
 	"github.com/xuri/excelize/v2"
 )
 
@@ -28,7 +28,7 @@ func Marshal(data any) ([]byte, error) {
 	if count > 0 {
 		// 这里反射只执行一次（除非切片元素是不同的对象）
 		val := v.Index(0)
-		fieldIndexs, fieldNames := fn.GetStructFields(val.Type())
+		fieldIndexs, fieldNames := object.GetStructFields(val.Type())
 		num := len(fieldIndexs)
 
 		// A = 65

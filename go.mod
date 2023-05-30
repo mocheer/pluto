@@ -29,6 +29,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.5 // indirect
 	github.com/antchfx/xmlquery v1.3.11 // indirect
 	github.com/antchfx/xpath v1.2.1 // indirect
+	github.com/batchatco/go-native-netcdf v0.0.0-20230103061018-5849c1f424b1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
@@ -41,6 +42,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/jonas-p/go-shp v0.1.1 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/matoous/go-nanoid/v2 v2.0.0 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/murphy214/mercantile v0.0.0-20201005105843-2d6d6ba702ec // indirect
 	github.com/murphy214/pbf v0.0.0-20201005105852-c6415b0d05c9 // indirect

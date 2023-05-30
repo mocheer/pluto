@@ -15,6 +15,7 @@ func Test1(t *testing.T) {
 	type User struct {
 		Name        string
 		Age         int
+		D           int
 		Anniversary map[string]string
 		Data        []byte
 		Num         int
@@ -23,6 +24,7 @@ func Test1(t *testing.T) {
 	u := &User{
 		Name: "mocheer",
 		Age:  30,
+		D:    -10,
 		Anniversary: map[string]string{
 			"birthday":  "19921214",
 			"birthday2": "1214",

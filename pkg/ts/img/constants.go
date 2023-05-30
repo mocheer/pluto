@@ -1,6 +1,7 @@
 package img
 
 const (
+	JPG  = "jpg"
 	JPEG = "jpeg"
 	PNG  = "png"
 	GIF  = "gif"

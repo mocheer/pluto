@@ -1,7 +1,6 @@
 package ds_toml_test
 
 import (
-	"fmt"
 	"testing"
 	"time"
 
@@ -18,6 +17,13 @@ type Config struct {
 
 func TestRead(t *testing.T) {
 	var conf Config
-	ds_toml.ReadFile("./a_test.toml", &conf)
-	fmt.Println(conf)
+	ds_toml.ReadFile("./testdata/a_test.toml", &conf)
+	t.Log(conf)
+}
+
+func TestSave(t *testing.T) {
+	var conf = &Config{}
+	conf.Age = 30
+	err := ds_toml.Save("./testdata/a_test2.toml", conf)
+	t.Log(err)
 }
