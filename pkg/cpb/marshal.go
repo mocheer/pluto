@@ -16,12 +16,6 @@ func Marshal(s any) []byte {
 	return data
 }
 
-type Marshaler interface {
-	MarshalCPB() (any, uint64)
-}
-
-var marshalerType = reflect.TypeOf((*Marshaler)(nil)).Elem()
-
 // marshal
 func marshal(data []byte, v reflect.Value) []byte {
 	// 指针、结构体和其属性可能是空对象、零值，当指针为nil时，后续取值，获取属性时会报错
@@ -121,6 +115,10 @@ func marshal(data []byte, v reflect.Value) []byte {
 		} else {
 			data = protowire.AppendVarint(data, TypeInvalid)
 		}
+		// 数组和切片
+	case reflect.Array:
+
+		fallthrough
 	case reflect.Slice:
 		num := v.Len()
 		if num > 0 {
@@ -146,10 +144,34 @@ func marshal(data []byte, v reflect.Value) []byte {
 				for i := 0; i < num; i++ {
 					data = protowire.AppendVarint(data, uint64(v.Index(i).Uint()))
 				}
+			case reflect.String:
+				data = protowire.AppendVarint(data, TypeSliceString)
+				data = protowire.AppendVarint(data, uint64(num))
+				for i := 0; i < num; i++ {
+					data = protowire.AppendString(data, v.Index(i).String())
+				}
 			case reflect.Struct:
 				data = protowire.AppendVarint(data, TypeSliceStruct)
 				data = marshalSliceStruct(v, vi.Type(), data)
+
+			case reflect.Slice:
+
+				vi2 := vi.Index(0)
+				vitype2 := vi2.Kind()
+				if vitype2 == reflect.Pointer {
+					vi2 = vi.Elem()
+					vitype2 = vi.Kind()
+				}
+				if vitype2 == reflect.Uint8 {
+					data = protowire.AppendVarint(data, TypeSliceBytes)
+					data = protowire.AppendVarint(data, uint64(num))
+					for i := 0; i < num; i++ {
+						data = protowire.AppendBytes(data, v.Index(i).Bytes())
+					}
+				}
+
 			}
+
 		} else { //需要给出类型，否则不好解析
 			data = protowire.AppendVarint(data, TypeInvalid)
 		}

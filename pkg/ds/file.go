@@ -3,7 +3,6 @@ package ds
 import (
 	"io"
 	"os"
-	"path/filepath"
 )
 
 func ReadFile(fileName string) ([]byte, error) {
@@ -20,12 +19,9 @@ func MustReadFile(fileName string) []byte {
 
 // Create 创建一个不存在的文件(已存在则忽略)
 func Create(fileName string) (*os.File, error) {
-	dir := filepath.Dir(fileName)
-	if !IsExist(dir) {
-		err := os.MkdirAll(dir, os.ModePerm)
-		if err != nil {
-			return nil, err
-		}
+	err := CreateDirFromFilename(fileName)
+	if err != nil {
+		return nil, err
 	}
 	file, err := os.Create(fileName)
 	return file, err
@@ -41,7 +37,12 @@ func MustCreate(fileName string) *os.File {
 }
 
 // OpenOrCreate
+// 慎用，如果文件存在，该方法不会创建新文件，所以如果直接写入data数据时，当文件内容大于data的数据长度时，会保留后面的数据
 func OpenOrCreate(fileName string) (*os.File, error) {
+	err := CreateDirFromFilename(fileName) //确保目录存在，不存在的话会报错
+	if err != nil {
+		return nil, err
+	}
 	// O_RDWR：可读可写
 	// O_CREATE：如果不存在将创建一个新文件
 	return os.OpenFile(fileName, os.O_RDWR|os.O_CREATE, os.ModePerm)
@@ -49,7 +50,6 @@ func OpenOrCreate(fileName string) (*os.File, error) {
 
 // Save 保存
 func Save(fileName string, data []byte) error {
-	//这里不用 OpenOrCreate，因为有问题的，当文件有内容且内容大于data长度时，会保留
 	f, err := Create(fileName)
 	if err == nil {
 		f.Write(data)

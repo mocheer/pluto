@@ -9,10 +9,11 @@ import (
 	"strings"
 )
 
-// CreateDir 创建不存在的文件夹
-func CreateDir(fileName string) error {
-	if !IsExist(fileName) {
-		err := os.MkdirAll(filepath.Dir(fileName), os.ModePerm)
+// CreateDirFromFilename 创建不存在的文件夹
+func CreateDirFromFilename(fileName string) error {
+	d := filepath.Dir(fileName)
+	if !IsExist(d) {
+		err := os.MkdirAll(d, os.ModePerm)
 		if err != nil {
 			return err
 		}

@@ -1,5 +1,7 @@
 package cpb
 
+import "reflect"
+
 const (
 	TypeInvalid uint64 = iota
 	TypeBool
@@ -14,4 +16,8 @@ const (
 	TypeSliceStruct
 	TypeDate
 	TypeSliceInt
+	TypeSliceString
+	TypeSliceBytes
 )
+
+var marshalerType = reflect.TypeOf((*Marshaler)(nil)).Elem()

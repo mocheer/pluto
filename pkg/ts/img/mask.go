@@ -17,7 +17,7 @@ func MaskImage(src, mask image.Image, copyPoint image.Point) (draw.Image, error)
 	whiteImg := image.NewRGBA(maskBounds)
 	draw.Draw(whiteImg, maskBounds, &white, image.Point{}, draw.Over)
 
-	copy := copySrc(src)
+	copy := Copy(src)
 	draw.DrawMask(copy, srcBounds.Add(copyPoint), whiteImg, image.Point{}, mask, maskBounds.Min, draw.Over)
 
 	return copy, nil
@@ -27,7 +27,7 @@ func MaskImage(src, mask image.Image, copyPoint image.Point) (draw.Image, error)
 func PieceImage(src, mask image.Image, copyPoint image.Point) (draw.Image, error) {
 	maskBounds := mask.Bounds()
 	// Create a new image with mask bounds for final move block
-	copy := copySrc(mask)
+	copy := Copy(mask)
 	// Get the part image in src image with the mask-bounds
 	draw.DrawMask(copy, maskBounds, src, copyPoint, mask, maskBounds.Min, draw.Over)
 

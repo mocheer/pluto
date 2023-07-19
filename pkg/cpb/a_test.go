@@ -1,7 +1,6 @@
 package cpb_test
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -99,8 +98,10 @@ func Test200(t *testing.T) {
 
 }
 
-func Test300(t *testing.T) {
-	var a map[string]string
-	fmt.Println(reflect.ValueOf(a).Len(), reflect.ValueOf(a).IsNil())
+func TestArray(t *testing.T) {
+	var a = [6][]byte{
+		{133},
+	}
+	t.Log(cpb.Marshal(a))
 
 }

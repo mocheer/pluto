@@ -18,7 +18,7 @@ type Ctp struct {
 
 func New() *Ctp {
 	c := colly.NewCollector(
-		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36 Edg/113.0.1774.35"),
+		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"),
 	)
 	return &Ctp{Collector: c}
 }
@@ -69,7 +69,7 @@ func (m *Ctp) Request(uri string, orgin string, callback func(resp *colly.Respon
 func (m *Ctp) Save(uri string, fileName string) error {
 	return m.Request(uri, "", func(resp *colly.Response) {
 		// 确保目录存在
-		ds.CreateDir(fileName)
+		ds.CreateDirFromFilename(fileName)
 		if err := resp.Save(fileName); err != nil {
 			log.Fatal(err)
 		}
@@ -86,15 +86,11 @@ func (m *Ctp) EnableInsecureTLS(value bool) {
 }
 
 // SetProxies
-// SetProxies(
-// "36.111.146.161:9000",
-// "36.6.145.98:8089",
-// "34.168.233.208:8585",
-// "43.156.241.242:8089",
-// "146.59.2.185:80",
-// )
-func (m *Ctp) SetProxies(addr ...string) {
-	if p, err := proxy.RoundRobinProxySwitcher(addr...); err == nil {
-		m.SetProxyFunc(p)
+func (m *Ctp) SetProxies(addr ...string) *Ctp {
+	p, err := proxy.RoundRobinProxySwitcher(addr...)
+	if err != nil {
+		panic(err)
 	}
+	m.SetProxyFunc(p)
+	return m
 }

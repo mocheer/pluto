@@ -18,6 +18,8 @@ func Test1(t *testing.T) {
 	t.Log(nc.ListTypes())
 	t.Log(nc.ListSubgroups()) //
 	t.Log(nc.ListDimensions())
+	t.Log(nc.Attributes())
+	t.Log(nc.Attributes().Keys())
 	// Read the NetCDF variable from the file
 
 	vr, _ := nc.GetVariable("lat")
@@ -30,7 +32,6 @@ func Test1(t *testing.T) {
 	if !has {
 		panic("latitude data not found")
 	}
-	for i, lat := range lats {
-		t.Log(i, lat)
-	}
+	t.Log(lats)
+
 }

@@ -10,8 +10,8 @@ import (
 	"github.com/tidwall/gjson"
 )
 
-// Read
-func Read(fileName string, e any) error {
+// ReadFile
+func ReadFile(fileName string, e any) error {
 	data, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
