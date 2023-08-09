@@ -14,3 +14,6 @@ test.*
 # 
 go.work
 go.work.sum
+
+# 
+testdata

@@ -7,7 +7,6 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ts/object"
 	"github.com/stretchr/testify/assert"
-	"github.com/tidwall/gjson"
 )
 
 func TestGetKind(t *testing.T) {
@@ -21,10 +20,4 @@ func TestGetKind(t *testing.T) {
 }
 func TestIsTime(t *testing.T) {
 	t.Log(object.GetType(time.Now())) //struct
-}
-
-func TestKeys(t *testing.T) {
-	dj := gjson.Parse(`{"data":null,"int":0,"bool":false,"key":"key"}`).Map()
-	fields := object.Keys(dj)
-	t.Log(fields)
 }
