@@ -8,6 +8,7 @@ func Atob(s string) string {
 }
 
 // Atob2Bytes 解码base64编码字符串
+// 如果是`data:image/jpeg;base64,{s}` 需要去掉前缀
 func Atob2Bytes(s string) []byte {
 	ret, err := base64.StdEncoding.DecodeString(s)
 	if err != nil {

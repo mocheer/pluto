@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"io"
 	"math"
-	"os"
 
 	"github.com/google/tiff"
 	"github.com/google/tiff/bigtiff"
@@ -18,39 +17,14 @@ import (
 	"github.com/mocheer/pluto/pkg/ds/ds_tif/lzw"
 )
 
-type Gtif struct {
+type DsTif struct {
 	Tif       tiff.TIFF
 	Data      []float64
 	IFD_Index int
 }
 
-func Read(fileName string) (*Gtif, error) {
-	f, err := os.Open(fileName)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-	return parse(f)
-}
-
-func ReadBytes(bs []byte) (*Gtif, error) {
-	f := bytes.NewReader(bs)
-	return parse(f)
-}
-
-func parse(reader tiff.ReadAtReadSeeker) (*Gtif, error) {
-	tif, err := tiff.Parse(reader, nil, nil)
-	if err != nil {
-		panic(err)
-	}
-	m := &Gtif{Tif: tif}
-	// m.IFD_Index = len(m.Tif.IFDs()) - 1
-	m.Data, err = m.readData()
-	return m, err
-}
-
 // HasField 判断是否存在tagID对那个的field
-func (m Gtif) HasField(tagID uint16) bool {
+func (m DsTif) HasField(tagID uint16) bool {
 	ifds := m.Tif.IFDs()
 	index := m.IFD_Index
 	for index >= 0 {
@@ -64,7 +38,7 @@ func (m Gtif) HasField(tagID uint16) bool {
 }
 
 // GetField 根据tagID获取对应field
-func (m Gtif) GetField(tagID uint16) tiff.Field {
+func (m DsTif) GetField(tagID uint16) tiff.Field {
 	ifds := m.Tif.IFDs()
 	index := m.IFD_Index
 	for index >= 0 {
@@ -78,7 +52,7 @@ func (m Gtif) GetField(tagID uint16) tiff.Field {
 }
 
 // GetFirstInt
-func (m Gtif) GetFirstInt(tagID uint16) uint {
+func (m DsTif) GetFirstInt(tagID uint16) uint {
 	field := m.GetField(tagID)
 	val := field.Value()
 	bs := val.Bytes()
@@ -96,7 +70,7 @@ func (m Gtif) GetFirstInt(tagID uint16) uint {
 }
 
 // GetInt
-func (m Gtif) GetInt(tagID uint16) []uint {
+func (m DsTif) GetInt(tagID uint16) []uint {
 	field := m.GetField(tagID)
 	count := field.Count()
 	size := field.Type().Size()
@@ -126,7 +100,7 @@ func (m Gtif) GetInt(tagID uint16) []uint {
 }
 
 // GetFloat
-func (m Gtif) GetFloat(tagID uint16) []float64 {
+func (m DsTif) GetFloat(tagID uint16) []float64 {
 	field := m.GetField(tagID)
 	count := field.Count()
 	u := make([]float64, count)
@@ -154,23 +128,23 @@ func (m Gtif) GetFloat(tagID uint16) []float64 {
 }
 
 // Origin 获取坐标原点，通常是经纬度坐标原点
-func (m Gtif) Origin() []float64 {
+func (m DsTif) Origin() []float64 {
 	origin := m.GetFloat(tModelTiepointTag)
 	return origin[3:6]
 }
 
 // 栅格坐标和模型坐标的比例
-func (m Gtif) Scale() []float64 {
+func (m DsTif) Scale() []float64 {
 	return m.GetFloat(tModelPixelScaleTag)
 }
 
 // 栅格坐标到模型坐标的变换矩阵，这个值很多时候是空值
-func (m Gtif) Transform() []float64 {
+func (m DsTif) Transform() []float64 {
 	return m.GetFloat(tModelTransformationTag)
 }
 
 // GetColRow 获取经纬度对应的行列坐标，这种算法不一定精确，不一定等间隔
-func (m Gtif) GetColRow(lon, lat float64) [2]int {
+func (m DsTif) GetColRow(lon, lat float64) [2]int {
 	origin := m.Origin()
 	scale := m.Scale()
 	col := int(math.Round((lon - origin[0]) / scale[0]))
@@ -186,7 +160,7 @@ func (m Gtif) GetColRow(lon, lat float64) [2]int {
 }
 
 // GetLonLat 获取行列坐标对应的经纬度
-func (m Gtif) GetLonLat(col, row int) [2]float64 {
+func (m DsTif) GetLonLat(col, row int) [2]float64 {
 	ModelTiepoint := m.GetFloat(tModelTiepointTag)
 	scale := m.Scale()
 	//
@@ -197,7 +171,7 @@ func (m Gtif) GetLonLat(col, row int) [2]float64 {
 }
 
 // BBox
-func (m Gtif) BBox() [4]float64 {
+func (m DsTif) BBox() [4]float64 {
 	origin := m.Origin()
 	scale := m.Scale()
 	var maxX = origin[0] + (scale[0] * float64(m.Width()))
@@ -208,27 +182,27 @@ func (m Gtif) BBox() [4]float64 {
 }
 
 // Width
-func (m Gtif) Width() int {
+func (m DsTif) Width() int {
 	return int(m.GetFirstInt(tImageWidth))
 }
 
 // Height
-func (m Gtif) Height() int {
+func (m DsTif) Height() int {
 	return int(m.GetFirstInt(tImageLength))
 }
 
 // GetAlt 获取行列坐标对应的高程数据
-func (m Gtif) GetAlt(column, row int) float64 {
+func (m DsTif) GetAlt(column, row int) float64 {
 	return m.Data[column+row*m.Width()]
 }
 
-func (m Gtif) GetAltByLonLat(lon, lat float64) float64 {
+func (m DsTif) GetAltByLonLat(lon, lat float64) float64 {
 	colrow := m.GetColRow(lon, lat)
 	col, row := colrow[0], colrow[1]
 	return m.GetAlt(col, row)
 }
 
-func (m Gtif) readData() (data []float64, err error) {
+func (m DsTif) readData() (data []float64, err error) {
 	tif := m.Tif
 	compressionType := m.GetFirstInt(tCompression)
 	SampleFormat := m.GetFirstInt(tSampleFormat)

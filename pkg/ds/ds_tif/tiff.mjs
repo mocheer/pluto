@@ -25,8 +25,5 @@ fromFile('./testdata/ASTGTMV003_N03E112_dem.tif')
       const data = await image.readRasters();
       console.log(data[0].length)
       console.log(data[0].filter(e=>e).length)
-      
-    
     })
-    
   });
