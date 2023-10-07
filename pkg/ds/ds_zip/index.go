@@ -57,7 +57,9 @@ func EachFiles(fileName string, callback func(*zip.File)) error {
 func EachFilesReader(fileName string, callback func(io.ReadCloser)) error {
 	return EachFiles(fileName, func(f *zip.File) {
 		reader, err := f.Open()
-		fn.Panic(err, "无法解压")
+		if err != nil {
+			fn.Panic(err, "无法解压")
+		}
 		defer reader.Close()
 		callback(reader)
 	})
@@ -67,7 +69,9 @@ func EachFilesReader(fileName string, callback func(io.ReadCloser)) error {
 func EachFilesBytes(fileName string, callback func([]byte)) error {
 	return EachFilesReader(fileName, func(r io.ReadCloser) {
 		bs, err := io.ReadAll(r)
-		fn.Panic(err, "无法读取")
+		if err != nil {
+			fn.Panic(err, "无法读取")
+		}
 		callback(bs)
 	})
 }
