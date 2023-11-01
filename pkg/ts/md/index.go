@@ -8,6 +8,7 @@ import (
 type MD []byte
 
 // HTML 将一个mh对象转成html文本输出
+// 弃用，TODO修改为github.com/yuin/goldmark
 func (m MD) HTML() string {
 	return fn.BytesToString(markdown.ToHTML(m, nil, nil))
 }

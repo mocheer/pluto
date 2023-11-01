@@ -61,8 +61,6 @@ func marshal(data []byte, v reflect.Value) []byte {
 		cv, ct := s.MarshalCPB()
 		data = protowire.AppendVarint(data, ct)
 		switch ct {
-		case TypeDate:
-			fallthrough
 		case TypeInt:
 			val, _ := cv.(uint64)
 			data = protowire.AppendVarint(data, val)

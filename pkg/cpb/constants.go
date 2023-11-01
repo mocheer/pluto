@@ -14,7 +14,6 @@ const (
 	TypeFixed32
 	TypeFixed64
 	TypeSliceStruct
-	TypeDate
 	TypeSliceInt
 	TypeSliceString
 	TypeSliceBytes

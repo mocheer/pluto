@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/mocheer/pluto/pkg/cpb"
-	"github.com/mocheer/pluto/pkg/ts/clock"
 	"github.com/mocheer/pluto/pkg/ts/object"
 	"github.com/xuri/excelize/v2"
 )
@@ -47,8 +45,8 @@ func Marshal(data any) ([]byte, error) {
 					c := vi.(Marshaler)
 					data, cpbtype := c.MarshalCPB()
 					switch cpbtype {
-					case cpb.TypeDate:
-						f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string(rune(65+i)), rowIndex+2), clock.FromUnixMilli(int64(data.(uint64))).Fmt(clock.FmtFullDate))
+					// case cpb.TypeDate:
+					// 	f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string(rune(65+i)), rowIndex+2), clock.FromUnixMilli(int64(data.(uint64))).Fmt(clock.FmtFullDate))
 					default:
 						f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string(rune(65+i)), rowIndex+2), data)
 					}

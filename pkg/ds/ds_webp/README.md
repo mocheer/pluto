@@ -16,19 +16,14 @@ WebP 主要优势在于有损编码，其无损编码的性能和压缩比表现
 
  压缩比，0表示快速压缩，耗时短，压缩质量一般，6表示极限压缩，耗时长，压缩质量好。该参数也只针对有损压缩有明显效果。调节该参数最高能带来 20% ～ 40% 的更高压缩比，但相应的编码时间会增加 5～20 倍。Google 推荐的值是 4。
 
-## 包
--  golang.org/x/image/webp
-
-只有Decode没有Encode
-
-- github.com/chai2010/webp
-
-依赖于libwebp?
-
 ## 其他
 有损编码图片，quality=0, method=0~3 是相对来说比较合适的参数，能够节省编码时间，同时也有不错的压缩比。
 无损编码图片，quality=75, method=2~4 是比较合适的参数，能在编码时间、图片质量、文件体积之间有着不错的平衡。
 
+## 参考
+- https://github.com/chai2010/webp
+- https://github.com/kolesa-team/go-webp
+- golang.org/x/image/webp  (没有encode)
 
 
 

@@ -1,4 +1,4 @@
-package dsfileinfo_test
+package fs_info_test
 
 import (
 	"os"
