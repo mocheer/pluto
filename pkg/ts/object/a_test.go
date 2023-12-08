@@ -21,3 +21,11 @@ func TestGetKind(t *testing.T) {
 func TestIsTime(t *testing.T) {
 	t.Log(object.GetType(time.Now())) //struct
 }
+
+func TestType(t *testing.T) {
+	type User struct {
+		ID string
+	}
+	u := &User{ID: ""}
+	t.Log(reflect.ValueOf(u).Elem().Type() == reflect.TypeOf(u).Elem())
+}

@@ -5,59 +5,37 @@ import (
 	"github.com/batchatco/go-native-netcdf/netcdf/api"
 )
 
-type DsNcOptions struct {
-	LonField   string
-	LatField   string
-	ValueField string
-}
-
 type DsNc struct {
-	Lons   []float32
-	Lats   []float32
-	Values []float32
-	Attrs  map[string]any
+	Data  map[string]any
+	Attrs map[string]any
 }
 
-func Read(file api.ReadSeekerCloser, options DsNcOptions) *DsNc {
+func Read(file api.ReadSeekerCloser) *DsNc {
 	nc, err := netcdf.New(file)
 	if err != nil {
 		panic(err)
 	}
 	defer nc.Close()
-	return readNc(nc, options)
+	return readNc(nc)
 }
 
-func ReadFile(fileName string, options DsNcOptions) *DsNc {
-
+func ReadFile(fileName string) (*DsNc, error) {
 	nc, err := netcdf.Open(fileName)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 	defer nc.Close()
-	return readNc(nc, options)
+	return readNc(nc), nil
 }
 
-func readNc(nc api.Group, options DsNcOptions) *DsNc {
-	vr, _ := nc.GetVariable(options.LonField)
-	if vr == nil {
-		panic("lon variable not found")
+// readNc
+// TODO 读取变量
+func readNc(nc api.Group) *DsNc {
+	data := map[string]any{}
+	keys := nc.ListVariables()
+	for _, key := range keys {
+		val, _ := nc.GetVariable(key)
+		data[key] = val.Values
 	}
-	lons, _ := vr.Values.([]float32)
-	//
-	vr2, _ := nc.GetVariable(options.LatField)
-	if vr2 == nil {
-		panic("lat variable not found")
-	}
-	lats, _ := vr2.Values.([]float32)
-	//
-	vr3, _ := nc.GetVariable(options.ValueField)
-	if vr3 == nil {
-		panic("value variable not found")
-	}
-	values, _ := vr3.Values.([]float32)
-	return &DsNc{
-		Lons:   lons,
-		Lats:   lats,
-		Values: values,
-	}
+	return &DsNc{Data: data}
 }

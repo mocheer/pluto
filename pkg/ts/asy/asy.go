@@ -14,6 +14,7 @@ func (m *Asy) Wait() {
 	m.wg.Wait()
 }
 
+// Add
 func (m *Asy) Add(fn func(args ...any), args ...any) *Asy {
 	m.wg.Add(1)
 	go func() {

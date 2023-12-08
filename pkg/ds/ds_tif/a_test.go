@@ -13,6 +13,7 @@ func TestTiff(t *testing.T) {
 	tfs, _ := ds_tif.Read(fileName)
 
 	t.Log(tfs.Tif.IFDs()[0])
+	t.Log(string(tfs.Tif.IFDs()[0].Fields()[18].Value().Bytes()))
 	// 107.85853701103325 34.12743138973333 107.34437034436667 33.849098056400045
 	t.Log(tfs.BBox())
 	// 100,100
@@ -105,4 +106,17 @@ func TestTiff5(t *testing.T) {
 	t.Log(tfs.Scale())             // 系数
 	t.Log(tfs.Scale()[0] * 111110) // 30.86 说明这个水平分辨率只有30米，这个算法是一个模糊值
 	t.Log(len(lo.Filter(tfs.Data, func(v float64, _ int) bool { return v != 0 })))
+}
+
+func TestTiff_llsk(t *testing.T) {
+	fileName := "./testdata/llsk/Extract_crea61.tif" //高斯投影3度带，117
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()[0]
+	t.Log(ifd)
+	t.Log((ifd.Fields()[16]))
+	t.Log(string(ifd.Fields()[16].Value().Bytes()))
+	t.Log(string(ifd.Fields()[17].Value().Bytes()))
+	// 107.85853701103325 34.12743138973333 107.34437034436667 33.849098056400045
+	t.Log(tfs.BBox())
+
 }

@@ -8,12 +8,24 @@ import (
 	"github.com/mocheer/pluto/pkg/ts/object"
 )
 
+func TestNew(t *testing.T) {
+	type User struct {
+		Name string `json:"name"`
+	}
+	u := User{Name: "Mocheer"}
+	t.Log(object.GetKind(u), object.GetKind(object.New(u)))
+	t.Log(object.GetKind(1), object.GetKind(object.New(1)))
+	a, ok := object.New(u).(*User)
+	t.Log(*a, ok)
+
+}
+
 func TestNewSlices(t *testing.T) {
 	type User struct {
 		Name string `json:"name"`
 	}
 	u := User{Name: "Mocheer"}
-	users := object.NewSlicePointer(u)
+	users := object.NewSlice(u)
 	fmt.Println(users)
 	//
 	v := reflect.ValueOf(users).Elem()

@@ -25,7 +25,7 @@ func ReadGJSON(fileName string) gjson.Result {
 }
 
 // Save 保存数据为json文件（包含json格式化）
-func Save(data any, fileName string) error {
+func Save(fileName string, data any) error {
 	_data, err := json.MarshalIndent(data, "", " ")
 	if err != nil {
 		return err

@@ -1,12 +1,17 @@
 # tif
 
-@see https://github.com/jblindsay/go-spatial
-@see https://github.com/google/tiff
-@see https://github.com/geotiffjs/geotiff.js
+## 压缩算法
 
-@see https://search.asf.alaska.edu
-@see http://www.tuxingis.com
-@see http://www.gscloud.cn/   
+|          | Decoding | Encoding |
+| -------- | -------- | -------- |
+| None     | ✓        | ✓        |
+| LZW      | ✓        | ✓        |
+| Deflate  | ✓        | ✓        |
+| PackBits | ✓        | ✓        |
+| JPEG     | ✓        | ✓        |
+| LERC     | ✓        | ✓        |
+
+## 开发库
 
 ### jblindsay/go-spatial
 - 在tiff格式之外还支持其他栅格数据文件
@@ -18,12 +23,21 @@
 ### google/tiff
 - 没有直接支持获取高程数据（灰度值），包括相关的lzw压缩算法等（在另外的库中，且lzw算法目前有问题，无法解析部分lzw压缩的tiff文件）
 
-### bigtiff
+### google/tiff/geotiff
 - BigTiff的文件头固定为8个字节，分别为49 49 2B 00 08 00 00 00。读取程序检测得到这8个字节即可判定文件为BigTiff格式。
 - BigTiff的文件尾固定为8个全零字节
 
-### geotiff
+### geotiffjs/geotiff
+这是一个js库
+
 - 可解析`golang.org/x/image/tiff/lzw`算法不支持的tiff文件
+- 压缩算法还支持LERC、JPEG
+
+### image-rs/image-tiff
+这是一个rust库
+
+
+
 
 ```go
 // Tags (see p. 28-41 of the spec).
@@ -117,3 +131,13 @@ var tagMap = map[int]string{
 	34377: "Photoshop",
 }
 ```
+
+## 参考
+- https://github.com/jblindsay/go-spatial
+- https://github.com/google/tiff
+- https://github.com/geotiffjs/geotiff.js
+- https://search.asf.alaska.edu
+- http://www.tuxingis.com
+- http://www.gscloud.cn/   
+- https://github.com/image-rs/image-tiff
+

@@ -7,6 +7,7 @@ require (
 	github.com/amenzhinsky/go-memexec v0.7.1
 	github.com/andybalholm/brotli v1.0.5
 	github.com/batchatco/go-native-netcdf v0.0.0-20230103061018-5849c1f424b1
+	github.com/chai2010/webp v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/dop251/goja v0.0.0-20230806174421-c933cf95e127
 	github.com/emirpasic/gods v1.18.1
@@ -23,6 +24,7 @@ require (
 	github.com/mocheer/xena v1.0.6
 	github.com/murphy214/geobuf v0.0.0-20230427183955-8319bc00ee3a
 	github.com/paulmach/go.geojson v1.5.0
+	github.com/paulmach/orb v0.10.0
 	github.com/pierrec/lz4/v4 v4.1.18
 	github.com/qmuntal/draco-go v0.5.0
 	github.com/qmuntal/gltf v0.24.2
@@ -43,7 +45,6 @@ require (
 	github.com/antchfx/xmlquery v1.3.11 // indirect
 	github.com/antchfx/xpath v1.2.1 // indirect
 	github.com/batchatco/go-thrower v0.0.0-20200827035905-5cb7337f6be6 // indirect
-	github.com/chai2010/webp v1.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
@@ -70,6 +71,7 @@ require (
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
+	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/image v0.11.0 // indirect
