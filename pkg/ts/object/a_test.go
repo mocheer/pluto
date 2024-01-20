@@ -7,6 +7,7 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ts/object"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/image/tiff"
 )
 
 func TestGetKind(t *testing.T) {
@@ -28,4 +29,21 @@ func TestType(t *testing.T) {
 	}
 	u := &User{ID: ""}
 	t.Log(reflect.ValueOf(u).Elem().Type() == reflect.TypeOf(u).Elem())
+}
+
+func TestGetFuncName(t *testing.T) {
+	t.Log(object.GetFuncName(reflect.ValueOf))
+}
+
+func TestGetTypeName(t *testing.T) {
+	t.Log(object.GetTypeName(time.Timer{}))
+	t.Log(object.GetTypeName(&time.Timer{}))
+
+	t.Log(object.GetTypeName(time.Layout))
+	// t.Log(object.GetTypeName(&time.Layout))
+
+	//
+	t.Log(object.GetPackageName(time.Timer{}))
+	t.Log(object.GetPackageName(tiff.CCITTGroup3))
+	// t.Log(object.GetPackageName(&time.Layout))
 }

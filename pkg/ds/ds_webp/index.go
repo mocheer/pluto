@@ -3,10 +3,15 @@ package ds_webp
 import (
 	"bytes"
 	"image"
+	"io"
 
 	"github.com/chai2010/webp"
 	"github.com/mocheer/pluto/pkg/ts/img"
 )
+
+func Decode(r io.Reader) (image.Image, error) {
+	return webp.Decode(r)
+}
 
 // FromImageFile
 func FromImageFile(filename string) (*bytes.Buffer, error) {

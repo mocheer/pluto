@@ -11,8 +11,8 @@ import (
 )
 
 // Save 保存为文件
-func (p *Img) Save(path string) error {
-	switch p.Type {
+func (p *Img) Save(path string, format string) error {
+	switch format {
 	case JPEG:
 		return SaveAsJPEG(p.Image, path)
 	case PNG:

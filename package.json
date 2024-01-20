@@ -4,5 +4,8 @@
  "author": "mocheer",
  "description": "",
  "license": "MIT",
- "scripts": {}
+ "scripts": {},
+ "dependencies": {
+  "geotiff": "^2.1.0"
+ }
 }

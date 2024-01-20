@@ -11,7 +11,7 @@ import (
 )
 
 func (p *Img) MustToBase64() (data string) {
-	data, err := ToBase64(p.Image, p.Type)
+	data, err := ToBase64(p.Image, JPG)
 	if err != nil {
 		panic(err)
 	}
@@ -19,7 +19,7 @@ func (p *Img) MustToBase64() (data string) {
 }
 
 func (p *Img) ToBase64() (data string, err error) {
-	return ToBase64(p.Image, p.Type)
+	return ToBase64(p.Image, JPG)
 }
 
 // ToJPEGBase64 将image转成各种图片编码的base64字符串

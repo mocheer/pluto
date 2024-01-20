@@ -4,7 +4,7 @@ import "image"
 
 // Thumbnail 缩略图
 func (p *Img) Thumbnail(width, height int) *Img {
-	return &Img{Image: Thumbnail(p.Image, width, height), Type: p.Type}
+	return &Img{Image: Thumbnail(p.Image, width, height)}
 }
 
 // Thumbnail

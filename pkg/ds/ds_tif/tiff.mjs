@@ -1,8 +1,8 @@
 import { fromFile} from 'geotiff';
 
-fromFile('./testdata/ASTGTMV003_N03E112_dem.tif')
+fromFile('./testdata/20230812_164500压缩.tiff')
   .then(tiff => { 
-    const image = tiff.getImage().then(async image=>{
+    const image = tiff.getImage(0).then(async image=>{
      
       const width = image.getWidth();
       const height = image.getHeight();
@@ -22,8 +22,10 @@ fromFile('./testdata/ASTGTMV003_N03E112_dem.tif')
       console.log(origin)
       console.log(resolution)
       console.log(origin)
-      const data = await image.readRasters();
-      console.log(data[0].length)
-      console.log(data[0].filter(e=>e).length)
+      const data = await image.readRasters({
+        samples: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], // 波段数量，一个波段：[0]，三个波段：[2,1,0]
+      });
+      console.log(data.length,data[0].length)
+      console.log(data[1].filter(e=>e).length)
     })
   });

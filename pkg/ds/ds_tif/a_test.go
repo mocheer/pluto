@@ -31,7 +31,7 @@ func TestBids_tiff(t *testing.T) {
 	tfs, _ := ds_tif.Read(fileName)
 
 	tfs.IFD_Index = 0
-	t.Log(len(tfs.Tif.IFDs()))
+	t.Log(tfs.Tif.IFDs())
 	t.Log(tfs.Origin())
 	t.Log(tfs.BBox())
 	t.Log(tfs.Scale())
@@ -106,9 +106,11 @@ func TestTiff5(t *testing.T) {
 	t.Log(tfs.Scale())             // 系数
 	t.Log(tfs.Scale()[0] * 111110) // 30.86 说明这个水平分辨率只有30米，这个算法是一个模糊值
 	t.Log(len(lo.Filter(tfs.Data, func(v float64, _ int) bool { return v != 0 })))
+	t.Log(string(tfs.Tif.IFDs()[0].Fields()[18].Value().Bytes()))
 }
 
 func TestTiff_llsk(t *testing.T) {
+	// 岭里水库
 	fileName := "./testdata/llsk/Extract_crea61.tif" //高斯投影3度带，117
 	tfs, _ := ds_tif.Read(fileName)
 	ifd := tfs.Tif.IFDs()[0]
@@ -118,5 +120,62 @@ func TestTiff_llsk(t *testing.T) {
 	t.Log(string(ifd.Fields()[17].Value().Bytes()))
 	// 107.85853701103325 34.12743138973333 107.34437034436667 33.849098056400045
 	t.Log(tfs.BBox())
+
+}
+
+func TestTiff_nc(t *testing.T) {
+	fileName := "./testdata/nc.tif"
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()[0]
+	t.Log(ifd)
+	t.Log(tfs.Width())
+	t.Log(tfs.Height())
+	t.Log(tfs.BBox())
+	t.Log(tfs.Scale())
+	t.Log(tfs.Origin())
+	// ds_json.Save("./testdata/nc.json", tfs.Data)
+}
+
+func TestTiff2_nc(t *testing.T) {
+	fileName := "./testdata/20230812_164500.tif"
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()
+	t.Log(ifd[0], len(ifd))
+}
+
+func TestTiff3_mq(t *testing.T) {
+	fileName := "./testdata/闽清倾斜摄影对应DEM/10M.tif"
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()
+	t.Log(ifd[0], len(ifd))
+	t.Log(tfs.Origin())
+	t.Log(tfs.BBox())
+	t.Log(tfs.Scale())
+	//
+	t.Log(tfs.GetAlt(1000, 1000))
+	t.Log(tfs.GetLonLat(1000, 1000))
+	t.Log(tfs.GetAltByLonLat(674663.2124192547, 2874738.825797036))
+	t.Log(tfs.GetAltByLonLat(674669.8599475692, 2875052.5104912943))
+
+	t.Log(tfs.Scale()[0])
+	// ds_json.Save("./testdata/nc.json", tfs.Data)
+
+}
+
+func TestTiff34(t *testing.T) {
+	fileName := "./testdata/alos/AP_27052_FBS_F0740_RT1/AP_27052_FBS_F0740_RT1.dem.tif"
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()
+	t.Log(ifd[0], len(ifd))
+	t.Log(tfs.Origin())
+	t.Log(tfs.BBox())
+	t.Log(tfs.Scale())
+	//
+	t.Log(tfs.GetAlt(1000, 1000))
+	t.Log(tfs.GetLonLat(1000, 1000))
+	t.Log(tfs.GetAltByLonLat(674663.2124192547, 2874738.825797036))
+	t.Log(tfs.GetAltByLonLat(674669.8599475692, 2875052.5104912943))
+
+	t.Log(tfs.Scale()[0])
 
 }

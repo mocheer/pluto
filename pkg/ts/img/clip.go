@@ -8,12 +8,12 @@ import (
 
 // Clip 剪切
 func (m *Img) Clip(x0, y0, width, height int) *Img {
-	return &Img{Image: Clip(m.Image, x0, y0, width, height), Type: m.Type}
+	return &Img{Image: Clip(m.Image, x0, y0, width, height)}
 }
 
 // Clip 剪切
 func (m *Img) ClipPNG(x0, y0, width, height int) *Img {
-	return &Img{Image: ClipPNG(m.Image, x0, y0, width, height), Type: m.Type}
+	return &Img{Image: ClipPNG(m.Image, x0, y0, width, height)}
 }
 
 // Clip 剪切

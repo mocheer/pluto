@@ -19,7 +19,9 @@ type Ctp struct {
 func New() *Ctp {
 	c := colly.NewCollector(
 		colly.UserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"),
+		colly.AllowURLRevisit(),
 	)
+
 	return &Ctp{Collector: c}
 }
 
@@ -36,7 +38,6 @@ func (m *Ctp) Get(uri string) ([]byte, error) {
 func (m *Ctp) Request(uri string, orgin string, callback func(resp *colly.Response)) error {
 	// extensions.RandomUserAgent(c)
 	extensions.Referer(m.Collector)
-
 	if orgin == "" {
 		orgin = uri
 	}

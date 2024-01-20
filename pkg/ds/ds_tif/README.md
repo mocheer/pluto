@@ -31,7 +31,7 @@
 这是一个js库
 
 - 可解析`golang.org/x/image/tiff/lzw`算法不支持的tiff文件
-- 压缩算法还支持LERC、JPEG
+- 压缩算法还支持 LERC 、JPEG
 
 ### image-rs/image-tiff
 这是一个rust库

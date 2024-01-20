@@ -3,6 +3,7 @@ package ds_zip
 import (
 	"archive/zip"
 	"bytes"
+	"errors"
 	"io"
 	"os"
 	"path"
@@ -10,6 +11,34 @@ import (
 
 	"github.com/mocheer/pluto/pkg/fn"
 )
+
+// ReadFileItem
+// 即使文件在多层文件夹内部也能获取到，文件名为：文件夹/文件夹/**/名称
+func ReadFileItem(fileName string, itemFileName string) ([]byte, error) {
+	// 读取
+	r, err := zip.OpenReader(fileName)
+
+	if err == nil {
+		defer r.Close()
+		// 遍历所有文件，包括文件夹本身
+		for _, f := range r.File {
+			if f.Name == itemFileName {
+				reader, err := f.Open()
+
+				defer reader.Close()
+				if err == nil {
+
+					data, err := io.ReadAll(reader)
+					return data, err
+				}
+				return nil, err
+			}
+		}
+		err = errors.New("not found")
+	}
+
+	return nil, err
+}
 
 // Each 遍历zip文件
 func Each(fileName string, callback func(*zip.File)) error {

@@ -10,11 +10,11 @@ import (
 
 // TestSave
 func TestSave(t *testing.T) {
-	p, err := img.FromFile("test.png")
+	p, _, err := img.FromFile("test.png")
 	if err != nil {
 		t.Error(err)
 	}
-	p.Save("test_save.png")
+	p.Save("test_save.png", "png")
 }
 
 // TestColor

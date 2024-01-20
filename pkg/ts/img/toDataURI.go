@@ -6,7 +6,7 @@ import (
 )
 
 func (p *Img) MustToDataURI() (data string) {
-	data, err := ToDataURI(p.Image, p.Type)
+	data, err := ToDataURI(p.Image, JPG)
 	if err != nil {
 		panic(err)
 	}
@@ -14,7 +14,7 @@ func (p *Img) MustToDataURI() (data string) {
 }
 
 func (p *Img) ToDataURI() (data string, err error) {
-	return ToDataURI(p.Image, p.Type)
+	return ToDataURI(p.Image, JPG)
 }
 
 // ToDataURI  支持 data uri
