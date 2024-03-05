@@ -24,10 +24,33 @@ func ReadFileItem(fileName string, itemFileName string) ([]byte, error) {
 		for _, f := range r.File {
 			if f.Name == itemFileName {
 				reader, err := f.Open()
-
-				defer reader.Close()
 				if err == nil {
+					defer reader.Close()
+					data, err := io.ReadAll(reader)
+					return data, err
+				}
+				return nil, err
+			}
+		}
+		err = errors.New("not found")
+	}
 
+	return nil, err
+}
+
+// ReadItem
+// 即使文件在多层文件夹内部也能获取到，文件名为：文件夹/文件夹/**/名称
+func ReadItem(data []byte, itemFileName string) ([]byte, error) {
+	// 读取
+	reader := bytes.NewReader(data)
+	r, err := zip.NewReader(reader, int64(len(data)))
+	if err == nil {
+		// 遍历所有文件，包括文件夹本身
+		for _, f := range r.File {
+			if f.Name == itemFileName {
+				reader, err := f.Open()
+				if err == nil {
+					defer reader.Close()
 					data, err := io.ReadAll(reader)
 					return data, err
 				}

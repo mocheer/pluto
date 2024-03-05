@@ -15,7 +15,7 @@ func Decode(r io.Reader) (image.Image, error) {
 
 // FromImageFile
 func FromImageFile(filename string) (*bytes.Buffer, error) {
-	i, err := img.FromFile(filename)
+	i, _, err := img.FromFile(filename)
 	if err != nil {
 		return nil, err
 	}

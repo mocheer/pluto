@@ -16,8 +16,9 @@ func TestNew(t *testing.T) {
 	t.Log(object.GetKind(u), object.GetKind(object.New(u)))
 	t.Log(object.GetKind(1), object.GetKind(object.New(1)))
 	a, ok := object.New(u).(*User)
+	a.Name = "mocheer"
 	t.Log(*a, ok)
-
+	t.Log(*a == u)
 }
 
 func TestNewSlices(t *testing.T) {
