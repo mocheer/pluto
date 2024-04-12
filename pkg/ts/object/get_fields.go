@@ -9,9 +9,11 @@ import (
 // 返回struct所有的字段索引和字段名称， 不包括忽略的字段。
 // "json:-"
 func GetFieldsByReflectStruct(typ reflect.Type) ([]int, []string) {
-	num := typ.NumField() // 包括未导出的字段
+	num := typ.NumField() // 包括未导出的字段，这里不会包括组合的内部字段
+
 	fieldIndexs := []int{}
 	fieldNames := []string{}
+
 	for i := 0; i < num; i++ {
 		field := typ.Field(i)
 		// 忽略没有导出的字段和无效值

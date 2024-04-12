@@ -215,6 +215,7 @@ func marshalStruct(v reflect.Value, typ reflect.Type, data []byte) []byte {
 	num := len(fieldIndexs)
 	data = protowire.AppendVarint(data, uint64(num))
 	for i := 0; i < num; i++ {
+		// TODO 这里需要判断是不是组合后的struct字段，然后平级输出
 		data = protowire.AppendString(data, fieldNames[i])
 		data = marshal(data, v.Field(fieldIndexs[i]))
 	}
