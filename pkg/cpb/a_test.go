@@ -1,40 +1,50 @@
 package cpb_test
 
 import (
+	_ "embed"
+	"encoding/json"
 	"reflect"
 	"testing"
 	"time"
 
 	"github.com/mocheer/pluto/pkg/cpb"
+	"github.com/vmihailenco/msgpack/v5"
 	"google.golang.org/protobuf/encoding/protowire"
 	"gorm.io/datatypes"
 )
 
+type User struct {
+	Name        string
+	Age         int
+	D           int
+	Anniversary map[string]string
+	Data        []byte
+	Num         int
+	CreatedAt   *time.Time
+}
+
+var u = &User{
+	Name: "mocheer",
+	Age:  30,
+	D:    -10,
+	Anniversary: map[string]string{
+		"birthday":  "19921214",
+		"birthday2": "1214",
+	},
+	Data: []byte{1, 2, 3, 4, 5},
+}
+
+var us = []*User{u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u, u}
+
+//go:embed marshal.go
+var bs []byte
+
 func Test1(t *testing.T) {
-	type User struct {
-		Name        string
-		Age         int
-		D           int
-		Anniversary map[string]string
-		Data        []byte
-		Num         int
-		CreatedAt   *time.Time
-	}
-	u := &User{
-		Name: "mocheer",
-		Age:  30,
-		D:    -10,
-		Anniversary: map[string]string{
-			"birthday":  "19921214",
-			"birthday2": "1214",
-		},
-		Data: []byte{1, 2, 3, 4, 5},
-	}
 
 	data := cpb.Marshal(u)
 	t.Log(data)
 	t.Log(len(data))
-	t.Log(len(u.Anniversary))
+	// t.Log(len(u.Anniversary))
 
 	a := &User{}
 
@@ -53,10 +63,6 @@ func Test1(t *testing.T) {
 	bv := reflect.ValueOf(b)
 	t.Log(bv.IsZero(), bv.IsValid())
 
-	var c any = nil
-	dv := reflect.ValueOf(c)
-	t.Log("c")
-	t.Log(dv.IsZero(), dv.IsValid())
 }
 
 func Test100(t *testing.T) {
@@ -103,5 +109,48 @@ func TestArray(t *testing.T) {
 		{133},
 	}
 	t.Log(cpb.Marshal(a))
+
+}
+
+func BenchmarkCPB(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		cpb.Marshal(us)
+	}
+}
+
+func BenchmarkJSON(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		json.Marshal(us)
+	}
+}
+
+func BenchmarkMessagePack(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		msgpack.Marshal(us)
+
+	}
+
+}
+
+func BenchmarkCPB2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		cpb.Marshal(bs)
+
+	}
+
+}
+
+func BenchmarkJSON2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		json.Marshal(bs)
+
+	}
+}
+
+func BenchmarkMessagePack2(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		msgpack.Marshal(bs)
+
+	}
 
 }

@@ -10,6 +10,8 @@ import (
 
 // Marshal
 // 目前只计划支持 struct{} 和 []struct{}
+// TODO 用gorm/gen+代码生成器直接生成proto编码程序，取消反射
+// TODO []any 数组如果是接口会出问题
 func Marshal(s any) []byte {
 	var data []byte
 	data = marshal(data, reflect.ValueOf(s))
@@ -24,9 +26,9 @@ func marshal(data []byte, v reflect.Value) []byte {
 	// 2. 当 v 是一个结构体或者其他不能为空的值，IsNil 会发生错误，所以在用 IsNil 进行判断前需要先验证 IsValid
 	// || v.IsNil()
 	if !v.IsValid() {
+
 		return protowire.AppendVarint(data, TypeInvalid)
 	}
-
 	//
 	typ := v.Type()
 	// 结构体中未赋值的属性值，为真

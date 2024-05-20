@@ -31,8 +31,12 @@ require (
 	github.com/samber/lo v1.38.1
 	github.com/spatial-go/geoos v1.1.3
 	github.com/stretchr/testify v1.8.4
+	github.com/tetratelabs/wazero v1.7.1
 	github.com/tidwall/gjson v1.15.0
+	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/xuri/excelize/v2 v2.7.1
+	golang.org/x/crypto v0.8.0
+	golang.org/x/image v0.11.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/ini.v1 v1.67.0
 	gorm.io/datatypes v1.2.0
@@ -69,12 +73,11 @@ require (
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
-	golang.org/x/crypto v0.8.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
-	golang.org/x/image v0.11.0 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.12.0 // indirect

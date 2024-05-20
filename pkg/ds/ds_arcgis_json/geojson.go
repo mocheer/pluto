@@ -8,30 +8,32 @@ import (
 	"github.com/paulmach/orb/geojson"
 )
 
+// ToGeoJSON
+func (m ArcGISJSON) ToGeoJSON(idAttribute string) *geojson.FeatureCollection {
+	fc := geojson.NewFeatureCollection()
+	if len(m.Features) != 0 {
+		for i := 0; i < len(m.Features); i++ {
+			f := m.Features[i]
+			feature := featureToFeature(f, idAttribute)
+			fc.Features = append(fc.Features, feature)
+		}
+	}
+	return fc
+}
+
 func Convert(data []byte, idAttribute string) ([]byte, error) {
 	arcgisJSON := ArcGISJSON{}
 	err := json.Unmarshal(data, &arcgisJSON)
 	if err != nil {
 		return nil, err
 	}
-	if arcgisJSON.SpatialReference.WKID != 4326 {
-		return nil, errors.New("error: arc gis features must be in wkid 4326 for valid conversion to geojson")
-	}
-	fc := geojson.NewFeatureCollection()
-	if len(arcgisJSON.Features) != 0 {
-		for i := 0; i < len(arcgisJSON.Features); i++ {
-			f := arcgisJSON.Features[i]
-			feature := featureToFeature(f, idAttribute)
-			fc.Features = append(fc.Features, feature)
-		}
-	}
+
+	fc := arcgisJSON.ToGeoJSON(idAttribute)
 	return fc.MarshalJSON()
 }
 
 func featureToFeature(f ArcGISFeature, idAttribute string) *geojson.Feature {
-
 	var feature = new(geojson.Feature)
-
 	// x,y >> point
 	if f.X != 0 && f.Y != 0 {
 		point := [][]float64{

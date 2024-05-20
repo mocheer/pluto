@@ -3,6 +3,8 @@ package ds
 import (
 	"io"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 func ReadFile(fileName string) ([]byte, error) {
@@ -73,4 +75,15 @@ func CopyFile(src, dst string) (err error) {
 	defer df.Close()
 	_, err = io.Copy(df, sf)
 	return
+}
+
+func Basename(name string) string {
+	// 获取基础文件名，包括后缀
+	baseName := filepath.Base(name)
+	// 获取最后一个点（.）的位置
+	if lastDot := strings.LastIndexByte(baseName, '.'); lastDot != -1 {
+		// 截取不带后缀的文件名
+		baseName = baseName[:lastDot]
+	}
+	return baseName
 }
