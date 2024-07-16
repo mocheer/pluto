@@ -3,12 +3,39 @@ package fn_test
 import (
 	"fmt"
 	"math"
+	"os"
 	"strings"
 	"testing"
 
+	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
 	"github.com/stretchr/testify/assert"
 )
+
+func TestMD(t *testing.T) {
+	data, err := os.ReadFile("./testdata/LAND STALKER.md")
+	if err != nil {
+		panic(err)
+	}
+
+	for i, v := range data {
+		switch v {
+		case 0xff:
+			if data[i+1] == 0xd8 {
+
+				for j, v := range data[i:] {
+					if v == 0xff && data[i+j+1] == 0xD9 {
+						t.Log(i, i+j, j)
+						ds.Save(fmt.Sprintf("testdata/part/%d.jpg", i), data[i:i+j+2])
+						break
+					}
+				}
+
+			}
+		}
+	}
+
+}
 
 func TestB2S(t *testing.T) {
 	var b = []byte(`b2s`)

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 
+	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/qmuntal/gltf"
 )
 
@@ -48,4 +49,14 @@ func toBuffer(doc gltf.Document, asBubary bool) bytes.Buffer {
 	enc.AsBinary = asBubary
 	enc.Encode(&doc)
 	return buf
+}
+
+func Save(filename string, doc *gltf.Document, asBubary bool) error {
+	var buf bytes.Buffer
+	enc := gltf.NewEncoder(&buf)
+	// 默认 false 生成 gltf
+	// 设置为true时生成 glb
+	enc.AsBinary = asBubary
+	enc.Encode(doc)
+	return ds.Save(filename, buf.Bytes())
 }

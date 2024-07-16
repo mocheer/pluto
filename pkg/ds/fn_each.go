@@ -43,12 +43,32 @@ func EachFilesToRemove(dir string, fn func(filename string, fi os.FileInfo) bool
 	})
 }
 
+// 批量重命名指定目录及所有子目录下的所有文件。(包含目录)
+// func EachToRename(dir string, fn func(oldName string) string) (err error) {
+// 	return Each(dir, func(filename string, fi os.FileInfo) {
+// 		oldName := fi.Name()
+// 		newName := fn(oldName)
+// 		os.Rename(filename, filepath.Join(filepath.Dir(oldName), newName))
+// 	})
+// }
+
+// 批量重命名指定目录及所有子目录下的所有目录
+func EachDirsToRename(dir string, fn func(oldName string) string) (err error) {
+	return Each(dir, func(filename string, fi os.FileInfo) {
+		if fi.IsDir() { // 忽略目录
+			oldName := fi.Name()
+			newName := fn(oldName)
+			os.Rename(filename, filepath.Join(filepath.Dir(filename), newName))
+		}
+	})
+}
+
 // 批量重命名指定目录及所有子目录下的所有文件。(不包含目录)
 func EachFilesToRename(dir string, fn func(oldName string) string) (err error) {
 	return EachFiles(dir, func(filename string, fi os.FileInfo) {
 		oldName := fi.Name()
 		newName := fn(oldName)
-		os.Rename(filename, filepath.Join(filepath.Dir(oldName), newName))
+		os.Rename(filename, filepath.Join(filepath.Dir(filename), newName))
 	})
 }
 

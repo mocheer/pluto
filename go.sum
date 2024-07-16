@@ -144,6 +144,8 @@ github.com/qmuntal/draco-go v0.5.0 h1:ymCQOA925iUj9FfSUEgm30Ajnwt95PWC8wrBlvl0fB
 github.com/qmuntal/draco-go v0.5.0/go.mod h1:TwrF6mH8K+vN3qK/s4yqi38xOOWNOQllGxbE65N5/KU=
 github.com/qmuntal/gltf v0.24.2 h1:Cy9gabbcuWl/LJb3EIFXQIiWZ1Jf2V8ZygtiLc7Piyg=
 github.com/qmuntal/gltf v0.24.2/go.mod h1:7FR0CRHoOehIgKTBVq/QVyvPn0i6tzp2AdIghb2bPg4=
+github.com/qmuntal/gltf v0.26.0 h1:geVxZPBJ43f0ouLyseqMuzgKG6m6DkNH+gI3A63PFas=
+github.com/qmuntal/gltf v0.26.0/go.mod h1:YoXZOt0Nc0kIfSKOLZIRoV4FycdC+GzE+3JgiAGYoMs=
 github.com/richardlehane/mscfb v1.0.4 h1:WULscsljNPConisD5hR0+OyZjwK46Pfyr6mPu5ZawpM=
 github.com/richardlehane/mscfb v1.0.4/go.mod h1:YzVpcZg9czvAuhk9T+a3avCpcFPMUWm7gK3DypaEsUk=
 github.com/richardlehane/msoleps v1.0.1/go.mod h1:BWev5JBpU9Ko2WAgmZEuiz4/u3ZYTKbjLycmwiWUfWg=

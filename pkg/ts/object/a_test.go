@@ -47,3 +47,35 @@ func TestGetTypeName(t *testing.T) {
 	t.Log(object.GetPackageName(tiff.CCITTGroup3))
 	// t.Log(object.GetPackageName(&time.Layout))
 }
+
+func TestClone(t *testing.T) {
+	type User struct {
+		ID     string
+		Num    *int
+		Slices []*int
+		Test   []*User
+	}
+	num := 1
+	a := 9
+	b := 8
+
+	u := &User{ID: "a", Num: &num, Slices: []*int{&a, &b}, Test: []*User{{ID: "a"}}}
+	user := object.ShallowClone(*u)
+
+	t.Log(u.ID, user.ID, *u.Num, *user.Num, u.Test, user.Test)
+	// t.Log(*u == user)
+	t.Log(u == &user)
+
+	user.ID = "b"
+	*user.Num = 2
+	t.Log(u.ID, user.ID, *u.Num, *user.Num)
+	// t.Log(*u == user)
+	t.Log(u == &user)
+
+	user.ID = "c"
+	num2 := 3
+	user.Num = &num2
+	t.Log(u.ID, user.ID, *u.Num, *user.Num)
+	// t.Log(*u == user)
+	t.Log(u == &user)
+}

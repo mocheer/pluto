@@ -33,13 +33,28 @@ func GetFiles(dir string) (files []string, err error) {
 		if err != nil { //忽略错误
 			return err
 		}
-		if fi.IsDir() { // 忽略目录
-			return nil
+		if !fi.IsDir() { // 忽略目录
+			files = append(files, filename)
 		}
-		files = append(files, filename)
+
 		return nil
 	})
 	return files, err
+}
+
+// GetDirs
+func GetDirs(dir string) (dirs []string, err error) {
+	dirs = make([]string, 0, 10)
+	err = filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error { //遍历目录
+		if err != nil { //忽略错误
+			return err
+		}
+		if fi.IsDir() { // 忽略目录
+			dirs = append(dirs, filename)
+		}
+		return nil
+	})
+	return dirs, err
 }
 
 func GetFilesWithSuffix(dir, suffix string) (files []string, err error) {

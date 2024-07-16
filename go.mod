@@ -27,7 +27,7 @@ require (
 	github.com/paulmach/orb v0.10.0
 	github.com/pierrec/lz4/v4 v4.1.18
 	github.com/qmuntal/draco-go v0.5.0
-	github.com/qmuntal/gltf v0.24.2
+	github.com/qmuntal/gltf v0.26.0
 	github.com/samber/lo v1.38.1
 	github.com/spatial-go/geoos v1.1.3
 	github.com/stretchr/testify v1.8.4
