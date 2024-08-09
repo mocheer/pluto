@@ -27,6 +27,7 @@ func GetFirstFiles(dir string) ([]fs.DirEntry, error) {
 }
 
 // GetFiles 获取指定目录及所有子目录下的所有文件，可以匹配后缀过滤。(不包含目录本身)
+// 这里获取的是绝对路径
 func GetFiles(dir string) (files []string, err error) {
 	files = make([]string, 0, 10)
 	err = filepath.Walk(dir, func(filename string, fi os.FileInfo, err error) error { //遍历目录

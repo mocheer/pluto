@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"slices"
+	"strconv"
 	"strings"
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -49,4 +52,21 @@ func TestRename(t *testing.T) {
 		}
 		return name
 	})
+}
+
+func TestMerge(t *testing.T) {
+	files, _ := ds.GetFiles("D:\\data\\apk\\从前一条街2\\assets")
+	zipFiles := lo.Filter(files, func(f string, _ int) bool {
+		return strings.Contains(f, ".zip")
+	})
+	slices.SortFunc(zipFiles, func(s1 string, s2 string) int {
+		s1 = strings.Replace(strings.Replace(s1, "D:\\data\\apk\\从前一条街2\\assets\\data", "", -1), ".zip", "", -1)
+		s2 = strings.Replace(strings.Replace(s2, "D:\\data\\apk\\从前一条街2\\assets\\data", "", -1), ".zip", "", -1)
+		i1, _ := strconv.Atoi(s1)
+		i2, _ := strconv.Atoi(s2)
+		return i1 - i2
+	})
+	t.Log(zipFiles)
+	err := ds.MergeFiles(zipFiles, "./testdata/a.zip")
+	t.Log(err)
 }
