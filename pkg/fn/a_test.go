@@ -71,3 +71,10 @@ func TestMinFloat64(t *testing.T) {
 	t.Log(fn.RoundInt(4.49))
 	t.Log(fn.RoundInt(4.5))
 }
+func TestBase64(t *testing.T) {
+	data, _ := ds.ReadFile("testdata/auth.jpg")
+	// t.Log(fn.BtoaBytes([]byte{0xFF, 0xD8}))
+	t.Log(data[0:2])
+	t.Log(fn.BtoaBytes(data[0:2]))
+	t.Log(fn.BtoaBytes(data[0:3]))
+}

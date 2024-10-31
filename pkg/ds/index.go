@@ -6,9 +6,16 @@ import (
 )
 
 // IsExist 检查文件或目录是否存在
+// 可能已经存在跟目录名一样的文件名，所以判断目录和文件是否存在，请用IsDirExist
 func IsExist(path string) bool {
 	_, err := os.Stat(path)
 	return err == nil || os.IsExist(err)
+}
+
+// IsDirExist
+func IsDirExist(path string) bool {
+	s, err := os.Stat(path)
+	return (err == nil && s.IsDir()) || os.IsExist(err)
 }
 
 // Copy 拷贝文件或目录

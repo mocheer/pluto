@@ -17,6 +17,15 @@ func TestSave(t *testing.T) {
 	p.Save("test_save.png", "png")
 }
 
+func TestBase64(t *testing.T) {
+	p, f, err := img.FromFile("testdata/auth.jpg")
+	if err != nil {
+		t.Error(err)
+	}
+	t.Log(f)
+	t.Log(p.ToBase64())
+}
+
 // TestColor
 func TestColor(t *testing.T) {
 	c := color.RGBA{255, 16, 16, 254}

@@ -26,7 +26,8 @@ func (p *Img) ToBase64() (data string, err error) {
 func ToBase64(target image.Image, imageType string) (data string, err error) {
 	buf := new(bytes.Buffer)
 	switch imageType {
-	case JPEG:
+
+	case JPG, JPEG:
 		err = jpeg.Encode(buf, target, nil)
 	case PNG:
 		err = png.Encode(buf, target)

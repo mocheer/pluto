@@ -9,6 +9,7 @@ import (
 
 // MemExec
 // 在内存中直接执行程序，不需要在硬盘临时创建文件
+// 不建议使用，毕竟临时创建文件也只有一次耗时，但却更稳定
 func MemExec(bs []byte, params ...string) error {
 	exe, err := memexec.New(bs)
 	if err != nil {

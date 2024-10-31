@@ -10,9 +10,11 @@ import (
 )
 
 // CreateDirFromFilename 创建不存在的文件夹
+// 目录名可能包含无效的字符
+// 目录名可能因为当前目录下已经存在相同名称的文件名导致创建失败
 func CreateDirFromFilename(fileName string) error {
 	d := filepath.Dir(fileName)
-	if !IsExist(d) {
+	if !IsDirExist(d) {
 		err := os.MkdirAll(d, os.ModePerm)
 		if err != nil {
 			return err

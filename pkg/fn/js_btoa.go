@@ -16,6 +16,7 @@ func BtoaBytes(bytes []byte) string {
 
 // BtoaWithURI
 // typeName eg. "image/jpeg"
+// "data:image/jpeg;base64,%s"
 func BtoaWithURI(typeName string, bytes []byte) string {
 	return fmt.Sprintf("data:%s;base64,%s", typeName, BtoaBytes(bytes))
 }

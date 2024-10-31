@@ -15,6 +15,13 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test(t *testing.T) {
+
+	b := ds.IsExist("/a_test.go")
+	c := ds.IsExist("./a_test.go")
+	t.Log(b, c)
+}
+
 func TestRead(t *testing.T) {
 	data, err := os.ReadFile("./a_test.go")
 	if err != nil {
@@ -22,6 +29,11 @@ func TestRead(t *testing.T) {
 	}
 
 	assert.Equal(t, strings.HasPrefix(fn.BytesToString(data), "package ds_test"), true)
+}
+
+func TestSafeFileName(t *testing.T) {
+	name := ds.SafeFileName("./testdata/save/webshare2.shanhaibi.com/erwkq60victe?a=b&c=1")
+	t.Log(name)
 }
 
 func TestRename(t *testing.T) {
