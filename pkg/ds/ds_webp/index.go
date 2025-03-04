@@ -9,6 +9,10 @@ import (
 	"github.com/mocheer/pluto/pkg/ts/img"
 )
 
+// func RegisterFormat() {
+// 	image.RegisterFormat("webp", "RIFF????WEBPVP8", webp.Decode, webp.DecodeConfig)
+// }
+
 func Decode(r io.Reader) (image.Image, error) {
 	return webp.Decode(r)
 }

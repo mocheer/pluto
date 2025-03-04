@@ -9,12 +9,12 @@ import (
 	"path"
 	"strings"
 
-	"github.com/mocheer/pluto/pkg/fn"
+	"github.com/mocheer/pluto/pkg/std"
 )
 
 // ReadFileItem
 // 即使文件在多层文件夹内部也能获取到，文件名为：文件夹/文件夹/**/名称
-func ReadFileItem(fileName string, itemFileName string) ([]byte, error) {
+func ReadFileItem(fileName string, itemFileName string) std.Result[[]byte] {
 	// 读取
 	r, err := zip.OpenReader(fileName)
 
@@ -27,15 +27,15 @@ func ReadFileItem(fileName string, itemFileName string) ([]byte, error) {
 				if err == nil {
 					defer reader.Close()
 					data, err := io.ReadAll(reader)
-					return data, err
+					return std.NewResult(data, err)
 				}
-				return nil, err
+				return std.NewResult[[]byte](nil, err)
 			}
 		}
 		err = errors.New("not found")
 	}
 
-	return nil, err
+	return std.NewResult[[]byte](nil, err)
 }
 
 // ReadItem
@@ -64,7 +64,7 @@ func ReadItem(data []byte, itemFileName string) ([]byte, error) {
 }
 
 // Each 遍历zip文件
-func Each(fileName string, callback func(*zip.File)) error {
+func Each(fileName string, callback func(*zip.File) error) error {
 	// 读取
 	r, err := zip.OpenReader(fileName)
 	// zip: not a valid zip file [recovered]
@@ -75,7 +75,10 @@ func Each(fileName string, callback func(*zip.File)) error {
 	defer r.Close()
 	// 遍历所有文件，包括文件夹本身
 	for _, f := range r.File {
-		callback(f)
+		err := callback(f)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -96,35 +99,36 @@ func EachByReader(reader io.ReaderAt, size int64, callback func(*zip.File)) erro
 }
 
 // EachFiles 遍历zip文件
-func EachFiles(fileName string, callback func(*zip.File)) error {
-	return Each(fileName, func(f *zip.File) {
+func EachFiles(fileName string, callback func(*zip.File) error) error {
+	return Each(fileName, func(f *zip.File) error {
 		info := f.FileInfo()
 		if !info.IsDir() {
-			callback(f)
+			return callback(f)
 		}
+		return nil
 	})
 }
 
 // EachFiles 遍历zip文件
-func EachFilesReader(fileName string, callback func(io.ReadCloser)) error {
-	return EachFiles(fileName, func(f *zip.File) {
+func EachFilesReader(fileName string, callback func(io.ReadCloser) error) error {
+	return EachFiles(fileName, func(f *zip.File) error {
 		reader, err := f.Open()
 		if err != nil {
-			fn.Panic(err, "无法解压")
+			return err
 		}
 		defer reader.Close()
-		callback(reader)
+		return callback(reader)
 	})
 }
 
 // EachFilesBytes 遍历zip文件
-func EachFilesBytes(fileName string, callback func([]byte)) error {
-	return EachFilesReader(fileName, func(r io.ReadCloser) {
+func EachFilesBytes(fileName string, callback func([]byte) error) error {
+	return EachFilesReader(fileName, func(r io.ReadCloser) error {
 		bs, err := io.ReadAll(r)
 		if err != nil {
-			fn.Panic(err, "无法读取")
+			return err
 		}
-		callback(bs)
+		return callback(bs)
 	})
 }
 

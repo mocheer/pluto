@@ -20,16 +20,12 @@ func New() *vm {
 
 // Import 导入脚本
 func (m vm) Import(fileName string) (goja.Value, error) {
-	script, err := ds_text.ReadFile(fileName)
-	if err != nil {
-		return nil, err
-	}
+	script := ds_text.ReadFile(fileName).UnWrap()
 	return m.Ctx.RunString(script)
 }
 
 // Get
 func (m vm) Get(key string) goja.Value {
-
 	return m.Ctx.Get(key)
 }
 

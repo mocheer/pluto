@@ -2,6 +2,8 @@ package fn
 
 import gonanoid "github.com/matoous/go-nanoid/v2"
 
+// Nanoid
+// 默认为21
 func Nanoid(l ...int) string {
 	id, err := gonanoid.New(l...)
 	if err != nil {

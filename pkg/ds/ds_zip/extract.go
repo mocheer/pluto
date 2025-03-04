@@ -10,30 +10,31 @@ import (
 // Extract 解压缩zip文件到指定目录
 func Extract(fileName string, target string) {
 	// 读取
-	Each(fileName, func(f *zip.File) {
+	Each(fileName, func(f *zip.File) error {
 		info := f.FileInfo()
 		// 解压路径
 		targetName := filepath.Join(target, f.Name)
 		if info.IsDir() {
 			err := os.MkdirAll(targetName, os.ModePerm)
 			if err != nil {
-				panic(err.Error())
+				return err
 			}
-			return
+
 		}
 		srcFile, err := f.Open()
 		if err != nil {
-			panic(err.Error())
+			return err
 		}
 		defer srcFile.Close()
 
 		newFile, err := os.Create(targetName)
 		if err != nil {
-			panic(err.Error())
+			return err
 		}
 		defer newFile.Close()
 
 		io.Copy(newFile, srcFile)
+		return nil
 	})
 
 }

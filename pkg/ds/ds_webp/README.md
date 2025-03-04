@@ -22,10 +22,9 @@ WebP 主要优势在于有损编码，其无损编码的性能和压缩比表现
 无损编码图片，quality=75, method=2~4 是比较合适的参数，能在编码时间、图片质量、文件体积之间有着不错的平衡。
 
 ## 参考
-- https://github.com/chai2010/webp
-- https://github.com/kolesa-team/go-webp
-- golang.org/x/image/webp  (没有encode)
--
+- https://github.com/chai2010/webp（编译似乎有问题）
+- https://github.com/kolesa-team/go-webp(需要libwebp)
+- https://golang.org/x/image/webp  (没有encode)
 
 
 

@@ -12,3 +12,7 @@ type MD []byte
 func (m MD) HTML() string {
 	return fn.BytesToString(markdown.ToHTML(m, nil, nil))
 }
+
+// func (m MD) HTML2() string {
+// 	return fn.BytesToString(blackfriday.Run(m))
+// }

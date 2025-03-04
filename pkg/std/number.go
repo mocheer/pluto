@@ -1,4 +1,4 @@
-package itypes
+package std
 
 // 泛型
 type Number interface {
