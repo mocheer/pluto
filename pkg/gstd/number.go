@@ -1,4 +1,4 @@
-package std
+package gstd
 
 // 泛型
 type Number interface {

@@ -6,13 +6,12 @@ import (
 
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
-	"github.com/mocheer/pluto/pkg/std"
 )
 
 // ReadFile
-func ReadFile(fileName string) std.Result[string] {
+func ReadFile(fileName string) (string, error) {
 	bs, err := os.ReadFile(fileName)
-	return std.NewResult(fn.BytesToString(bs), err)
+	return fn.BytesToString(bs), err
 }
 
 // MustReadFile 读取文本文件，当发生错误的时候直接panic

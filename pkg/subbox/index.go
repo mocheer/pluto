@@ -20,7 +20,10 @@ func New() *vm {
 
 // Import 导入脚本
 func (m vm) Import(fileName string) (goja.Value, error) {
-	script := ds_text.ReadFile(fileName).UnWrap()
+	script, err := ds_text.ReadFile(fileName)
+	if err != nil {
+		return nil, err
+	}
 	return m.Ctx.RunString(script)
 }
 

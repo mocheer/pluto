@@ -5,6 +5,7 @@ import (
 	"image"
 	"io"
 
+	"github.com/chai2010/webp"
 	"github.com/mocheer/pluto/pkg/ts/img"
 )
 
@@ -13,8 +14,7 @@ import (
 // }
 
 func Decode(r io.Reader) (image.Image, error) {
-	// return webp.Decode(r)
-	return nil, nil
+	return webp.Decode(r)
 }
 
 // FromImageFile
@@ -28,14 +28,12 @@ func FromImageFile(filename string) (*bytes.Buffer, error) {
 
 // FromImage
 func FromImage(m image.Image) (*bytes.Buffer, error) {
-	// var bs bytes.Buffer
-	// err := webp.Encode(&bs, m, &webp.Options{Lossless: false, Quality: 75})
-	// return &bs, err
-	return nil, nil
+	var bs bytes.Buffer
+	err := webp.Encode(&bs, m, &webp.Options{Lossless: false, Quality: 75})
+	return &bs, err
 }
 
 // Save
 func Save(filename string, m image.Image) error {
-	// return webp.Save(filename, m, &webp.Options{Lossless: false, Quality: 75})
-	return nil
+	return webp.Save(filename, m, &webp.Options{Lossless: false, Quality: 75})
 }

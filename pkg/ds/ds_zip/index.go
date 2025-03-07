@@ -8,13 +8,11 @@ import (
 	"os"
 	"path"
 	"strings"
-
-	"github.com/mocheer/pluto/pkg/std"
 )
 
 // ReadFileItem
 // 即使文件在多层文件夹内部也能获取到，文件名为：文件夹/文件夹/**/名称
-func ReadFileItem(fileName string, itemFileName string) std.Result[[]byte] {
+func ReadFileItem(fileName string, itemFileName string) ([]byte, error) {
 	// 读取
 	r, err := zip.OpenReader(fileName)
 
@@ -27,15 +25,15 @@ func ReadFileItem(fileName string, itemFileName string) std.Result[[]byte] {
 				if err == nil {
 					defer reader.Close()
 					data, err := io.ReadAll(reader)
-					return std.NewResult(data, err)
+					return data, err
 				}
-				return std.NewResult[[]byte](nil, err)
+				return nil, err
 			}
 		}
 		err = errors.New("not found")
 	}
 
-	return std.NewResult[[]byte](nil, err)
+	return nil, err
 }
 
 // ReadItem

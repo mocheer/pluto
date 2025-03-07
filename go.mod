@@ -8,6 +8,7 @@ require (
 	github.com/andybalholm/brotli v1.0.5
 	github.com/batchatco/go-native-netcdf v0.0.0-20230103061018-5849c1f424b1
 	github.com/chai2010/webp v1.1.1
+	github.com/dave/jennifer v1.7.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/dop251/goja v0.0.0-20230806174421-c933cf95e127
 	github.com/emirpasic/gods v1.18.1
@@ -35,7 +36,9 @@ require (
 	github.com/tidwall/gjson v1.15.0
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/xuri/excelize/v2 v2.7.1
+	gocv.io/x/gocv v0.37.0
 	golang.org/x/crypto v0.8.0
+	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17
 	golang.org/x/image v0.11.0
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/ini.v1 v1.67.0
@@ -48,9 +51,7 @@ require (
 	github.com/antchfx/htmlquery v1.2.5 // indirect
 	github.com/antchfx/xmlquery v1.3.11 // indirect
 	github.com/antchfx/xpath v1.2.1 // indirect
-	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/batchatco/go-thrower v0.0.0-20200827035905-5cb7337f6be6 // indirect
-	github.com/dave/jennifer v1.7.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dlclark/regexp2 v1.7.0 // indirect
 	github.com/go-sourcemap/sourcemap v2.1.3+incompatible // indirect
@@ -71,17 +72,15 @@ require (
 	github.com/richardlehane/mscfb v1.0.4 // indirect
 	github.com/richardlehane/msoleps v1.0.3 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/temoto/robotstxt v1.1.2 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
+	github.com/tomchavakis/geojson v0.0.5
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/xuri/efp v0.0.0-20220603152613-6918739fd470 // indirect
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
-	gocv.io/x/gocv v0.37.0 // indirect
-	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.12.0 // indirect
