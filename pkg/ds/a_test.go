@@ -16,7 +16,6 @@ import (
 )
 
 func Test(t *testing.T) {
-
 	b := ds.IsExist("/a_test.go")
 	c := ds.IsExist("./a_test.go")
 	t.Log(b, c)

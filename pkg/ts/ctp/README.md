@@ -9,4 +9,8 @@
 ## 代理网站
 - https://www.zdaye.com/dayProxy.html
 
+爬取脚本
+ 
+```js
 JSON.stringify(Array.from(document.getElementById('ipc').querySelector('tbody').children).map(e=>'http://'+e.children[0].innerText+':'+e.children[1].innerText))
+```

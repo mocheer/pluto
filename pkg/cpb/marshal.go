@@ -213,7 +213,7 @@ func marshal(data []byte, v reflect.Value) []byte {
 
 // marshalStruct
 func marshalStruct(v reflect.Value, typ reflect.Type, data []byte) []byte {
-	fieldIndexs, fieldNames := object.GetFieldsByReflectStruct(typ)
+	fieldIndexs, fieldNames := object.GetFieldsByStruct(typ)
 	num := len(fieldIndexs)
 	data = protowire.AppendVarint(data, uint64(num))
 	for i := 0; i < num; i++ {
@@ -230,7 +230,7 @@ func marshalSliceStruct(v reflect.Value, typ reflect.Type, data []byte) []byte {
 	num := v.Len()
 	data = protowire.AppendVarint(data, uint64(num))
 	//
-	fieldIndexs, fieldNames := object.GetFieldsByReflectStruct(typ)
+	fieldIndexs, fieldNames := object.GetFieldsByStruct(typ)
 	numField := len(fieldIndexs)
 	data = protowire.AppendVarint(data, uint64(numField))
 	//

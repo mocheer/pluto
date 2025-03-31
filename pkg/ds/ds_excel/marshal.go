@@ -26,7 +26,7 @@ func Marshal(data any) ([]byte, error) {
 	if count > 0 {
 		// 这里反射只执行一次（除非切片元素是不同的对象）
 		val := v.Index(0)
-		fieldIndexs, fieldNames := object.GetFieldsByReflectStruct(val.Type())
+		fieldIndexs, fieldNames := object.GetFieldsByStruct(val.Type())
 		num := len(fieldIndexs)
 
 		// A = 65

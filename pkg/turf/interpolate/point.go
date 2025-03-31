@@ -18,6 +18,7 @@ type InterpolatePointOptionsArgs struct {
 	Weight   float64
 	BBox     *gm.BBox
 	Mask     gm.MultiPolygon
+	Quality  float64
 }
 
 type Grid struct {
@@ -48,9 +49,44 @@ func InterpolatePoint(points []gm.PointZ, options InterpolatePointOptionsArgs) (
 		return nil, err
 	}
 	results := make([]float64, 0, len(grid.Points))
-	noDataVal := 9999.0
-	zMin := math.Inf(+1)
+	noDataVal := math.MaxFloat64
+	zMin := math.MaxFloat64
 	zMax := math.Inf(-1)
+	hasQuality := options.Quality > 0 && options.Quality < 1
+	qualityScale := 0.0
+	if hasQuality {
+		s := math.Max(grid.Xlim[1]-grid.Xlim[0], grid.Ylim[1]-grid.Ylim[0]) //TODO 这里应该改成距离
+		qualityScale = options.Weight * options.Quality * s * 0.003
+	}
+
+	// //
+	// const DegreesFactor2 = conversions.DegreesFactor * 2
+	// cartographicMap := map[gm.PointZ]gm.Cartographic{}
+	// cartographicLatCosMap := map[gm.Cartographic]float64{}
+	// getCartographic := func(p gm.PointZ) gm.Cartographic {
+	// 	v, ok := cartographicMap[p]
+	// 	if !ok {
+	// 		v = p.LonLat().ToCartographic()
+	// 		cartographicMap[p] = v
+	// 		cartographicLatCosMap[v] = math.Cos(v[1])
+	// 	}
+	// 	return v
+	// }
+	// distance := func(from gm.Cartographic, p gm.PointZ) float64 {
+	// 	to := getCartographic(p)
+	// 	//
+	// 	dLatRad := to[1] - from[1]
+	// 	dLonRad := to[0] - from[0]
+	// 	lat1Rad := from[1]
+	// 	lat2RadCos := cartographicLatCosMap[to]
+	// 	// Haversine 公式
+	// 	// 这是一个用于计算两个经度和纬度之间的距离的公式。
+	// 	dLatRad2 := math.Sin(dLatRad / 2)
+	// 	dLonRad2 := math.Sin(dLonRad / 2)
+	// 	a := dLatRad2*dLatRad2 + dLonRad2*dLonRad2*math.Cos(lat1Rad)*lat2RadCos
+	// 	return DegreesFactor2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+	// }
+
 	for _, grid := range grid.Points {
 		var zw, sw float64
 		show := true
@@ -58,10 +94,19 @@ func InterpolatePoint(points []gm.PointZ, options InterpolatePointOptionsArgs) (
 			isIn, _ := point_in_polygon_hao.PointInMultiPolygon(grid.ToPoint(), options.Mask)
 			show = isIn
 		}
-		zVal := 0.0
+
+		zVal := noDataVal
 		if show {
 			for _, p := range points {
-				d := distance.Distance(grid, p.LonLat(), options.Units)
+				if hasQuality {
+					q := p.Point().Distance(grid.ToPoint()) > qualityScale
+					if q {
+						continue
+					}
+				}
+				//
+				d := distance.DistanceCartographic(grid, p.LonLat().ToCartographic())
+				// d := distance(grid, p)
 				zValue := p[2]
 				if d == 0 { //当前格点刚好是一个测站的位置
 					zw = zValue
@@ -71,8 +116,6 @@ func InterpolatePoint(points []gm.PointZ, options InterpolatePointOptionsArgs) (
 				zw += w * zValue
 			}
 			zVal = zw / sw
-		} else {
-			zVal = noDataVal
 		}
 		if zMin > zVal {
 			zMin = zVal

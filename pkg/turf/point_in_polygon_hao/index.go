@@ -6,6 +6,7 @@ import (
 	"github.com/mocheer/xena/pkg/gm"
 )
 
+// PointInMultiPolygon
 func PointInMultiPolygon(p gm.Point, polygons gm.MultiPolygon) (bool, error) {
 	for _, polygon := range polygons {
 		isIn, _ := PointInPolygon(p, polygon)

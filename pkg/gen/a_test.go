@@ -18,3 +18,11 @@ func TestGen2(t *testing.T) {
 	m.AddVar("b", jen.Lit(5))
 	t.Log(m.String())
 }
+
+func TestGenStruct(t *testing.T) {
+	m := gen.Package("name")
+	person := &gen.StructSchema{
+		Name: "Persion",
+	}
+	m.TypeStruct(person)
+}

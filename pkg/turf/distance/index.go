@@ -10,7 +10,7 @@ import (
 // 这个变量很多地方都有，后面需要整理下
 const RADIANS_PER_DEGREE = math.Pi / 180 // 每一个角度单位对应的弧度值
 
-// Distance 计算两个地理坐标点之间的距离
+// DistanceLonLat 计算两个地理坐标点之间的距离
 // 参数：
 //
 //	from: 起点坐标
@@ -20,7 +20,7 @@ const RADIANS_PER_DEGREE = math.Pi / 180 // 每一个角度单位对应的弧度
 // 返回：
 //
 //	距离值
-func Distance(from, to gm.LonLat, units string) float64 {
+func DistanceLonLat(from, to gm.LonLat, units string) float64 {
 	// 将纬度和经度从度转换为弧度
 	dLat := to.Lat() - from.Lat()
 	dLon := to.Lon() - from.Lon()
@@ -32,7 +32,7 @@ func Distance(from, to gm.LonLat, units string) float64 {
 	lat1Rad := lat1 * RADIANS_PER_DEGREE
 	lat2Rad := lat2 * RADIANS_PER_DEGREE
 
-	// Haversine公式
+	// Haversine 公式
 	// 这是一个用于计算两个经度和纬度之间的距离的公式。
 	a := math.Pow(math.Sin(dLatRad/2), 2) +
 		math.Pow(math.Sin(dLonRad/2), 2)*
@@ -45,4 +45,20 @@ func Distance(from, to gm.LonLat, units string) float64 {
 		panic(err)
 	}
 	return d
+}
+
+const DegreesFactor2 = conversions.DegreesFactor * 2
+
+func DistanceCartographic(from, to gm.Cartographic) float64 {
+	//
+	lat1Rad := from[1]
+	lat2Rad := to[1]
+	dLatRad := lat2Rad - lat1Rad
+	dLonRad := to[0] - from[0]
+	// Haversine 公式
+	// 这是一个用于计算两个经度和纬度之间的距离的公式。
+	dLatRad2 := math.Sin(dLatRad / 2)
+	dLonRad2 := math.Sin(dLonRad / 2)
+	a := dLatRad2*dLatRad2 + dLonRad2*dLonRad2*math.Cos(lat1Rad)*math.Cos(lat2Rad)
+	return DegreesFactor2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 }

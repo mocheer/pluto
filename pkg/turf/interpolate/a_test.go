@@ -1,6 +1,7 @@
 package interpolate
 
 import (
+	"math"
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/ds/ds_json"
@@ -22,6 +23,19 @@ func TestInterPolateWithUnitMiles(t *testing.T) {
 		t.Log(err)
 	}
 	ds_json.SaveWithIndent("./testdata/result2.json", result)
+}
+
+func TestInterPolateWithUnitMiles2(t *testing.T) {
+	a := math.Inf(-1)
+	t.Log(math.Inf(-1) == a)
+	t.Log(math.Inf(-1) == math.Inf(-1))
+	t.Log(a)
+
+	b := math.Inf(1)
+	t.Log(math.Inf(1) == b)
+	t.Log(math.Inf(1) == math.Inf(1))
+	t.Log(b)
+
 }
 
 // 0.02 12824518200 约等于 12.8s

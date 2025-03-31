@@ -1,3 +1,5 @@
+//go:build windows
+
 package ds_webp
 
 import (

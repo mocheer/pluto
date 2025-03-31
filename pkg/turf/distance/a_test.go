@@ -13,6 +13,6 @@ import (
 // turf.distance(from, to, options) // = 60.35329997171415
 
 func TestDistance(t *testing.T) {
-	d := Distance(gm.LonLat{-75.343, 39.984}, gm.LonLat{-75.534, 39.123}, "miles")
+	d := DistanceLonLat(gm.LonLat{-75.343, 39.984}, gm.LonLat{-75.534, 39.123}, "miles")
 	t.Log(d)
 }

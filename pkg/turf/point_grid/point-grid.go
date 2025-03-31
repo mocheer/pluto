@@ -23,7 +23,7 @@ type PointGridOptions struct {
 }
 
 type PointGrid struct {
-	Points     []gm.LonLat
+	Points     []gm.Cartographic
 	Columns    int
 	Rows       int
 	CellWidth  float64
@@ -52,9 +52,9 @@ func NewWithOptions(options PointGridOptions) (*PointGrid, error) {
 	westSouth := bbox.WestSouth()
 
 	// 计算单元格宽度和高度
-	xFraction := cellSide / distance.Distance(westSouth, gm.LonLat{east, south}, options.Units)
+	xFraction := cellSide / distance.DistanceLonLat(westSouth, gm.LonLat{east, south}, options.Units)
 	cellWidth := xFraction * bboxWidth
-	yFraction := cellSide / distance.Distance(westSouth, gm.LonLat{west, north}, options.Units)
+	yFraction := cellSide / distance.DistanceLonLat(westSouth, gm.LonLat{west, north}, options.Units)
 	cellHeight := yFraction * bboxHeight
 
 	// 计算网格行列数
@@ -69,12 +69,12 @@ func NewWithOptions(options PointGridOptions) (*PointGrid, error) {
 	ylim := [2]float64{south + deltaY, north - deltaY}
 
 	// 创建网格点
-	results := make([]gm.LonLat, 0, columns*rows)
+	results := make([]gm.Cartographic, 0, columns*rows)
 	currentX := xlim[0]
 	for currentX <= east {
 		currentY := ylim[0]
 		for currentY <= north {
-			cellPt := gm.LonLat{currentX, currentY}
+			cellPt := gm.LonLat{currentX, currentY}.ToCartographic()
 			results = append(results, cellPt)
 			currentY += cellHeight
 		}
