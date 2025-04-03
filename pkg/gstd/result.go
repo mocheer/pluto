@@ -2,7 +2,6 @@ package gstd
 
 import "errors"
 
-//
 type result[T any] struct {
 	Value T
 	Error error
