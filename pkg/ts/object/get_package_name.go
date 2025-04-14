@@ -2,6 +2,7 @@ package object
 
 import (
 	"reflect"
+	"strings"
 )
 
 // GetPackageName 获取包名
@@ -10,4 +11,9 @@ import (
 // 这里的包名是完整的路径
 func GetPackageName(v any) string {
 	return reflect.TypeOf(v).PkgPath()
+}
+
+func GetPackageIdentName(v any) string {
+	s := GetPackageName(v)
+	return s[strings.LastIndex(s, "/")+1:]
 }

@@ -46,6 +46,10 @@ func TestGetTypeName(t *testing.T) {
 	t.Log(object.GetPackageName(time.Timer{}))
 	t.Log(object.GetPackageName(tiff.CCITTGroup3))
 	// t.Log(object.GetPackageName(&time.Layout))
+
+	t.Log(object.GetPackageIdentName(tiff.CCITTGroup3))
+	t.Log(object.GetQualName(tiff.CCITTGroup3))
+
 }
 
 func TestClone(t *testing.T) {
