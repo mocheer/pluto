@@ -119,6 +119,8 @@ github.com/mattn/go-sqlite3 v1.14.15 h1:vfoHhTN1af61xCRSWzFIWzx2YskyMTwHLrExkBOj
 github.com/mattn/go-sqlite3 v1.14.15/go.mod h1:2eHXhiwb8IkHr+BDWZGa96P6+rkvnG63S2DGjv9HUNg=
 github.com/microsoft/go-mssqldb v0.17.0 h1:Fto83dMZPnYv1Zwx5vHHxpNraeEaUlQ/hhHLgZiaenE=
 github.com/microsoft/go-mssqldb v0.17.0/go.mod h1:OkoNGhGEs8EZqchVTtochlXruEhEOaO4S0d2sB5aeGQ=
+github.com/mocheer/xena v0.0.0-20250331005127-b8d8f8ed04c8 h1:BqweG5faP09sez95UlE5T2hjCuqhAXezezIigDBDnVE=
+github.com/mocheer/xena v0.0.0-20250331005127-b8d8f8ed04c8/go.mod h1:4mdr61oWmLAbZLEfeMR2dyYo7csni0pGn7CwfcFzQsA=
 github.com/mocheer/xena v1.0.6 h1:EQk/m9yJkD/e8EHpSrW6tXsW7aqa1CUUTdphJLqAnJg=
 github.com/mocheer/xena v1.0.6/go.mod h1:x2dcLcoA10mwE7wx+DAYPfz/TY9civBJGL0HUqvfQIw=
 github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=

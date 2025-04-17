@@ -22,7 +22,7 @@ require (
 	github.com/klauspost/compress v1.16.7
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/mattn/go-runewidth v0.0.15
-	github.com/mocheer/xena v1.0.6
+	github.com/mocheer/xena v0.0.0-20250331005127-b8d8f8ed04c8
 	github.com/murphy214/geobuf v0.0.0-20230427183955-8319bc00ee3a
 	github.com/paulmach/go.geojson v1.5.0
 	github.com/paulmach/orb v0.10.0
