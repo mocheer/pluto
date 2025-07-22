@@ -4,7 +4,11 @@ import "sync"
 
 // 目前以下功能已经在规划中了
 type WaitGroup struct {
-	sync.WaitGroup
+	*sync.WaitGroup
+}
+
+func NewWaitGroup() *WaitGroup {
+	return &WaitGroup{&sync.WaitGroup{}}
 }
 
 // var wg sync.WaitGroup

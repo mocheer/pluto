@@ -68,7 +68,9 @@ func EachFilesToRename(dir string, fn func(oldName string) string) (err error) {
 	return EachFiles(dir, func(filename string, fi os.FileInfo) {
 		oldName := fi.Name()
 		newName := fn(oldName)
-		os.Rename(filename, filepath.Join(filepath.Dir(filename), newName))
+		if newName != "" && newName != oldName {
+			os.Rename(filename, filepath.Join(filepath.Dir(filename), newName))
+		}
 	})
 }
 

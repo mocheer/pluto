@@ -12,13 +12,13 @@ import (
 // TODO 如果没有设置bbox，理应从points中获取到bbox
 
 type InterpolatePointOptionsArgs struct {
-	CellSize float64
-	GridType string
-	Units    string
-	Weight   float64
-	BBox     *gm.BBox
-	Mask     gm.MultiPolygon
-	Quality  float64
+	CellSize    float64
+	GridType    string
+	Units       string
+	Weight      float64
+	BBox        *gm.BBox
+	MaskPolygon gm.MultiPolygon
+	DistAlg     string
 }
 
 type Grid struct {
@@ -52,13 +52,6 @@ func InterpolatePoint(points []gm.PointZ, options InterpolatePointOptionsArgs) (
 	noDataVal := math.MaxFloat64
 	zMin := math.MaxFloat64
 	zMax := math.Inf(-1)
-	hasQuality := options.Quality > 0 && options.Quality < 1
-	qualityScale := 0.0
-	if hasQuality {
-		s := math.Max(grid.Xlim[1]-grid.Xlim[0], grid.Ylim[1]-grid.Ylim[0]) //TODO 这里应该改成距离
-		qualityScale = options.Weight * options.Quality * s * 0.003
-	}
-
 	// //
 	// const DegreesFactor2 = conversions.DegreesFactor * 2
 	// cartographicMap := map[gm.PointZ]gm.Cartographic{}
@@ -86,27 +79,20 @@ func InterpolatePoint(points []gm.PointZ, options InterpolatePointOptionsArgs) (
 	// 	a := dLatRad2*dLatRad2 + dLonRad2*dLonRad2*math.Cos(lat1Rad)*lat2RadCos
 	// 	return DegreesFactor2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 	// }
-
+	// var distFunc func(from, to gm.LonLat) float64
 	for _, grid := range grid.Points {
 		var zw, sw float64
 		show := true
-		if options.Mask != nil {
-			isIn, _ := point_in_polygon_hao.PointInMultiPolygon(grid.ToPoint(), options.Mask)
+		if options.MaskPolygon != nil {
+			isIn, _ := point_in_polygon_hao.PointInMultiPolygon(grid.ToPoint(), options.MaskPolygon)
 			show = isIn
 		}
-
 		zVal := noDataVal
 		if show {
 			for _, p := range points {
-				if hasQuality {
-					q := p.Point().Distance(grid.ToPoint()) > qualityScale
-					if q {
-						continue
-					}
-				}
-				//
-				d := distance.DistanceCartographic(grid, p.LonLat().ToCartographic())
-				// d := distance(grid, p)
+				// d := distance.DistanceCartographic(grid.ToCartographic(), p.LonLat().ToCartographic())
+				// d := distance.DistanceCartographicSimple(grid, p.LonLat().ToCartographic())
+				d := distance.DistanceLonLatSimple(grid, p.ToLonLat())
 				zValue := p[2]
 				if d == 0 { //当前格点刚好是一个测站的位置
 					zw = zValue

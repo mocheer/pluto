@@ -49,6 +49,7 @@ func DistanceLonLat(from, to gm.LonLat, units string) float64 {
 
 const DegreesFactor2 = conversions.DegreesFactor * 2
 
+// 哈弗辛公式
 func DistanceCartographic(from, to gm.Cartographic) float64 {
 	//
 	lat1Rad := from[1]
@@ -61,4 +62,13 @@ func DistanceCartographic(from, to gm.Cartographic) float64 {
 	dLonRad2 := math.Sin(dLonRad / 2)
 	a := dLatRad2*dLatRad2 + dLonRad2*dLonRad2*math.Cos(lat1Rad)*math.Cos(lat2Rad)
 	return DegreesFactor2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
+}
+
+// DistanceLonLatSimple
+// 无投影平面近似法，误差较大
+func DistanceLonLatSimple(from, to gm.LonLat) float64 {
+	//
+	dLatRad := to[1] - from[1]
+	dLonRad := to[0] - from[0]
+	return math.Sqrt(dLonRad*dLonRad+dLatRad*dLatRad) * 111000
 }

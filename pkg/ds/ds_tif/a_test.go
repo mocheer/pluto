@@ -3,6 +3,7 @@ package ds_tif_test
 import (
 	"testing"
 
+	"github.com/mocheer/pluto/pkg/ds/ds_json"
 	"github.com/mocheer/pluto/pkg/ds/ds_tif"
 	"github.com/mocheer/xena/pkg/proj4"
 	"github.com/samber/lo"
@@ -178,4 +179,17 @@ func TestTiff34(t *testing.T) {
 
 	t.Log(tfs.Scale()[0])
 
+}
+
+// cd D:\soft\PostgreSQL\15\bin
+// D:\soft\PostgreSQL\15\bin\raster2pgsql.exe -s 4326 -I -C -F  testdata/fj.tif studio.dmap_raster > fj.sql
+func TestTiffm(t *testing.T) {
+	fileName := "./testdata/fj.tif"
+	tfs, _ := ds_tif.Read(fileName)
+	ifd := tfs.Tif.IFDs()
+	t.Log(ifd[0], len(ifd))
+	t.Log(tfs.Origin())
+	t.Log(tfs.BBox())
+	t.Log(tfs.Scale())
+	ds_json.Save("./tif.json", tfs.Data)
 }

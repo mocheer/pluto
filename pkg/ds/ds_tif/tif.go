@@ -54,6 +54,10 @@ func (m DsTif) GetField(tagID uint16) tiff.Field {
 // GetFirstInt
 func (m DsTif) GetFirstInt(tagID uint16) uint {
 	field := m.GetField(tagID)
+	if field == nil {
+		fmt.Printf("没有tagID:%d", tagID)
+		return 0
+	}
 	val := field.Value()
 	bs := val.Bytes()
 	size := field.Type().Size()
