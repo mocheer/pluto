@@ -43,3 +43,12 @@ func ToBytes(target image.Image, imageType string) (bs []byte, err error) {
 	}
 	return
 }
+
+func ToJpegBytes(target image.Image, options *jpeg.Options) (bs []byte, err error) {
+	var buf bytes.Buffer
+	err = jpeg.Encode(&buf, target, options)
+	if err == nil {
+		bs = buf.Bytes()
+	}
+	return
+}
