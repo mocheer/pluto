@@ -3,6 +3,7 @@ package img
 import "image"
 
 // Thumbnail 缩略图
+// 不同于Resize，当图片比缩略图小，不会缩放
 func (p *Img) Thumbnail(width, height int) *Img {
 	return &Img{Image: Thumbnail(p.Image, width, height)}
 }
