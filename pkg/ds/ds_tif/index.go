@@ -7,7 +7,7 @@ import (
 	"github.com/google/tiff"
 )
 
-func Read(fileName string) (*DsTif, error) {
+func ReadFile(fileName string) (*DsTif, error) {
 	f, err := os.Open(fileName)
 	if err != nil {
 		panic(err)

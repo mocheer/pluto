@@ -1,14 +1,18 @@
 package ds_shp
 
 import (
-	"fmt"
+	"io"
 	"log"
-	"reflect"
 
 	"github.com/jonas-p/go-shp"
+	"github.com/mocheer/xena/pkg/gm"
+	"github.com/mocheer/xena/pkg/gm/geojson"
+	"github.com/samber/lo"
 )
 
-func ReadFile(fileName string) {
+// ReadFile
+// ReadFile("xx.shp")
+func ReadFile(fileName string) *geojson.GeometryCollection {
 	// open a shapefile for reading
 	shape, err := shp.Open(fileName)
 	if err != nil {
@@ -16,23 +20,48 @@ func ReadFile(fileName string) {
 	}
 	defer shape.Close()
 
+	data := geojson.NewGeometryCollection()
 	// fields from the attribute table (DBF)
+	// 这里是读取同一路径下的dbf文件
 	fields := shape.Fields()
 
-	// loop through all features in the shapefile
+	//
 	for shape.Next() {
 		n, p := shape.Shape()
-
-		// print feature
-		fmt.Println(reflect.TypeOf(p).Elem(), p.BBox())
-
-		// print attributes
+		// log.Println(shape.GeometryType)
+		var geom *geojson.Geometry
+		switch g := p.(type) {
+		case *shp.Point:
+			poly := gm.Point{g.X, g.Y}.SetPrecision(6)
+			geom = geojson.NewPointGeom(&poly)
+		case *shp.Polygon:
+			poly := make(gm.Polygon, 1)
+			poly[0] = lo.Map(g.Points, func(p shp.Point, _ int) [2]float64 {
+				return gm.Point{p.X, p.Y}.SetPrecision(6)
+			})
+			geom = geojson.NewPolygonGeom(&poly)
+		case *shp.PolyLine:
+			var poly gm.LineString = lo.Map(g.Points, func(p shp.Point, _ int) [2]float64 {
+				return gm.Point{p.X, p.Y}.SetPrecision(6)
+			})
+			geom = geojson.NewLineStringGeom(&poly)
+		}
+		data.Append(geom)
+		// 读取数据， k为key，f为值
+		geom.Properties = geojson.Properties{}
 		for k, f := range fields {
 			val := shape.ReadAttribute(n, k)
-			fmt.Printf("\t%v: %v\n", f, val)
+			geom.Properties[f.String()] = val
 		}
-
 	}
+	return data
+}
+
+// go-shp暂不支持
+func Read(r io.Reader) *geojson.GeometryCollection {
+
+	// shp.OpenZip(r)
+	return nil
 }
 
 func Write() {

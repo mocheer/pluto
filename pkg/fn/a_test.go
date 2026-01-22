@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/fn"
@@ -77,4 +78,20 @@ func TestBase64(t *testing.T) {
 	t.Log(data[0:2])
 	t.Log(fn.BtoaBytes(data[0:2]))
 	t.Log(fn.BtoaBytes(data[0:3]))
+}
+
+func TestGo(t *testing.T) {
+	fn.Go(
+		func() {
+			t.Log("1")
+		},
+		func() {
+			time.Sleep(time.Second)
+			t.Log("2")
+		},
+		func() {
+			t.Log("3")
+		},
+	)
+	t.Log("4")
 }

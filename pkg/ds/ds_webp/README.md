@@ -23,9 +23,9 @@ WebP 主要优势在于有损编码，其无损编码的性能和压缩比表现
 
 ## 参考
 - https://github.com/chai2010/webp（编译似乎有问题，linux平台有时候会报错 --> 需要开启CGO）
-- https://github.com/kolesa-team/go-webp(需要libwebp)
+- https://github.com/kolesa-team/go-webp (需要libwebp)
 - https://golang.org/x/image/webp  (没有encode)
-- https://github.com/HugoSmits86/nativewebp
+- https://github.com/HugoSmits86/nativewebp (只支持无损编码，但是纯Go)
 
 
 

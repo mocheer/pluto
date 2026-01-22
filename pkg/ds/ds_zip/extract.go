@@ -19,7 +19,6 @@ func Extract(fileName string, target string) {
 			if err != nil {
 				return err
 			}
-
 		}
 		srcFile, err := f.Open()
 		if err != nil {

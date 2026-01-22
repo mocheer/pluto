@@ -1,5 +1,7 @@
 package d3_contour
 
+// smoothLinear
+// 用于绘制平滑曲线
 func smoothLinear(dx, dy int, ring [][2]float64, values []float64, value float64) {
 	for i := range ring {
 		var x = ring[i][0]

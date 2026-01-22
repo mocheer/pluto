@@ -11,7 +11,7 @@ import (
 
 func TestTiff(t *testing.T) {
 	fileName := "./testdata/SRTM3_V4_90m.tif" // GCS_WGS_1984
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 
 	t.Log(tfs.Tif.IFDs()[0])
 	t.Log(string(tfs.Tif.IFDs()[0].Fields()[18].Value().Bytes()))
@@ -29,7 +29,7 @@ func TestTiff(t *testing.T) {
 func TestBids_tiff(t *testing.T) {
 	// UTM 投影：经度采用6度分带，纬度采用8度分带，从80S到84N共20个纬度带（X带多4度），分别用C到X的字母来表示
 	fileName := "./testdata/utm/54R_20200101-20210101.tif" //这是一个bids_tiff格式的文件
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 
 	tfs.IFD_Index = 0
 	t.Log(tfs.Tif.IFDs())
@@ -44,7 +44,7 @@ func TestBids_tiff(t *testing.T) {
 
 func TestTiff2(t *testing.T) {
 	fileName := "./testdata/ASTGTMV003_N53E125_dem.tif" // lzw 压缩
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())
@@ -61,7 +61,7 @@ func TestTiff2(t *testing.T) {
 
 func TestTiff3(t *testing.T) {
 	fileName := "./testdata/ASTGTMV003_N34E107_dem.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())
@@ -78,7 +78,7 @@ func TestTiff3(t *testing.T) {
 
 func TestTiff4(t *testing.T) {
 	fileName := "./testdata/ASTGTMV003_N43E093_dem.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	//
 	t.Log(len(tfs.Tif.IFDs()))
 	t.Log(tfs.Width())                              // 宽度
@@ -94,7 +94,7 @@ func TestTiff4(t *testing.T) {
 
 func TestTiff5(t *testing.T) {
 	fileName := "./testdata/ASTGTMV003_N03E112_dem.tif"
-	tfs, err := ds_tif.Read(fileName)
+	tfs, err := ds_tif.ReadFile(fileName)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -113,7 +113,7 @@ func TestTiff5(t *testing.T) {
 func TestTiff_llsk(t *testing.T) {
 	// 岭里水库
 	fileName := "./testdata/llsk/Extract_crea61.tif" //高斯投影3度带，117
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()[0]
 	t.Log(ifd)
 	t.Log((ifd.Fields()[16]))
@@ -126,7 +126,7 @@ func TestTiff_llsk(t *testing.T) {
 
 func TestTiff_nc(t *testing.T) {
 	fileName := "./testdata/nc.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()[0]
 	t.Log(ifd)
 	t.Log(tfs.Width())
@@ -139,14 +139,14 @@ func TestTiff_nc(t *testing.T) {
 
 func TestTiff2_nc(t *testing.T) {
 	fileName := "./testdata/20230812_164500.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()
 	t.Log(ifd[0], len(ifd))
 }
 
 func TestTiff3_mq(t *testing.T) {
 	fileName := "./testdata/闽清倾斜摄影对应DEM/10M.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()
 	t.Log(ifd[0], len(ifd))
 	t.Log(tfs.Origin())
@@ -165,7 +165,7 @@ func TestTiff3_mq(t *testing.T) {
 
 func TestTiff34(t *testing.T) {
 	fileName := "./testdata/alos/AP_27052_FBS_F0740_RT1/AP_27052_FBS_F0740_RT1.dem.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()
 	t.Log(ifd[0], len(ifd))
 	t.Log(tfs.Origin())
@@ -185,7 +185,7 @@ func TestTiff34(t *testing.T) {
 // D:\soft\PostgreSQL\15\bin\raster2pgsql.exe -s 4326 -I -C -F  testdata/fj.tif studio.dmap_raster > fj.sql
 func TestTiffm(t *testing.T) {
 	fileName := "./testdata/fj.tif"
-	tfs, _ := ds_tif.Read(fileName)
+	tfs, _ := ds_tif.ReadFile(fileName)
 	ifd := tfs.Tif.IFDs()
 	t.Log(ifd[0], len(ifd))
 	t.Log(tfs.Origin())
