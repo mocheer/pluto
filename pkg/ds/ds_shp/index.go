@@ -4,7 +4,7 @@ import (
 	"io"
 	"log"
 
-	"github.com/jonas-p/go-shp"
+	"github.com/mocheer/pluto/pkg/ds/ds_shp/go-shp"
 	"github.com/mocheer/xena/pkg/gm"
 	"github.com/mocheer/xena/pkg/gm/geojson"
 	"github.com/samber/lo"
