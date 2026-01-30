@@ -1,6 +1,7 @@
 package ds_shp
 
 import (
+	"archive/zip"
 	"io"
 	"log"
 
@@ -19,7 +20,18 @@ func ReadFile(fileName string) *geojson.GeometryCollection {
 		log.Fatal(err)
 	}
 	defer shape.Close()
+	return toGeoJSON(shape)
+}
 
+type shpReader interface {
+	Fields() []shp.Field
+	Next() bool
+	Shape() (int, shp.Shape)
+	// ReadAttribute(row int, field int) string
+	Attribute(field int) string
+}
+
+func toGeoJSON(shape shpReader) *geojson.GeometryCollection {
 	data := geojson.NewGeometryCollection()
 	// fields from the attribute table (DBF)
 	// 这里是读取同一路径下的dbf文件
@@ -27,7 +39,7 @@ func ReadFile(fileName string) *geojson.GeometryCollection {
 
 	//
 	for shape.Next() {
-		n, p := shape.Shape()
+		_, p := shape.Shape() // 忽略 rowNum
 		// log.Println(shape.GeometryType)
 		var geom *geojson.Geometry
 		switch g := p.(type) {
@@ -50,18 +62,26 @@ func ReadFile(fileName string) *geojson.GeometryCollection {
 		// 读取数据， k为key，f为值
 		geom.Properties = geojson.Properties{}
 		for k, f := range fields {
-			val := shape.ReadAttribute(n, k)
+			// val := shape.ReadAttribute(n, k)
+			val := shape.Attribute(k)
 			geom.Properties[f.String()] = val
 		}
 	}
 	return data
 }
 
-// go-shp暂不支持
-func Read(r io.Reader) *geojson.GeometryCollection {
-
-	// shp.OpenZip(r)
-	return nil
+// go-shp 暂不支持
+func Read(r io.ReaderAt, size int64) *geojson.GeometryCollection {
+	zr, err := zip.NewReader(r, size)
+	if err != nil {
+		return nil
+	}
+	shapeZip, err := shp.OpenZipReader(zr, nil)
+	if err != nil {
+		return nil
+	}
+	defer shapeZip.Close()
+	return toGeoJSON(shapeZip)
 }
 
 func Write() {

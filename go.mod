@@ -19,7 +19,7 @@ require (
 	github.com/gomarkdown/markdown v0.0.0-20230716120725-531d2d74bc12
 	github.com/google/tiff v0.0.0-20161109161721-4b31f3041d9a
 	github.com/jonas-p/go-shp v0.1.1
-	github.com/klauspost/compress v1.16.7
+	github.com/klauspost/compress v1.18.3
 	github.com/matoous/go-nanoid/v2 v2.0.0
 	github.com/mattn/go-runewidth v0.0.15
 	github.com/mocheer/xena v0.0.0-20250331005127-b8d8f8ed04c8
