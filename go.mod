@@ -83,9 +83,9 @@ require (
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
-	golang.org/x/text v0.12.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	gorm.io/driver/mysql v1.4.7 // indirect
-	gorm.io/gorm v1.24.7-0.20230306060331-85eaf9eeda11 // indirect
+	gorm.io/gorm v1.25.12 // indirect
 )

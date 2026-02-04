@@ -59,6 +59,7 @@ func (m *Ctp) Request(uri string, orgin string, callback func(resp *colly.Respon
 		r.Headers.Set("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8")
 		//Do NotTrack(DNT)实际是一个涉及隐私保护的协议,它是用户和网站之间的一个“君子协定”,通过此协定,用户可以允许也可以禁止网站搜集自己在网上的隐私踪迹
 		r.Headers.Set("DNT", "1")
+
 	})
 	m.OnResponse(callback)
 	// m.OnError(func(r *colly.Response, err error) {
