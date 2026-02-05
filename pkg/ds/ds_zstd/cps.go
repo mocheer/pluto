@@ -11,13 +11,13 @@ import (
 
 // Encode input to output.
 func Encode(data []byte) ([]byte, error) {
-	var b bytes.Buffer
-	enc, err := zstd.NewWriter(&b)
+	b := &bytes.Buffer{}
+	enc, err := zstd.NewWriter(b)
 	if err != nil {
 		return nil, err
 	}
-	defer enc.Close()
 	enc.Write(data)
+	enc.Close() // Close之后，data才能算真正写入，b.Bytes才有数据
 	return b.Bytes(), err
 }
 
@@ -68,21 +68,21 @@ func Decompress(in io.Reader, out io.Writer) error {
 // samples 样本，一般是来源于多个文件
 // 这个似乎只是实验性功能，不能很好的用于生成环境
 func TrainDict(samples [][]byte) []byte {
-	// 弃用 zstd.BuildDict
-	// zstd.BuildDict()
 	// 样本总大小最好是目标字典大小的100倍
 	// 海量相似小文件，数据小于10KB左右的，一般设置字典大小是64KB-112KB
 	// 完整的配置文件、中等长度的文本（如文章）、代码文件,一般设置为112KB-256KB
 	// 数据越小、越相似，字典越有效，且字典本身可以更小（如64KB）。数据越大、越多样，字典收益越小，过大反而浪费内存。
+	// 弃用zstd.BuildDict，因为dict.BuildZstdDict封装了zstd.BuildDict方法，使用起来更简便
 	out := io.Discard
 	dictData, err := dict.BuildZstdDict(samples, dict.Options{
-		HashBytes:      6,                         // 最小匹配长度，通常4-8
+		HashBytes:      4,                         // 最小匹配长度，通常4-8
 		ZstdLevel:      zstd.SpeedBestCompression, // 字典针对的压缩级别
 		MaxDictSize:    2048,                      // 字典大小，字典大小不建议超过 256KB
 		ZstdDictID:     0,                         // Random
 		ZstdDictCompat: false,
 		Output:         out,
 	})
+
 	if err != nil {
 		fmt.Println(err)
 		return nil
