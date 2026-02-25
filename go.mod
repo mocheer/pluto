@@ -20,7 +20,7 @@ require (
 	github.com/klauspost/compress v1.18.3
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/mattn/go-runewidth v0.0.15
-	github.com/mocheer/xena v0.0.0-20250331005127-b8d8f8ed04c8
+	github.com/mocheer/xena v0.0.0-20260225073351-4067ac9df76b
 	github.com/murphy214/geobuf v0.0.0-20230427183955-8319bc00ee3a
 	github.com/paulmach/go.geojson v1.5.0
 	github.com/paulmach/orb v0.10.0
@@ -35,7 +35,7 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.4.1
 	github.com/xuri/excelize/v2 v2.7.1
 	gocv.io/x/gocv v0.37.0
-	golang.org/x/crypto v0.47.0
+	golang.org/x/crypto v0.48.0
 	golang.org/x/exp v0.0.0-20260112195511-716be5621a96
 	golang.org/x/image v0.28.0
 	google.golang.org/protobuf v1.36.11
@@ -46,11 +46,8 @@ require (
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
-	github.com/jackc/pgx/v5 v5.6.0 // indirect
-	github.com/jackc/puddle/v2 v2.2.2 // indirect
-	github.com/rogpeppe/go-internal v1.14.1 // indirect
-	gorm.io/driver/postgres v1.5.11 // indirect
+	github.com/jackc/pgx/v5 v5.8.0 // indirect
+	gorm.io/driver/postgres v1.6.0 // indirect
 	gorm.io/driver/sqlserver v1.6.3 // indirect
 )
 
@@ -91,7 +88,7 @@ require (
 	github.com/xuri/nfp v0.0.0-20220409054826-5e722a1d9e22 // indirect
 	go.mongodb.org/mongo-driver v1.11.4 // indirect
 	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
+	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
