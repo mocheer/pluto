@@ -9,8 +9,15 @@ import (
 // pointer类型：通过反射获取指针实际的类型，返回指向对应类型的指针
 func New(v any) any {
 	typ := getElemType(v)
-	entity := reflect.New(typ)
-	return entity.Interface()
+	return reflect.New(typ).Interface()
+}
+
+// NewFunc
+func NewFunc(v any) func() any {
+	typ := getElemType(v)
+	return func() any {
+		return reflect.New(typ).Interface()
+	}
 }
 
 // NewSlice 通过反射创建结构体切片的指针

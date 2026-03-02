@@ -11,7 +11,7 @@ import (
 
 // CreateDirFromFilename 创建不存在的文件夹
 // 目录名可能包含无效的字符
-// 目录名可能因为当前目录下已经存在相同名称的文件名导致创建失败
+// 目录名可能因为当前目录下已经存在相同名称的文件名导致创建失败 => 几乎所有文件系统都不允许同名文件和目录（文件包含文件名后缀）
 func CreateDirFromFilename(fileName string) error {
 	d := filepath.Dir(fileName)
 	if !IsDirExist(d) {

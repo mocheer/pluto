@@ -88,11 +88,12 @@ func OpenOrCreate(fileName string) (*os.File, error) {
 // Save 保存
 func Save(fileName string, data []byte) error {
 	f, err := Create(fileName)
-	if err == nil {
-		f.Write(data)
+	if err != nil {
+		return err
 	}
 	defer f.Close()
-	return err
+	f.Write(data)
+	return nil
 }
 
 // CopyFile 拷贝文件

@@ -1,6 +1,9 @@
 package fn
 
-import "encoding/base64"
+import (
+	"encoding/base64"
+	"strings"
+)
 
 // Atob 解码base64编码字符串
 func Atob(s string) string {
@@ -15,4 +18,12 @@ func Atob2Bytes(s string) []byte {
 		panic(err)
 	}
 	return ret
+}
+
+// Atob2BytesWithURI
+func Atob2BytesWithURI(s string) []byte {
+	if strings.Contains(s, "data:image") {
+		s = s[strings.Index(s, ",")+1:]
+	}
+	return Atob2Bytes(s)
 }
