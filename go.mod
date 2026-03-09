@@ -20,7 +20,6 @@ require (
 	github.com/klauspost/compress v1.18.3
 	github.com/matoous/go-nanoid/v2 v2.1.0
 	github.com/mattn/go-runewidth v0.0.15
-	github.com/mocheer/xena v0.0.0-20260225073351-4067ac9df76b
 	github.com/murphy214/geobuf v0.0.0-20230427183955-8319bc00ee3a
 	github.com/paulmach/go.geojson v1.5.0
 	github.com/paulmach/orb v0.10.0
@@ -47,6 +46,7 @@ require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgx/v5 v5.8.0 // indirect
+	github.com/mocheer/xena v0.0.0-20260306034646-f773f993de30 // indirect
 	gorm.io/driver/postgres v1.6.0 // indirect
 	gorm.io/driver/sqlserver v1.6.3 // indirect
 )
