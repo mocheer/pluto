@@ -1,4 +1,6 @@
-package cv
+//go:build cgo
+
+package ds_cv
 
 import (
 	"errors"

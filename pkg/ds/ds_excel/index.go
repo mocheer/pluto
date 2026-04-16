@@ -22,7 +22,8 @@ func ReadFile(fileName string) ([][]string, error) {
 	}()
 	// 获取 Sheet1 上所有单元格
 	// 单个row包含每个col的string值
-	rows, err := f.GetRows("Sheet1")
+	sheetName := f.GetSheetName(0)
+	rows, err := f.GetRows(sheetName)
 	if err != nil {
 		return nil, err
 	}
@@ -42,7 +43,8 @@ func Read(r io.Reader) ([][]string, error) {
 	}()
 	// 获取 Sheet1 上所有单元格
 	// 单个row包含每个col的string值
-	rows, err := f.GetRows("Sheet1")
+	sheetName := f.GetSheetName(0)
+	rows, err := f.GetRows(sheetName)
 	if err != nil {
 		return nil, err
 	}

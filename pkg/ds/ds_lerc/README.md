@@ -1,5 +1,4 @@
 # ds_lerc
 
-## 关于 go-lerc
-
-- 需要开启CGO
+## 参考
+- github.com/flywave/go-lerc：需要开启CGO
