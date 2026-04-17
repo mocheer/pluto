@@ -3,9 +3,9 @@ package interpolate
 import (
 	"math"
 
-	"github.com/mocheer/pluto/pkg/turf/distance"
-	"github.com/mocheer/pluto/pkg/turf/point_grid"
-	"github.com/mocheer/pluto/pkg/turf/point_in_polygon_hao"
+	"github.com/mocheer/pluto/pkg/series/turf/distance"
+	"github.com/mocheer/pluto/pkg/series/turf/point_grid"
+	"github.com/mocheer/pluto/pkg/series/turf/point_in_polygon_hao"
 	"github.com/mocheer/xena/pkg/gm"
 )
 

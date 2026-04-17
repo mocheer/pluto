@@ -4,7 +4,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/mocheer/pluto/pkg/turf/constants"
+	"github.com/mocheer/pluto/pkg/series/turf/constants"
 )
 
 const DegreesFactor = constants.EarthRadius / 111325.0

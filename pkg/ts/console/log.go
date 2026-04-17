@@ -13,3 +13,7 @@ func Log(msg string) {
 func Warn(msg string) {
 	fmt.Println(fmt.Sprintf(Red+"[%s] "+Reset+"%s", clock.Now().Fmt(clock.FmtFullDate), msg))
 }
+
+func Error(msg string) {
+	fmt.Println(fmt.Sprintf(Yellow+"[%s] "+Reset+"%s", clock.Now().Fmt(clock.FmtFullDate), msg))
+}

@@ -3,7 +3,7 @@ package invariant
 import (
 	"errors"
 
-	"github.com/mocheer/pluto/pkg/turf/utils"
+	"github.com/mocheer/pluto/pkg/series/turf/utils"
 	"github.com/tomchavakis/geojson"
 	"github.com/tomchavakis/geojson/feature"
 	"github.com/tomchavakis/geojson/geometry"

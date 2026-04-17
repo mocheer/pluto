@@ -3,7 +3,7 @@ package distance
 import (
 	"math"
 
-	"github.com/mocheer/pluto/pkg/turf/conversions"
+	"github.com/mocheer/pluto/pkg/series/turf/conversions"
 	"github.com/mocheer/xena/pkg/gm"
 )
 

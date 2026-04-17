@@ -1,7 +1,7 @@
 package boolean_overlap
 
 import (
-	"github.com/mocheer/pluto/pkg/turf/line_intersect"
+	"github.com/mocheer/pluto/pkg/series/turf/line_intersect"
 	"github.com/mocheer/xena/pkg/gm"
 )
 
