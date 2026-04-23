@@ -71,4 +71,6 @@ docx 根目录
 - https://github.com/fumiama/go-docx: 推荐
 - https://github.com/sajari/docconv：太多依赖，连windows的依赖安装都没有说明
 - https://github.com/gomutex/godocx：推荐
+- https://learn.microsoft.com/zh-cn/previous-versions/office/gg607163(v=office.14)：docx 格式规范
+- https://ecma-international.org/publications-and-standards/standards/ecma-376/
 
