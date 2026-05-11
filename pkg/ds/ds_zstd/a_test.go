@@ -2,14 +2,10 @@ package ds_zstd_test
 
 import (
 	"bytes"
-	"io"
 	"log"
-	"math/rand"
 	"os"
 	"testing"
 
-	"github.com/klauspost/compress/dict"
-	"github.com/klauspost/compress/zstd"
 	"github.com/mocheer/pluto/pkg/ds"
 	"github.com/mocheer/pluto/pkg/ds/ds_zstd"
 )
@@ -55,122 +51,68 @@ func TestEncode2(t *testing.T) {
 
 }
 
-// 失败原因是样本太小??
+// 失败原因是样本太大??
+// @see https://github.com/klauspost/compress/issues/1042
+// 太大会出现 panic: runtime error: slice bounds out of range [-129026:] [recovered, repanicked]
+// 太小压缩效率低
 func TestTrain(t *testing.T) {
+
 	var samples [][]byte
+
 	ds.EachFiles("./testdata/train", func(filename string, fi os.FileInfo) {
 		data, err := ds.ReadFile(filename)
 		if err != nil {
-			log.Println(err)
+			t.Log(filename, err)
 		}
+
+		if len(data) <= 128 {
+			return
+		}
+		// 大于256KB报错？
+		if len(data) >= 1024*256 {
+			t.Log(filename, "数据样本大小不适合", len(data))
+			return
+		}
+
 		samples = append(samples, data)
 	})
 	//
 	d := ds_zstd.TrainDict(samples)
-	ds.Save("./d", d)
+	ds.Save("./testdata/dict/train.dict", d)
 }
 
-func TestZStdDict(t *testing.T) {
-	for _, level := range []zstd.EncoderLevel{zstd.SpeedFastest, zstd.SpeedDefault, zstd.SpeedBetterCompression, zstd.SpeedBestCompression} {
-		testZStdDict(t, level)
-	}
-}
-
-func testZStdDict(t *testing.T, level zstd.EncoderLevel) {
-	out := io.Discard
-	if testing.Verbose() {
-		out = os.Stdout
-	}
-	opts := dict.Options{
-		MaxDictSize:    2048,
-		HashBytes:      4,
-		Output:         out,
-		ZstdDictID:     0,
-		ZstdDictCompat: false,
-		ZstdLevel:      level,
-	}
-
-	inBuf := make([]byte, 0, 4096)
-	outBuf := make([]byte, 0, 4096)
-
-	// This is 32K worth of data, but it's all very similar. Only fits in 4K if compressed with a dictionary.
-	samples := generateSimilarByteSlices(42, 32)
-
-	dict, err := dict.BuildZstdDict(samples, opts)
+func TestDict(t *testing.T) {
+	// testdata/train/hrbxt
+	// testdata/train/6VbjevBv
+	data, err := ds.ReadFile("./testdata/train/6VbjevBv")
 	if err != nil {
-		t.Fatal(err.Error())
+		t.Log(err)
+		return
 	}
-
-	totalSize := 0
-	for _, blob := range samples {
-		compressed, err := zCompressDict(inBuf, dict, blob)
-		if err != nil {
-			t.Fatal(err.Error())
-		}
-		totalSize += len(compressed)
-
-		// Check round trip.
-		decompressed, err := zDecompressDict(outBuf, dict, compressed)
-		if err != nil {
-			t.Fatal(err.Error())
-		}
-		if !bytes.Equal(decompressed, blob) {
-			t.Fatal("Round trip failed")
-		}
-	}
-	if totalSize > 4096 {
-		t.Fatal("Total compressed size exceeds 4096 bytes")
-	}
-	t.Log("Total compressed size:", totalSize)
-}
-
-func zCompressDict(dst, dict, data []byte) ([]byte, error) {
-	encoder, err := zstd.NewWriter(nil, zstd.WithEncoderDict(dict))
+	// testdata\dict\train.dict
+	dict, _ := ds.ReadFile("./testdata/dict/train.dict")
+	r, err := ds_zstd.EncodeWithDict(data, dict)
 	if err != nil {
-		return nil, err
+		t.Log(err)
+		return
 	}
-	defer encoder.Close()
-
-	result := encoder.EncodeAll(data, dst[:0])
-	return result, nil
-}
-
-func zDecompressDict(dst, dict, data []byte) ([]byte, error) {
-	decoder, err := zstd.NewReader(nil, zstd.WithDecoderDicts(dict))
+	r2, err := ds_zstd.Encode(data)
 	if err != nil {
-		return nil, err
+		t.Log(err)
+		return
 	}
-	defer decoder.Close()
-
-	result, err := decoder.DecodeAll(data, dst[:0])
+	origin, err := ds_zstd.DecodeWithDict(r, dict)
 	if err != nil {
-		return nil, err
+		t.Log(err)
+		return
 	}
-
-	return result, nil
-}
-
-// Creates a slice of byte slices, each of which is has the same random seed, so they are very similar. The length
-// of each slice is 1024 + the index of the slice.
-func generateSimilarByteSlices(seed int64, count int) [][]byte {
-	chks := make([][]byte, count)
-	for i := 0; i < count; i++ {
-		chks[i] = generateRandomByteSlice(seed, 1024+i)
-		if false {
-			// Generate a small diff.
-			chks[i][i] = byte(seed)
-		}
+	if !bytes.Equal(origin, data) {
+		t.Log("还原错误", len(origin), string(origin))
 	}
+	totalLength := float64(len(data))
+	t.Log(totalLength, float64(len(r))/totalLength)
+	t.Log(totalLength, float64(len(r2))/totalLength)
+	t.Log(len(r2) - len(r))
+	// t.Log(string(origin))
 
-	return chks
-}
-
-func generateRandomByteSlice(seed int64, len int) []byte {
-	r := rand.NewSource(seed)
-
-	data := make([]byte, len)
-	for i := range data {
-		data[i] = byte(r.Int63())
-	}
-	return data
 }

@@ -73,4 +73,5 @@ docx 根目录
 - https://github.com/gomutex/godocx：推荐
 - https://learn.microsoft.com/zh-cn/previous-versions/office/gg607163(v=office.14)：docx 格式规范
 - https://ecma-international.org/publications-and-standards/standards/ecma-376/
+- https://word.cloud.microsoft/open/onedrive：微软官方web组件
 

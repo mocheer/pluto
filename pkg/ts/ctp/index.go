@@ -46,7 +46,7 @@ func (m *Ctp) Request(uri string, orgin string, callback func(resp *colly.Respon
 	if err != nil {
 		return err
 	}
-
+	// TODO 一般不在这里监听
 	m.OnRequest(func(r *colly.Request) {
 		host := u.Host
 		r.Headers.Set("Host", host)
