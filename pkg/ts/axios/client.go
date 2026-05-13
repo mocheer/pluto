@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -19,6 +20,27 @@ type Client struct {
 	HTTPClient  *http.Client
 	Logger      Logger
 	CacheConfig *CacheConfig
+	queue       sync.WaitGroup
+	queueChan   chan struct{}
+}
+
+// NewClient 创建一个新的 HTTP 客户端
+func NewClient(baseURL string) *Client {
+	return &Client{
+		BaseURL:    baseURL,
+		HTTPClient: &http.Client{},
+		Logger:     NewLogger(LevelNone),
+	}
+}
+
+// NewClientWithCache 创建一个启用缓存的客户端
+func NewClientWithCache(baseURL string, cacheConfig *CacheConfig) *Client {
+	return &Client{
+		BaseURL:     baseURL,
+		HTTPClient:  &http.Client{},
+		Logger:      NewLogger(LevelNone),
+		CacheConfig: cacheConfig,
+	}
 }
 
 // Request 发送 HTTP 请求并返回响应
@@ -236,7 +258,7 @@ func (c *Client) Request(options *RequestOptions) (*Response, error) {
 			return nil, err
 		}
 	}
-
+	// 检查响应内容长度是否超过最大限制
 	if int64(len(responseBody)) > options.MaxContentLength {
 		return nil, errors.New("response content length exceeded maxContentLength")
 	}
@@ -281,14 +303,38 @@ func (c *Client) Request(options *RequestOptions) (*Response, error) {
 	}, err
 }
 
-// NewClientWithCache 创建一个启用缓存的客户端
-func NewClientWithCache(baseURL string, cacheConfig *CacheConfig) *Client {
-	return &Client{
-		BaseURL:     baseURL,
-		HTTPClient:  &http.Client{},
-		Logger:      NewLogger(LevelNone),
-		CacheConfig: cacheConfig,
+// RequestAsync 异步发送 HTTP 请求，返回 Promise
+func (c *Client) RequestAsync(options *RequestOptions) *Promise {
+	promise := NewPromise()
+	// 同步模式
+	if c.queueChan == nil {
+		resp, err := c.Request(options)
+		promise.resolve(resp, err)
+	} else {
+		// 异步模式
+		c.queue.Go(func() {
+			// 超过缓冲区大小时会自动阻塞
+			c.queueChan <- struct{}{}
+			resp, err := c.Request(options)
+			promise.resolve(resp, err)
+			<-c.queueChan
+		})
 	}
+	return promise
+}
+
+// SetMaxPendingRequests 设置最大并发请求数
+// 默认值为100
+func (c *Client) SetMaxPendingRequests(max int) {
+	if max <= 0 {
+		max = 100
+	}
+	c.queueChan = make(chan struct{}, max)
+}
+
+// Wait 等待所有队列中的请求完成
+func (c *Client) Wait() {
+	c.queue.Wait()
 }
 
 // SetCache 设置客户端的缓存配置
