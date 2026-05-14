@@ -6,6 +6,8 @@ import (
 )
 
 // Assign
+// 用json的序列化和反序列化来实现对象的拷贝
+// 性能较差，不建议在性能敏感场景下使用
 func Assign(a, b any) any {
 	jb, err := json.Marshal(b)
 	if err != nil {

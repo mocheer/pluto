@@ -307,9 +307,9 @@ func (c *MemoryCache) cleanupExpired() {
 }
 
 // shouldCacheRequest 判断请求是否应该被缓存
-func shouldCacheRequest(cacheConfig *CacheConfig, options *RequestOptions) bool {
+func shouldCacheRequest(cacheOptions *CacheConfig, options *AxiosOptions) bool {
 	// 检查客户端是否配置了缓存
-	if cacheConfig == nil || cacheConfig.Cache == nil {
+	if cacheOptions == nil || cacheOptions.Cache == nil {
 		return false
 	}
 
@@ -320,7 +320,7 @@ func shouldCacheRequest(cacheConfig *CacheConfig, options *RequestOptions) bool 
 
 	// 检查每次请求是否显式启用了缓存
 	if options.Cache != nil && options.Cache.Enabled != nil && *options.Cache.Enabled {
-		return isMethodCacheable(cacheConfig, options.Method)
+		return isMethodCacheable(cacheOptions, options.Method)
 	}
 
 	// 默认：除非每次请求显式启用，否则禁用缓存
@@ -342,12 +342,12 @@ func isMethodCacheable(cacheConfig *CacheConfig, method MethodType) bool {
 }
 
 // shouldForceRefresh 检查请求是否应绕过缓存
-func shouldForceRefresh(options *RequestOptions) bool {
+func shouldForceRefresh(options *AxiosOptions) bool {
 	return options.Cache != nil && options.Cache.ForceRefresh
 }
 
 // generateCacheKey 为请求生成缓存键
-func generateCacheKey(cacheConfig *CacheConfig, options *RequestOptions, fullURL string) string {
+func generateCacheKey(cacheConfig *CacheConfig, options *AxiosOptions, fullURL string) string {
 	// 检查请求选项中是否有自定义键
 	if options.Cache != nil && options.Cache.CustomKey != "" {
 		return options.Cache.CustomKey
@@ -363,7 +363,7 @@ func generateCacheKey(cacheConfig *CacheConfig, options *RequestOptions, fullURL
 }
 
 // getCacheTTL 确定缓存响应的 TTL
-func getCacheTTL(cacheConfig *CacheConfig, options *RequestOptions) time.Duration {
+func getCacheTTL(cacheConfig *CacheConfig, options *AxiosOptions) time.Duration {
 	// 每次请求的 TTL 优先
 	if options.Cache != nil && options.Cache.TTL > 0 {
 		return options.Cache.TTL

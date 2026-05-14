@@ -26,9 +26,9 @@ const (
 
 // Logger 是日志记录器接口
 type Logger interface {
-	LogRequest(*http.Request, LogLevel)
-	LogResponse(*http.Response, []byte, time.Duration, LogLevel)
-	LogError(error, LogLevel)
+	LogRequest(*http.Request)
+	LogResponse(*http.Response, []byte, time.Duration)
+	LogError(error)
 	SetLevel(LogLevel)
 }
 
@@ -68,8 +68,8 @@ func (l *DefaultLogger) SetLevel(level LogLevel) {
 }
 
 // LogRequest 记录 HTTP 请求日志
-func (l *DefaultLogger) LogRequest(req *http.Request, level LogLevel) {
-	if level > l.options.Level {
+func (l *DefaultLogger) LogRequest(req *http.Request) {
+	if l.options.Level > LevelNone {
 		return
 	}
 
@@ -105,8 +105,8 @@ func (l *DefaultLogger) LogRequest(req *http.Request, level LogLevel) {
 }
 
 // LogResponse 记录 HTTP 响应日志
-func (l *DefaultLogger) LogResponse(resp *http.Response, body []byte, duration time.Duration, level LogLevel) {
-	if level > l.options.Level {
+func (l *DefaultLogger) LogResponse(resp *http.Response, body []byte, duration time.Duration) {
+	if l.options.Level > LevelNone {
 		return
 	}
 
@@ -139,8 +139,8 @@ func (l *DefaultLogger) LogResponse(resp *http.Response, body []byte, duration t
 }
 
 // LogError 记录错误日志
-func (l *DefaultLogger) LogError(err error, level LogLevel) {
-	if level > l.options.Level {
+func (l *DefaultLogger) LogError(err error) {
+	if l.options.Level > LevelError {
 		return
 	}
 

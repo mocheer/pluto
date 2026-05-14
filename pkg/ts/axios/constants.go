@@ -1,9 +1,7 @@
 package axios
 
-import "net/http"
-
 // defaultClient 是默认的 HTTP 客户端实例
-var defaultClient = &Client{HTTPClient: &http.Client{}, Logger: NewLogger(LevelDebug), queueChan: make(chan struct{}, 100)}
+var defaultClient = New()
 
 // MethodType 表示 HTTP 请求方法类型
 type MethodType string

@@ -1,7 +1,7 @@
 package axios
 
 // mergeOptions 将源请求选项合并到目标请求选项中
-func mergeOptions(dst, src *RequestOptions) {
+func mergeOptions(dst, src *AxiosOptions) {
 	if src.Method != "" {
 		dst.Method = src.Method
 	}
