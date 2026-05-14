@@ -26,29 +26,23 @@ func mergeOptions(dst, src *AxiosOptions) {
 	if src.Auth != nil {
 		dst.Auth = src.Auth
 	}
-	if src.ResponseType != "" {
-		dst.ResponseType = src.ResponseType
-	}
-	if src.ResponseEncoding != "" {
-		dst.ResponseEncoding = src.ResponseEncoding
-	}
 	if src.MaxRedirects != 0 {
 		dst.MaxRedirects = src.MaxRedirects
 	}
-	if src.MaxContentLength != 0 {
-		dst.MaxContentLength = src.MaxContentLength
+	if src.MaxResponseContentSize != 0 {
+		dst.MaxResponseContentSize = src.MaxResponseContentSize
 	}
-	if src.MaxBodyLength != 0 {
-		dst.MaxBodyLength = src.MaxBodyLength
+	if src.MaxRequestBodySize != 0 {
+		dst.MaxRequestBodySize = src.MaxRequestBodySize
 	}
 	if src.ValidateStatus != nil {
 		dst.ValidateStatus = src.ValidateStatus
 	}
-	if src.InterceptorOptions.RequestInterceptors != nil {
-		dst.InterceptorOptions.RequestInterceptors = src.InterceptorOptions.RequestInterceptors
+	if src.RequestInterceptors != nil {
+		dst.RequestInterceptors = src.RequestInterceptors
 	}
-	if src.InterceptorOptions.ResponseInterceptors != nil {
-		dst.InterceptorOptions.ResponseInterceptors = src.InterceptorOptions.ResponseInterceptors
+	if src.ResponseInterceptors != nil {
+		dst.ResponseInterceptors = src.ResponseInterceptors
 	}
 	if src.OnUploadProgress != nil {
 		dst.OnUploadProgress = src.OnUploadProgress
@@ -62,5 +56,5 @@ func mergeOptions(dst, src *AxiosOptions) {
 	if src.Cache != nil {
 		dst.Cache = src.Cache
 	}
-	dst.Decompress = src.Decompress
+	dst.Uncompressed = src.Uncompressed
 }

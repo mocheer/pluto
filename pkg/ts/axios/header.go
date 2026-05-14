@@ -12,5 +12,5 @@ func (h Header) SetAuth(auth *Auth) {
 }
 
 func (h Header) RandomUserAgent() {
-	// h["User-Agent"] = randomUserAgent()
+	h["User-Agent"] = RandomUserAgent()
 }

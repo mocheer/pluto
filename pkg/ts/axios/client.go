@@ -2,6 +2,7 @@ package axios
 
 import (
 	"bytes"
+	"compress/gzip"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -29,20 +30,68 @@ type Client struct {
 func New() *Client {
 	return &Client{
 		Options: &AxiosOptions{
-			Timeout:          time.Second * 10,
-			ResponseType:     "json",
-			ResponseEncoding: "utf8",
-			MaxContentLength: 1024 * 1024, // 1MB
-			MaxBodyLength:    2000,
-			MaxRedirects:     21,
-			Decompress:       true,
-			ValidateStatus:   nil,
-			Header:           Header{
-				// "User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
-				// "Accept-Encoding": "gzip",
-				// "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-				// "Accept":          "*/*",
-				// "Content-Type":    "application/json",
+			Timeout:                time.Second * 10, // 10秒超时
+			MaxResponseContentSize: 1024 * 1024,      // 1MB
+			MaxRequestBodySize:     4096,             // 4KB
+			MaxRedirects:           21,               // 最大重定向次数，默认 21 次
+			ValidateStatus:         nil,              // 自定义状态码验证函数，默认 nil
+			// 浏览器/Go都会自动填充Host（HTTP/1.1协议）、Connection、Content-Length，所以一般这些不需要手动设置
+			// Connection: 在net/http中默认是keep-alive会自动设置,HTTP/2 协议明确禁止使用 Connection 头部
+			Header: Header{
+				// 默认值为 Go-http-client/1.1
+				"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
+				// 目前只支持 gzip 编码，其他编码需要根据实际情况调整
+				// 浏览器支持：gzip, deflate, br
+				"Accept-Encoding": "gzip",
+				"Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+				// 默认值为 */*
+				// img标签：image/avif,image/webp,image/apng,image/*,*/*;q=0.8
+				// 导航请求：text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8
+				"Accept": "*/*",
+				// Content-Type 默认值为 application/json
+				"Content-Type": "application/json",
+				// Cache-Control 用于控制缓存行为，浏览器强制刷新时，会发送 Cache-Control: no-cache。
+				"Cache-Control": "no-cache",
+			},
+
+			// 请求拦截器配置
+			// 经常要根据实际情况调整请求头，比如设置 Host、Origin、Referer 等，因为很多站点有严格的请求头要求
+			// 例如，一些 API 只允许从特定的域名或 IP 地址访问，而其他站点则要求请求头中包含特定的字段。
+			RequestInterceptors: []RequestInterceptor{
+				func(req *http.Request) error {
+					// 这里采用默认的 Host 和 Origin 头,Host一般会自动填充，这里其实不需要设置
+					// 实际上有些服务需要自定义的 Host 和 Origin 头，这里根据实际情况调整
+					host := req.URL.Host
+					// 无法通过 req.Header.Set("Host", "...") 来修改它
+					// request.Header.Set("Host", host)
+					// request.Host = host //只能通过request.Host来设置Host
+
+					// Origin 头是浏览器在发起跨站请求或某些非简单请求时自动附加的，它只包含请求的来源（协议、域名和端口），不包含路径。
+					// 用途：CORS (跨域资源共享) 和 安全防护（类似于 Referer 头） 用来防范 CSRF 攻击、资源盗链等。部分网站的 API 会严格校验 Origin，要求它必须与目标站点同源或出现在白名单里。
+					// Origin 只到根路径。
+					// 仅在特定情况下发送，如跨域请求、同域POST、PUT、DELETE 等。导航请求、同域的GET、HEAD 等不会发送 Origin 头。
+					req.Header.Set("Origin", host)
+					// Referer 头记录了请求的来源页面，是浏览器行为的另一重要特征，一般情况下为当前页面的 URL
+					// Referer 通常包含完整的路径和参数，比 Origin 头更详细，隐私敏感的场景下，浏览器可能会仅发送 Origin。
+					// 1. 首请求无 Referer 头，其他请求需要设置为上一个请求的 URL，所以这里其实要判断是否是首请求
+					// 2. 从一个页面跳转到另一个页面，或页面引用了跨域资源时，会自动携带。
+					// 3. 重定向时，Referer 一般需要设置为上一个请求的 URL
+					// 浏览器有时会出于隐私考虑隐藏或裁剪 Referer（如使用 Referrer-Policy）,或者限制 Referer 的内容（如只发送源信息、降级等）。
+					// 对爬虫来说，我们更多是反其道而行之，确保它总是携带一个合理的来源。
+					req.Header.Set("Referer", req.URL.String())
+
+					// Sec-Fetch-* 系列头用于描述请求的类型，如导航请求、资源请求、跨站请求等。
+					// 以 Sec- 或 Proxy- 开头的头，都是浏览器在发起请求时自动添加的，用于描述请求的类型、模式、站点等，js端不能手动设置。
+					// 1. Sec-Fetch-Dest: 描述请求的目标类型，如 document、image、script 等。
+					// 2. Sec-Fetch-Mode: 描述请求的模式，如 navigate（导航）、cors（跨域）、no-cors（不跨域）、same-origin（同源）等。
+					// 3. Sec-Fetch-Site: 描述请求的站点，如 same-origin、cross-origin 等。
+					// 4. Sec-Fetch-User: 描述这个请求是不是由用户的主动操作（如点击、按键）直接触发的，只有两个值: ?1或者没有这个请求头
+					req.Header.Set("Sec-Fetch-Dest", "document")
+					req.Header.Set("Sec-Fetch-Mode", "same-origin")
+					req.Header.Set("Sec-Fetch-Site", "same-origin")
+					req.Header.Set("Sec-Fetch-User", "?1")
+					return nil
+				},
 			},
 		},
 		logger:    NewLogger(LevelError),
@@ -120,7 +169,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 			return nil, errors.New("请求体内容读取失败")
 		}
 		// 检查请求体长度是否超过最大限制
-		if options.MaxBodyLength > 0 && bodyLength > int64(options.MaxBodyLength) {
+		if options.MaxRequestBodySize > 0 && bodyLength > int64(options.MaxRequestBodySize) {
 			return nil, errors.New("请求体内容长度超过最大限制")
 		}
 		// 处理上传进度回调
@@ -145,7 +194,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		req.Header.Set(key, value)
 	}
 	// 执行请求拦截器
-	for _, interceptor := range options.InterceptorOptions.RequestInterceptors {
+	for _, interceptor := range options.RequestInterceptors {
 		err = interceptor(req)
 		if err != nil {
 			return nil, fmt.Errorf("请求拦截器失败: %v, %w", err, err)
@@ -216,7 +265,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	}()
 
 	var responseBody []byte
-	limitedReader := io.LimitReader(resp.Body, options.MaxContentLength+1)
+	limitedReader := io.LimitReader(resp.Body, options.MaxResponseContentSize+1)
 	// 处理下载进度回调
 	if options.OnDownloadProgress != nil {
 		buf := &bytes.Buffer{}
@@ -237,7 +286,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 	}
 	// 检查响应内容长度是否超过最大限制
-	if int64(len(responseBody)) > options.MaxContentLength {
+	if int64(len(responseBody)) > options.MaxResponseContentSize {
 		return nil, errors.New("响应内容长度超过最大限制")
 	}
 	// 记录响应时间
@@ -251,7 +300,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		return nil, fmt.Errorf("请求失败，状态码: %v", resp.StatusCode)
 	}
 	// 执行响应拦截器
-	for _, interceptor := range options.InterceptorOptions.ResponseInterceptors {
+	for _, interceptor := range options.ResponseInterceptors {
 		err = interceptor(resp)
 		if err != nil {
 			return nil, fmt.Errorf("响应拦截器失败，错误: %w", err)
@@ -273,12 +322,26 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 			}, ttl)
 		}
 	}
-	// 返回响应
-	return &Response{
+	res := &Response{
 		StatusCode: resp.StatusCode,
 		Headers:    resp.Header,
 		Body:       responseBody,
-	}, err
+	}
+	// 如果请求成功，且响应体压缩为 gzip，解压缩响应体
+	if !options.Uncompressed && res.StatusCode >= 200 && res.StatusCode < 300 && resp.Header.Get("Content-Encoding") == "gzip" {
+		bodyReader, err = gzip.NewReader(res.Reader())
+		if err != nil {
+			return nil, err
+		}
+		defer bodyReader.(*gzip.Reader).Close()
+		body, err := io.ReadAll(bodyReader)
+		if err != nil {
+			return nil, err
+		}
+		res.Body = body
+	}
+	// 返回响应
+	return res, err
 }
 
 // RequestAsync 异步发送 HTTP 请求，返回 Promise
@@ -336,4 +399,14 @@ func (c *Client) CacheStats() *CacheStats {
 		return &stats
 	}
 	return nil
+}
+
+// AddRequestInterceptor 添加请求拦截器
+func (c *Client) AddRequestInterceptor(interceptor RequestInterceptor) {
+	c.Options.RequestInterceptors = append(c.Options.RequestInterceptors, interceptor)
+}
+
+// AddResponseInterceptor 添加响应拦截器
+func (c *Client) AddResponseInterceptor(interceptor ResponseInterceptor) {
+	c.Options.ResponseInterceptors = append(c.Options.ResponseInterceptors, interceptor)
 }

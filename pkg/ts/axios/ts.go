@@ -1,30 +1,15 @@
 package axios
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 )
 
-// Response 表示 HTTP 响应
-type Response struct {
-	StatusCode int
-	Headers    http.Header
-	Body       []byte
-}
+// RequestInterceptor 是请求拦截器函数列表
+type RequestInterceptor = func(*http.Request) error
 
-// RequestInterceptors 是请求拦截器函数列表
-type RequestInterceptors []func(*http.Request) error
-
-// ResponseInterceptors 是响应拦截器函数列表
-type ResponseInterceptors []func(*http.Response) error
-
-// InterceptorOptions 包含请求和响应拦截器配置
-type InterceptorOptions struct {
-	RequestInterceptors  RequestInterceptors
-	ResponseInterceptors ResponseInterceptors
-}
-
+// ResponseInterceptor
+type ResponseInterceptor = func(*http.Response) error
 
 // Proxy 表示 HTTP 代理配置
 type Proxy struct {
@@ -74,9 +59,4 @@ func (pw *ProgressWriter) Write(p []byte) (int, error) {
 		pw.onProgress(pw.written, pw.total)
 	}
 	return n, err
-}
-
-// JSON 将响应体解析为 JSON 格式
-func (r *Response) JSON(v interface{}) error {
-	return json.Unmarshal(r.Body, v)
 }
