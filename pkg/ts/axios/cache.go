@@ -355,11 +355,11 @@ func generateCacheKey(cacheConfig *CacheConfig, options *AxiosOptions, fullURL s
 
 	// 如果配置了自定义键函数则使用
 	if cacheConfig.KeyFunc != nil {
-		return cacheConfig.KeyFunc(options.Method, fullURL, options.Headers)
+		return cacheConfig.KeyFunc(options.Method, fullURL, options.Header)
 	}
 
 	// 使用默认键函数
-	return DefaultCacheKeyFunc(options.Method, fullURL, options.Headers)
+	return DefaultCacheKeyFunc(options.Method, fullURL, options.Header)
 }
 
 // getCacheTTL 确定缓存响应的 TTL

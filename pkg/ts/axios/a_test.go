@@ -28,6 +28,7 @@ func TestGetSync(t *testing.T) {
 	resp, err := axios.GetSync("https://www.baidu.com")
 	if err != nil {
 		t.Errorf("Get failed: %v", err)
+		return
 	}
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Get failed, status code: %d", resp.StatusCode)

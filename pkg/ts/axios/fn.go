@@ -17,8 +17,8 @@ func mergeOptions(dst, src *AxiosOptions) {
 	if src.Body != nil {
 		dst.Body = src.Body
 	}
-	if src.Headers != nil {
-		dst.Headers = src.Headers
+	if src.Header != nil {
+		dst.Header = src.Header
 	}
 	if src.Timeout != 0 {
 		dst.Timeout = src.Timeout

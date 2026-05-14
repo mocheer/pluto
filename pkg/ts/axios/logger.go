@@ -106,6 +106,12 @@ func (l *DefaultLogger) LogRequest(req *http.Request) {
 
 // LogResponse 记录 HTTP 响应日志
 func (l *DefaultLogger) LogResponse(resp *http.Response, body []byte, duration time.Duration) {
+
+	// 相应时间太长时，发送警告日志
+	if duration > time.Minute {
+
+	}
+
 	if l.options.Level > LevelNone {
 		return
 	}

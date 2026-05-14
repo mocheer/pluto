@@ -3,13 +3,11 @@ package axios
 import (
 	"bytes"
 	"encoding/base64"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
-	"strings"
 	"sync"
 	"time"
 )
@@ -22,8 +20,6 @@ type Client struct {
 	CacheConfig *CacheConfig
 	// logger 是日志记录器，用于记录请求和响应，每个请求使用同一个日志记录器
 	logger Logger
-	// httpClient 是 HTTP 客户端，用于发送请求，每个请求使用同一个 HTTP 客户端
-	httpClient *http.Client
 	// 请求队列，用于处理并发请求
 	queue     sync.WaitGroup
 	queueChan chan struct{}
@@ -33,7 +29,7 @@ type Client struct {
 func New() *Client {
 	return &Client{
 		Options: &AxiosOptions{
-			Timeout:          1000,
+			Timeout:          time.Second * 10,
 			ResponseType:     "json",
 			ResponseEncoding: "utf8",
 			MaxContentLength: 1024 * 1024, // 1MB
@@ -41,18 +37,16 @@ func New() *Client {
 			MaxRedirects:     21,
 			Decompress:       true,
 			ValidateStatus:   nil,
-			Headers: map[string]string{
-				"User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
-				"Accept-Encoding": "gzip",
-				"Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
-				"Accept":          "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-				"Content-Type":    "application/json",
-				"Connection":      "keep-alive",
+			Header:           Header{
+				// "User-Agent":      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0",
+				// "Accept-Encoding": "gzip",
+				// "Accept-Language": "zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3",
+				// "Accept":          "*/*",
+				// "Content-Type":    "application/json",
 			},
 		},
-		httpClient: &http.Client{},
-		logger:     NewLogger(LevelError),
-		queueChan:  make(chan struct{}, 64), //
+		logger:    NewLogger(LevelError),
+		queueChan: make(chan struct{}, 64), //
 	}
 }
 
@@ -118,30 +112,19 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	}
 	//
 	var bodyReader io.Reader
-	var bodyLength int64
 	// 处理请求体
 	if options.Body != nil {
-		switch v := options.Body.(type) {
-		case string:
-			bodyReader = strings.NewReader(v)
-			bodyLength = int64(len(v))
-		case []byte:
-			bodyReader = bytes.NewReader(v)
-			bodyLength = int64(len(v))
-		default:
-			jsonBody, err := json.Marshal(options.Body)
-			if err != nil {
-				return nil, err
-			}
-			bodyReader = bytes.NewBuffer(jsonBody)
-			bodyLength = int64(len(jsonBody))
+		var bodyLength int64
+		bodyReader, bodyLength = createReqBody(options.Body)
+		if bodyReader == nil {
+			return nil, errors.New("请求体内容读取失败")
 		}
 		// 检查请求体长度是否超过最大限制
 		if options.MaxBodyLength > 0 && bodyLength > int64(options.MaxBodyLength) {
 			return nil, errors.New("请求体内容长度超过最大限制")
 		}
 		// 处理上传进度回调
-		if options.Body != nil && options.OnUploadProgress != nil {
+		if options.OnUploadProgress != nil {
 			bodyReader = &ProgressReader{
 				reader:     bodyReader,
 				total:      bodyLength,
@@ -155,6 +138,12 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	if err != nil {
 		return nil, err
 	}
+	// 设置认证头
+	options.Header.SetAuth(options.Auth)
+	// 设置请求头
+	for key, value := range options.Header {
+		req.Header.Set(key, value)
+	}
 	// 执行请求拦截器
 	for _, interceptor := range options.InterceptorOptions.RequestInterceptors {
 		err = interceptor(req)
@@ -162,28 +151,23 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 			return nil, fmt.Errorf("请求拦截器失败: %v, %w", err, err)
 		}
 	}
-
-	// 设置请求头
-	for key, value := range options.Headers {
-		req.Header.Set(key, value)
-	}
-
-	// 处理认证
-	if options.Auth != nil {
-		auth := options.Auth.Username + ":" + options.Auth.Password
-		basicAuth := base64.StdEncoding.EncodeToString([]byte(auth))
-		req.Header.Set("Authorization", "Basic "+basicAuth)
-	}
 	// 记录日志
 	if c.logger != nil {
 		c.logger.LogRequest(req)
 	}
-
-	httpClient := c.httpClient
-	httpClient.Timeout = time.Duration(options.Timeout) * time.Millisecond
+	// httpClient 是 HTTP 客户端，用于发送请求，这里每个请求都创建一个新的客户端，避免线程安全问题
+	// TODO 需要测试如果共用一个客户端，每个请求使用同一个 HTTP 客户端，性能提升几何，或者这里可以用池来管理客户端
+	httpClient := &http.Client{
+		Timeout: options.Timeout,
+	}
 	// 处理重定向
 	if options.MaxRedirects > 0 {
 		httpClient.CheckRedirect = func(_ *http.Request, via []*http.Request) error {
+			// 记录每次重定向的 URL
+			// if c.logger != nil {
+			// 	c.logger.LogRedirect(via[len(via)-1].URL.String())
+			// }
+			//
 			if len(via) >= options.MaxRedirects {
 				return fmt.Errorf("重定向次数超过最大重定向次数: %d", options.MaxRedirects)
 			}
@@ -259,10 +243,6 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	// 记录响应时间
 	duration := time.Since(startTime)
 	if c.logger != nil {
-		// 相应时间太长时，发送警告日志
-		if duration > time.Minute {
-
-		}
 		c.logger.LogResponse(resp, responseBody, duration)
 	}
 
