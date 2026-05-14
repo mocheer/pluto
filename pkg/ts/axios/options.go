@@ -1,6 +1,9 @@
 package axios
 
-import "time"
+import (
+	"net/http"
+	"time"
+)
 
 // AxiosOptions 包含 HTTP 请求的所有配置选项
 type AxiosOptions struct {
@@ -23,6 +26,7 @@ type AxiosOptions struct {
 	OnUploadProgress       func(bytesRead, totalBytes int64) // 上传进度回调, 实际上是数据读取进度，并非网络传输进度
 	OnDownloadProgress     func(bytesRead, totalBytes int64) // 下载进度回调，实际上是数据读取进度，并非网络传输进度
 	Cache                  *RequestCacheOptions              // 请求缓存配置
+	Cookies                []*http.Cookie                    // 请求时携带的 Cookie
 }
 
 // SetBaseURL 设置默认客户端的 BaseURL

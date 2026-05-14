@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"sync"
 	"time"
@@ -19,6 +20,8 @@ type Client struct {
 	Options *AxiosOptions
 	// CacheConfig Client的缓存配置，用于自定义缓存行为，每个请求可以共用缓存
 	CacheConfig *CacheConfig
+	// jar 是 CookieJar（内存存储），用于存储和管理 Cookie
+	jar *cookiejar.Jar
 	// logger 是日志记录器，用于记录请求和响应，每个请求使用同一个日志记录器
 	logger Logger
 	// 请求队列，用于处理并发请求
@@ -28,7 +31,17 @@ type Client struct {
 
 // New
 func New() *Client {
+	// 创建 CookieJar（内存存储）
+	// 即使不用同一个http.Client,只要用jar创建http.client,每个请求的cookie都会被保存到jar中
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		panic(err)
+	}
 	return &Client{
+		jar:       jar,
+		logger:    NewLogger(LevelError),
+		queueChan: make(chan struct{}, 64),
+		// 默认配置
 		Options: &AxiosOptions{
 			Timeout:                time.Second * 10, // 10秒超时
 			MaxResponseContentSize: 1024 * 1024,      // 1MB
@@ -43,6 +56,9 @@ func New() *Client {
 				// 目前只支持 gzip 编码，其他编码需要根据实际情况调整
 				// 浏览器支持：gzip, deflate, br
 				"Accept-Encoding": "gzip",
+				// 告诉服务器用户希望页面或资源返回哪种自然语言
+				// 没有这个头，服务器通常会返回默认语言（常为英语）或根据 IP 猜测
+				// 例如，如果用户在中国，服务器可能会返回 zh-CN 或 zh 等语言，如果IP和用户语言不一致，就会显得可疑
 				"Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
 				// 默认值为 */*
 				// img标签：image/avif,image/webp,image/apng,image/*,*/*;q=0.8
@@ -90,12 +106,17 @@ func New() *Client {
 					req.Header.Set("Sec-Fetch-Mode", "same-origin")
 					req.Header.Set("Sec-Fetch-Site", "same-origin")
 					req.Header.Set("Sec-Fetch-User", "?1")
+					// Do NotTrack(DNT) 这是一个被弃用的隐私保护机制
+					// 这是浏览器向服务器表达用户“不希望被追踪”意愿的一种方式，但这个设计存在根本性缺陷，导致其在现实中收效甚微
+					// 通过此协定,用户可以允许也可以禁止网站搜集自己在网上的隐私踪迹
+					// 1 用户不希望被追踪
+					// 0 用户同意被追踪
+					// 这个已经被弃用，发送反而可能导致风险
+					// req.Header.Set("DNT", "1")
 					return nil
 				},
 			},
 		},
-		logger:    NewLogger(LevelError),
-		queueChan: make(chan struct{}, 64), //
 	}
 }
 
@@ -130,12 +151,12 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 			return nil, err
 		}
 	}
+	parsedURL, err := url.Parse(fullURL)
+	if err != nil {
+		return nil, err
+	}
 	// 处理查询参数
 	if len(options.Params) > 0 {
-		parsedURL, err := url.Parse(fullURL)
-		if err != nil {
-			return nil, err
-		}
 		q := parsedURL.Query()
 		for k, v := range options.Params {
 			q.Add(k, v)
@@ -200,14 +221,24 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 			return nil, fmt.Errorf("请求拦截器失败: %v, %w", err, err)
 		}
 	}
+
 	// 记录日志
 	if c.logger != nil {
 		c.logger.LogRequest(req)
 	}
+	// 处理 Cookie
+	if len(options.Cookies) > 0 {
+		c.jar.SetCookies(parsedURL, options.Cookies)
+	}
 	// httpClient 是 HTTP 客户端，用于发送请求，这里每个请求都创建一个新的客户端，避免线程安全问题
-	// TODO 需要测试如果共用一个客户端，每个请求使用同一个 HTTP 客户端，性能提升几何，或者这里可以用池来管理客户端
+	// http.Client 在发送请求前，会调用 Jar 的 Cookies() 方法获取匹配的 Cookie 并填入请求头；收到响应后调用 SetCookies() 更新存储。
+	// 所有使用默认 Transport 的 Client 都会共享同一个连接池，即使每次请求都新建 Client，TCP 连接依然能被复用，所以网络延迟和吞吐量基本没有损失。
+	// 1. 只有自定义Transport时，才会创建新的连接池。=> 不太影响性能
+	// 2. 每次新建 Client 手动传递相同的 Jar 实例，不如直接复用 Client 简洁。 => 不太影响性能
+	// http.Get 等全局函数 其实是共享 DefaultClient，复用能减少 GC 压力，有益无害，但这里因为需要并发安全，暂时不考虑复用
 	httpClient := &http.Client{
 		Timeout: options.Timeout,
+		Jar:     c.jar,
 	}
 	// 处理重定向
 	if options.MaxRedirects > 0 {
