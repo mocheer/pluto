@@ -2,12 +2,23 @@ package ds_ase
 
 // Aseprite 是aseprite的结构体
 type Aseprite struct {
-	Frames []Frames `json:"frames"`
-	Meta   Meta     `json:"meta"`
+	Frames []FrameInfos `json:"frames"`
+	Meta   Meta         `json:"meta"`
 }
 
-// Frame 是帧的结构体
-type Frame struct {
+// FrameInfos 是帧的信息结构体
+type FrameInfos struct {
+	Filename         string           `json:"filename"`         // 文件名
+	Frame            FrameRect        `json:"frame"`            // 帧的坐标,子图在精灵表中的位置和尺寸
+	Rotated          bool             `json:"rotated"`          // 是否旋转90度
+	Trimmed          bool             `json:"trimmed"`          // 是否裁剪
+	SpriteSourceSize SpriteSourceSize `json:"spriteSourceSize"` // 精灵源大小,子图在原始画布上的裁剪后位置和尺寸, 仅在裁剪时有效
+	SourceSize       Size             `json:"sourceSize"`       // 原始图的尺寸,不包含旋转和裁剪后的大小
+	Duration         int              `json:"duration"`         // 帧的持续时间
+}
+
+// FrameRect 是帧的坐标结构体
+type FrameRect struct {
 	X int `json:"x"`
 	Y int `json:"y"`
 	W int `json:"w"`
@@ -20,17 +31,6 @@ type SpriteSourceSize struct {
 	Y int `json:"y"`
 	W int `json:"w"`
 	H int `json:"h"`
-}
-
-// Frames 是帧的结构体
-type Frames struct {
-	Filename         string           `json:"filename"`
-	Frame            Frame            `json:"frame"`
-	Rotated          bool             `json:"rotated"`
-	Trimmed          bool             `json:"trimmed"`
-	SpriteSourceSize SpriteSourceSize `json:"spriteSourceSize"`
-	SourceSize       Size             `json:"sourceSize"`
-	Duration         int              `json:"duration"`
 }
 
 // Size 是大小的结构体
