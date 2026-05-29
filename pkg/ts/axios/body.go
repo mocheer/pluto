@@ -7,9 +7,8 @@ import (
 	"strings"
 )
 
-func createReqBody(body any) (io.Reader, int64) {
-	var bodyReader io.Reader
-	var bodyLength int64
+// createReqBody 创建请求体
+func createReqBody(body any) (bodyReader io.Reader, bodyLength int64) {
 	switch v := body.(type) {
 	case string:
 		bodyReader = strings.NewReader(v)
@@ -25,5 +24,5 @@ func createReqBody(body any) (io.Reader, int64) {
 		bodyReader = bytes.NewBuffer(jsonBody)
 		bodyLength = int64(len(jsonBody))
 	}
-	return bodyReader, bodyLength
+	return
 }

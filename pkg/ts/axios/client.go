@@ -12,6 +12,7 @@ import (
 	"net/url"
 	"sync"
 	"time"
+	"math"
 )
 
 // Client 是 HTTP 客户端，用于发送请求并处理响应
@@ -43,8 +44,8 @@ func New() *Client {
 		queueChan: make(chan struct{}, 64),
 		// 默认配置
 		Options: &AxiosOptions{
-			Timeout:                time.Second * 10, // 10秒超时
-			MaxResponseContentSize: 1024 * 1024,      // 1MB
+			Timeout:                time.Hour,        // 1小时超时,如果用来下载文件，超时时间不宜过短
+			MaxResponseContentSize: math.MaxInt64,    // 不限制返回的内容大小，因为下载文件可能很大，但太大，会导致内存溢出
 			MaxRequestBodySize:     4096,             // 4KB
 			MaxRedirects:           21,               // 最大重定向次数，默认 21 次
 			ValidateStatus:         nil,              // 自定义状态码验证函数，默认 nil

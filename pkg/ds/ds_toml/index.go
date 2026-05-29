@@ -2,7 +2,6 @@ package ds_toml
 
 import (
 	"bytes"
-	"fmt"
 
 	"github.com/BurntSushi/toml"
 	"github.com/mocheer/pluto/pkg/ds"
@@ -36,6 +35,6 @@ func Save(fileName string, obj any) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println(bs.String())
+	// fmt.Println(bs.String())
 	return ds.Save(fileName, bs.Bytes())
 }
