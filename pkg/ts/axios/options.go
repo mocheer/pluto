@@ -18,7 +18,7 @@ type AxiosOptions struct {
 	MaxRedirects           int                               // 最大重定向次数，默认 21 次
 	MaxRequestBodySize     int64                             // 最大请求体长度， 0 表示不限制
 	MaxResponseContentSize int64                             // 最大响应内容长度， 0 表示不限制
-	Uncompressed           bool                              // 是否解压缩响应体，默认 false
+	Uncompressed           bool                              // 是否解压缩响应体，默认 false ，false 表示不解压缩，true 表示解压缩 gzip 压缩的响应体
 	ValidateStatus         func(int) bool                    // 自定义状态码验证函数，默认 nil
 	RequestInterceptors    []RequestInterceptor              // 请求拦截器配置
 	ResponseInterceptors   []ResponseInterceptor             // 响应拦截器配置

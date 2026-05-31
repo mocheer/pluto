@@ -7,12 +7,12 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
 	"sync"
 	"time"
-	"math"
 )
 
 // Client 是 HTTP 客户端，用于发送请求并处理响应
@@ -44,11 +44,11 @@ func New() *Client {
 		queueChan: make(chan struct{}, 64),
 		// 默认配置
 		Options: &AxiosOptions{
-			Timeout:                time.Hour,        // 1小时超时,如果用来下载文件，超时时间不宜过短
-			MaxResponseContentSize: math.MaxInt64,    // 不限制返回的内容大小，因为下载文件可能很大，但太大，会导致内存溢出
-			MaxRequestBodySize:     4096,             // 4KB
-			MaxRedirects:           21,               // 最大重定向次数，默认 21 次
-			ValidateStatus:         nil,              // 自定义状态码验证函数，默认 nil
+			Timeout:                time.Hour,         // 1小时超时,如果用来下载文件，超时时间不宜过短
+			MaxResponseContentSize: math.MaxInt64 - 1, // 不限制返回的内容大小，因为下载文件可能很大，但太大，会导致内存溢出
+			MaxRequestBodySize:     4096,              // 4KB
+			MaxRedirects:           21,                // 最大重定向次数，默认 21 次
+			ValidateStatus:         nil,               // 自定义状态码验证函数，默认 nil
 			// 浏览器/Go都会自动填充Host（HTTP/1.1协议）、Connection、Content-Length，所以一般这些不需要手动设置
 			// Connection: 在net/http中默认是keep-alive会自动设置,HTTP/2 协议明确禁止使用 Connection 头部
 			Header: Header{
@@ -153,6 +153,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 	}
 	parsedURL, err := url.Parse(fullURL)
+
 	if err != nil {
 		return nil, err
 	}
@@ -182,12 +183,12 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 	}
 	//
-	var bodyReader io.Reader
+	var gzipReader io.Reader
 	// 处理请求体
 	if options.Body != nil {
 		var bodyLength int64
-		bodyReader, bodyLength = createReqBody(options.Body)
-		if bodyReader == nil {
+		gzipReader, bodyLength = createReqBody(options.Body)
+		if gzipReader == nil {
 			return nil, errors.New("请求体内容读取失败")
 		}
 		// 检查请求体长度是否超过最大限制
@@ -196,8 +197,8 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 		// 处理上传进度回调
 		if options.OnUploadProgress != nil {
-			bodyReader = &ProgressReader{
-				reader:     bodyReader,
+			gzipReader = &ProgressReader{
+				reader:     gzipReader,
 				total:      bodyLength,
 				onProgress: options.OnUploadProgress,
 			}
@@ -205,7 +206,8 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	}
 
 	// 创建请求
-	req, err := http.NewRequest(string(options.Method), fullURL, bodyReader)
+	req, err := http.NewRequest(string(options.Method), fullURL, gzipReader)
+
 	if err != nil {
 		return nil, err
 	}
@@ -276,8 +278,10 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 	}
 	// 记录请求时间
 	startTime := time.Now()
+	fmt.Println(string(options.Method), fullURL, gzipReader, err, startTime)
 	// 发起请求
 	resp, err := httpClient.Do(req)
+
 	if err != nil {
 		if c.logger != nil {
 			c.logger.LogError(err)
@@ -296,8 +300,29 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 	}()
 
+	// 如果请求成功，且响应体压缩为 gzip，解压缩响应体
+	if !options.Uncompressed && resp.StatusCode >= 200 && resp.StatusCode < 300 && resp.Header.Get("Content-Encoding") == "gzip" {
+		bodyReader := resp.Body
+		defer bodyReader.Close()
+		gzipReader, err = gzip.NewReader(bodyReader)
+		if err != nil {
+			return nil, fmt.Errorf("解压缩响应体失败，错误: %w", err)
+		}
+		reader := gzipReader.(*gzip.Reader)
+		// 关闭 gzip 读取器
+		// defer reader.Close()
+		// 这里不用关闭，因为resp.Body 已经在上面做了自动关闭
+		resp.Body = reader // 替换响应体为解压缩后的读取器
+		// body, err := io.ReadAll(bodyReader)
+		// if err != nil {
+		// 	return nil, fmt.Errorf("读取解压缩后的响应体失败，错误: %w", err)
+		// }
+	}
+
 	var responseBody []byte
+	// 这里有溢出风险，当options.MaxResponseContentSize=math.MaxInt64时会变成负数，会导致读取失败
 	limitedReader := io.LimitReader(resp.Body, options.MaxResponseContentSize+1)
+
 	// 处理下载进度回调
 	if options.OnDownloadProgress != nil {
 		buf := &bytes.Buffer{}
@@ -312,6 +337,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		}
 		responseBody = buf.Bytes()
 	} else {
+		// resp.Body 被消费殆尽，指针到 EOF 位置
 		responseBody, err = io.ReadAll(limitedReader)
 		if err != nil {
 			return nil, err
@@ -359,19 +385,7 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		Headers:    resp.Header,
 		Body:       responseBody,
 	}
-	// 如果请求成功，且响应体压缩为 gzip，解压缩响应体
-	if !options.Uncompressed && res.StatusCode >= 200 && res.StatusCode < 300 && resp.Header.Get("Content-Encoding") == "gzip" {
-		bodyReader, err = gzip.NewReader(res.Reader())
-		if err != nil {
-			return nil, err
-		}
-		defer bodyReader.(*gzip.Reader).Close()
-		body, err := io.ReadAll(bodyReader)
-		if err != nil {
-			return nil, err
-		}
-		res.Body = body
-	}
+
 	// 返回响应
 	return res, err
 }

@@ -2,6 +2,7 @@ package axios_test
 
 import (
 	"net/http"
+	"runtime/debug"
 	"testing"
 
 	"github.com/mocheer/pluto/pkg/ts/axios"
@@ -27,10 +28,12 @@ func TestGetSync(t *testing.T) {
 	// 测试 Get 方法
 	resp, err := axios.GetSync("https://www.baidu.com")
 	if err != nil {
-		t.Errorf("Get failed: %v", err)
+		t.Errorf("Get failed: %v, %s", err, debug.Stack())
 		return
 	}
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Get failed, status code: %d", resp.StatusCode)
 	}
+	t.Log(len(resp.Body))
+
 }
