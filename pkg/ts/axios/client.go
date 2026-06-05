@@ -44,11 +44,11 @@ func New() *Client {
 		queueChan: make(chan struct{}, 64),
 		// 默认配置
 		Options: &AxiosOptions{
-			Timeout:                time.Hour,         // 1小时超时,如果用来下载文件，超时时间不宜过短
-			MaxResponseContentSize: math.MaxInt64 - 1, // 不限制返回的内容大小，因为下载文件可能很大，但太大，会导致内存溢出
-			MaxRequestBodySize:     4096,              // 4KB
-			MaxRedirects:           21,                // 最大重定向次数，默认 21 次
-			ValidateStatus:         nil,               // 自定义状态码验证函数，默认 nil
+			Timeout:                time.Hour,     // 1小时超时,如果用来下载文件，超时时间不宜过短
+			MaxResponseContentSize: math.MaxInt64, // 不限制返回的内容大小，因为下载文件可能很大，但太大，会导致内存溢出
+			MaxRequestBodySize:     4096,          // 4KB
+			MaxRedirects:           21,            // 最大重定向次数，默认 21 次
+			ValidateStatus:         nil,           // 自定义状态码验证函数，默认 nil
 			// 浏览器/Go都会自动填充Host（HTTP/1.1协议）、Connection、Content-Length，所以一般这些不需要手动设置
 			// Connection: 在net/http中默认是keep-alive会自动设置,HTTP/2 协议明确禁止使用 Connection 头部
 			Header: Header{
@@ -318,10 +318,15 @@ func (c *Client) Request(configs ...*AxiosOptions) (*Response, error) {
 		// 	return nil, fmt.Errorf("读取解压缩后的响应体失败，错误: %w", err)
 		// }
 	}
-
 	var responseBody []byte
-	// 这里有溢出风险，当options.MaxResponseContentSize=math.MaxInt64时会变成负数，会导致读取失败
-	limitedReader := io.LimitReader(resp.Body, options.MaxResponseContentSize+1)
+	maxResponseContentSize := options.MaxResponseContentSize
+	// 这里有溢出风险，当options.MaxResponseContentSize=math.MaxInt64时如果再+1会变成负数，会导致读取失败：EOF
+	// 所以这里需要判断是否是 math.MaxInt64，如果是，就不需要再+1了
+	if maxResponseContentSize < math.MaxInt64 {
+		maxResponseContentSize++
+	}
+	// 这里的resp.Body可能是原始响应体读取器，也可能是gzip解压缩后的读取器
+	limitedReader := io.LimitReader(resp.Body, maxResponseContentSize)
 
 	// 处理下载进度回调
 	if options.OnDownloadProgress != nil {

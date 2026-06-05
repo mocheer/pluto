@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 )
 
@@ -78,6 +79,7 @@ func CopyFile(src, dst string) (err error) {
 	return
 }
 
+// Basename 获取文件名（不包含后缀）
 func Basename(name string) string {
 	// 获取基础文件名，包括后缀
 	baseName := filepath.Base(name)
@@ -87,4 +89,18 @@ func Basename(name string) string {
 		baseName = baseName[:lastDot]
 	}
 	return baseName
+}
+
+// EqualFilePath 比较两个路径是否相等
+// 考虑Windows和Linux的路径比较
+// 1. 统一分隔符（/ 和 \ 都转成当前平台的标准分隔符）
+// 2. 去除 .、..、多余的 /、末尾的 /
+// 3. 忽略大小写差异
+func EqualFilePath(p1, p2 string) bool {
+	p1c := filepath.Clean(p1)
+	p2c := filepath.Clean(p2)
+	if runtime.GOOS == "windows" {
+		return strings.EqualFold(p1c, p2c)
+	}
+	return p1c == p2c
 }
