@@ -14,6 +14,10 @@ func (m *Img) ToBytes() (bs []byte, err error) {
 	return ToBytes(m.Image, JPG)
 }
 
+func (m *Img) ToPngBytes() (bs []byte, err error) {
+	return ToBytes(m.Image, PNG)
+}
+
 // MustToBytes
 func (m *Img) MustToBytes(format string) []byte {
 	bs, err := ToBytes(m.Image, format)
