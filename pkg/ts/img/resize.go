@@ -13,5 +13,5 @@ func (p *Img) Resize(width, height int) *Img {
 
 // Resize 当宽度或者高度为0时，保持比例
 func Resize(target image.Image, width, height int) image.Image {
-	return imaging.Resize(target, width, height, imaging.Lanczos)
+	return imaging.Resize(target, width, height, imaging.Linear)
 }
