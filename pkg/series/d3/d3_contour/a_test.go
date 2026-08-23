@@ -3,7 +3,7 @@ package d3_contour_test
 import (
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/d3/d3_contour"
+	"github.com/mocheer/pluto/pkg/series/d3/d3_contour"
 	"github.com/stretchr/testify/assert"
 )
 
