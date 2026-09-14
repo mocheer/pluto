@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/ts/img"
+	"github.com/mocheer/pluto/pkg/img"
 )
 
 // TestSave

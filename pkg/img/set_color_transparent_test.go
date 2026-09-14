@@ -3,7 +3,7 @@ package img_test
 import (
 	"testing"
 
-	"github.com/mocheer/pluto/pkg/ts/img"
+	"github.com/mocheer/pluto/pkg/img"
 )
 
 // TestSetColorTransparent
