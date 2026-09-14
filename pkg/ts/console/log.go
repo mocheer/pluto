@@ -3,7 +3,7 @@ package console
 import (
 	"fmt"
 
-	"github.com/mocheer/pluto/pkg/ts/clock"
+	"github.com/mocheer/pluto/pkg/clock"
 )
 
 func Log(msg string) {

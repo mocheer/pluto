@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mocheer/pluto/pkg/ts/clock"
+	"github.com/mocheer/pluto/pkg/clock"
 	"github.com/stretchr/testify/assert"
 )
 
